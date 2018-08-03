@@ -5,19 +5,26 @@
  */
 package view;
 
+import java.sql.Connection;
+
 /**
  *
  * @author aldam
  */
 public class Tela_Data_Base extends javax.swing.JFrame {
-
+    private static Connection conection;
     /**
      * Creates new form Tela_Data_Base
      */
+    public Tela_Data_Base(Connection conection) {
+        this.conection = conection;
+        initComponents();
+    }
+    
     public Tela_Data_Base() {
         initComponents();
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -172,7 +179,7 @@ public class Tela_Data_Base extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtAvancarActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed
-        Tela_Script script = new Tela_Script();
+        Tela_Script script = new Tela_Script(conection);
         script.setVisible(true);
         dispose();
     }//GEN-LAST:event_jBtCancelarActionPerformed

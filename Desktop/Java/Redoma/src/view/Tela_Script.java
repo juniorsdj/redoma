@@ -5,16 +5,24 @@
  */
 package view;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author aldam
  */
 public class Tela_Script extends javax.swing.JFrame {
 
+    private static Connection conection;
+
     /**
      * Creates new form Tela_Data_Base
      */
-    public Tela_Script() {
+    public Tela_Script(Connection conection) {
+        this.conection = conection;
         initComponents();
     }
 
@@ -215,13 +223,18 @@ public class Tela_Script extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtVoltarActionPerformed
-      Tela_Login_Principal login = new Tela_Login_Principal();
-      login.setVisible(true);
-      dispose();
+        try {
+            this.conection.close();
+            Tela_Login_Principal login = new Tela_Login_Principal();
+            login.setVisible(true);
+            dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(Tela_Script.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jBtVoltarActionPerformed
 
     private void jBtAvançarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAvançarActionPerformed
-        Tela_Data_Base data_base = new Tela_Data_Base();
+        Tela_Data_Base data_base = new Tela_Data_Base(this.conection);
         data_base.setVisible(true);
         dispose();
     }//GEN-LAST:event_jBtAvançarActionPerformed
@@ -261,7 +274,7 @@ public class Tela_Script extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Tela_Script().setVisible(true);
+                new Tela_Script(conection).setVisible(true);
             }
         });
     }

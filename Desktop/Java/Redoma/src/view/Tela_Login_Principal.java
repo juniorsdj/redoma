@@ -5,11 +5,46 @@
  */
 package view;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 /**
  *
  * @author aldam
  */
 public class Tela_Login_Principal extends javax.swing.JFrame {
+
+    private Connection connection;
+    private String nomeServidor;
+    private String usuario;
+    private char[] senha;
+
+    public String getNomeServidor() {
+        return nomeServidor;
+    }
+
+    public void setNomeServidor(String nomeServidor) {
+        this.nomeServidor = nomeServidor;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public char[] getSenha() {
+        return senha;
+    }
+
+    public void setSenha(char[] senha) {
+        this.senha = senha;
+    }
 
     /**
      * Creates new form telaLogin
@@ -50,6 +85,11 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
         jPanelPrincipal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jBtCredito.setText("Créditos");
+        jBtCredito.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jBtCreditoMousePressed(evt);
+            }
+        });
 
         jLsimblo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/download.jpg"))); // NOI18N
 
@@ -61,7 +101,30 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
 
         jLsenha.setText("Senha:");
 
+        jTextFieldNomServidor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldNomServidorActionPerformed(evt);
+            }
+        });
+        jTextFieldNomServidor.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jTextFieldNomServidorPropertyChange(evt);
+            }
+        });
+
         jComboBoxAutenticar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Autenticação do SQL Server" }));
+
+        jTextFieldNomUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldNomUsuarioActionPerformed(evt);
+            }
+        });
+
+        jPasswordFieldSenha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPasswordFieldSenhaActionPerformed(evt);
+            }
+        });
 
         jPanelFuncao.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -169,8 +232,25 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtConectarActionPerformed
-       Tela_Script script = new Tela_Script();
-       script.setVisible(true);
+        this.setNomeServidor(jTextFieldNomServidor.getText());
+        this.setUsuario(jTextFieldNomUsuario.getText());
+        this.setSenha(jPasswordFieldSenha.getPassword());
+
+        String url = "jdbc:sqlserver://" + this.getNomeServidor()
+                + ";user=" + this.getUsuario() + ";password=" + new String(this.getSenha()) + ";";
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            connection = DriverManager.getConnection(url);
+            System.out.println(connection);
+            Tela_Script script = new Tela_Script(connection);
+            script.setVisible(true);
+        } catch (ClassNotFoundException e) {
+            // Erro caso o driver JDBC não foi instalado
+            e.printStackTrace();
+        } catch (SQLException e) {
+            // Erro caso haja problemas para se conectar ao banco de dados
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_jBtConectarActionPerformed
 
     private void jBtSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtSairActionPerformed
@@ -180,6 +260,25 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
     private void jBtAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAjudaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jBtAjudaActionPerformed
+
+    private void jBtCreditoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBtCreditoMousePressed
+    }//GEN-LAST:event_jBtCreditoMousePressed
+
+    private void jTextFieldNomServidorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNomServidorActionPerformed
+
+    }//GEN-LAST:event_jTextFieldNomServidorActionPerformed
+
+    private void jTextFieldNomServidorPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jTextFieldNomServidorPropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldNomServidorPropertyChange
+
+    private void jTextFieldNomUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNomUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldNomUsuarioActionPerformed
+
+    private void jPasswordFieldSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordFieldSenhaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPasswordFieldSenhaActionPerformed
 
     /**
      * @param args the command line arguments
