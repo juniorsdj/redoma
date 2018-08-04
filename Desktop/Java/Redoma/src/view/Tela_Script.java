@@ -197,7 +197,7 @@ public class Tela_Script extends javax.swing.JFrame {
                 .addComponent(jCheckBoxMaiorIndice)
                 .addGap(18, 18, 18)
                 .addComponent(jCheckBoxFileGroup)
-                .addGap(18, 21, Short.MAX_VALUE)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(jCheckBoxIndexClusterTipoVariavel)
                 .addGap(18, 18, 18)
                 .addComponent(jCheckBoxTableHeap)
@@ -208,6 +208,7 @@ public class Tela_Script extends javax.swing.JFrame {
         jPanelFuncao.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jBtVoltar.setText("<< Voltar ");
+        jBtVoltar.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtVoltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtVoltarActionPerformed(evt);
@@ -216,6 +217,7 @@ public class Tela_Script extends javax.swing.JFrame {
         jPanelFuncao.add(jBtVoltar);
 
         jBtAvançar.setText("Avançar >>");
+        jBtAvançar.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtAvançar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtAvançarActionPerformed(evt);
@@ -224,6 +226,7 @@ public class Tela_Script extends javax.swing.JFrame {
         jPanelFuncao.add(jBtAvançar);
 
         jBtCancelar.setText("Cancelar");
+        jBtCancelar.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtCancelarActionPerformed(evt);
@@ -232,6 +235,7 @@ public class Tela_Script extends javax.swing.JFrame {
         jPanelFuncao.add(jBtCancelar);
 
         jBtAjuda.setText("Ajuda");
+        jBtAjuda.setPreferredSize(new java.awt.Dimension(100, 30));
         jPanelFuncao.add(jBtAjuda);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

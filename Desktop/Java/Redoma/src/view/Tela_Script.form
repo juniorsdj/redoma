@@ -154,7 +154,7 @@
                   <Component id="jCheckBoxMaiorIndice" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jCheckBoxFileGroup" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" pref="21" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="32767" attributes="0"/>
                   <Component id="jCheckBoxIndexClusterTipoVariavel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jCheckBoxTableHeap" min="-2" max="-2" attributes="0"/>
@@ -301,6 +301,9 @@
         <Component class="javax.swing.JButton" name="jBtVoltar">
           <Properties>
             <Property name="text" type="java.lang.String" value="&lt;&lt; Voltar "/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[100, 30]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBtVoltarActionPerformed"/>
@@ -309,6 +312,9 @@
         <Component class="javax.swing.JButton" name="jBtAvan&#xe7;ar">
           <Properties>
             <Property name="text" type="java.lang.String" value="Avan&#xe7;ar &gt;&gt;"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[100, 30]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBtAvan&#xe7;arActionPerformed"/>
@@ -317,6 +323,9 @@
         <Component class="javax.swing.JButton" name="jBtCancelar">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cancelar"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[100, 30]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBtCancelarActionPerformed"/>
@@ -325,6 +334,9 @@
         <Component class="javax.swing.JButton" name="jBtAjuda">
           <Properties>
             <Property name="text" type="java.lang.String" value="Ajuda"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[100, 30]"/>
+            </Property>
           </Properties>
         </Component>
       </SubComponents>

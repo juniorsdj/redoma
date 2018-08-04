@@ -108,13 +108,14 @@ public class Tela_Data_Base extends javax.swing.JFrame {
                 .addComponent(jCheckBoxDWcoportativo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBoxDataMart)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 123, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
                 .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPanelFuncao.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jBtAvancar.setText("Avançar >>");
+        jBtAvancar.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtAvancar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtAvancarActionPerformed(evt);
@@ -123,6 +124,7 @@ public class Tela_Data_Base extends javax.swing.JFrame {
         jPanelFuncao.add(jBtAvancar);
 
         jBtCancelar.setText("Cancelar");
+        jBtCancelar.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtCancelarActionPerformed(evt);
@@ -131,6 +133,7 @@ public class Tela_Data_Base extends javax.swing.JFrame {
         jPanelFuncao.add(jBtCancelar);
 
         jBtAjuda.setText("Ajuda");
+        jBtAjuda.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtAjuda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtAjudaActionPerformed(evt);
@@ -155,7 +158,7 @@ public class Tela_Data_Base extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(32, 32, 32)
-                .addComponent(jPanelFuncao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanelFuncao, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
                 .addGap(39, 39, 39))
         );
 

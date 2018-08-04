@@ -46,11 +46,12 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("TelaLogin");
         setName("Gerenciador de dados"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(500, 500));
+        setPreferredSize(new java.awt.Dimension(500, 550));
 
         jPanelPrincipal.setBorder(javax.swing.BorderFactory.createTitledBorder("Redoma - Tela de Login"));
 
         jBtCredito.setText("Créditos");
+        jBtCredito.setPreferredSize(new java.awt.Dimension(100, 30));
 
         jLsimblo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/download.jpg"))); // NOI18N
 
@@ -74,7 +75,7 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
                     .addGroup(jPanelPrincipalLayout.createSequentialGroup()
                         .addComponent(jLsimblo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jBtCredito))
+                        .addComponent(jBtCredito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanelPrincipalLayout.createSequentialGroup()
                         .addGroup(jPanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanelPrincipalLayout.createSequentialGroup()
@@ -84,8 +85,8 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
                                     .addComponent(jLautenticacao, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addGap(20, 20, 20)
                                 .addGroup(jPanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBoxAutenticar, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextFieldNomServidor, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jComboBoxAutenticar, 0, 276, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldNomServidor)))
                             .addGroup(jPanelPrincipalLayout.createSequentialGroup()
                                 .addGroup(jPanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLnomUsuario)
@@ -99,19 +100,19 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
         jPanelPrincipalLayout.setVerticalGroup(
             jPanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelPrincipalLayout.createSequentialGroup()
-                .addContainerGap(13, Short.MAX_VALUE)
+                .addGap(13, 13, 13)
                 .addGroup(jPanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLsimblo)
-                    .addComponent(jBtCredito))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                    .addComponent(jBtCredito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
                 .addGroup(jPanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldNomServidor, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLNomeServidor))
-                .addGap(18, 20, Short.MAX_VALUE)
+                .addGap(20, 20, 20)
                 .addGroup(jPanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLautenticacao)
-                    .addComponent(jComboBoxAutenticar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                    .addComponent(jComboBoxAutenticar, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
+                .addGap(9, 9, 9)
                 .addGroup(jPanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldNomUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLnomUsuario))
@@ -119,12 +120,13 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
                 .addGroup(jPanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jPasswordFieldSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLsenha))
-                .addContainerGap(75, Short.MAX_VALUE))
+                .addGap(75, 75, 75))
         );
 
         jPanelFuncao.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jBtConectar.setText("Conectar");
+        jBtConectar.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtConectar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtConectarActionPerformed(evt);
@@ -133,6 +135,7 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
         jPanelFuncao.add(jBtConectar);
 
         jBtSair.setText("Sair");
+        jBtSair.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtSairActionPerformed(evt);
@@ -141,6 +144,7 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
         jPanelFuncao.add(jBtSair);
 
         jBtAjuda.setText("Ajuda");
+        jBtAjuda.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtAjuda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtAjudaActionPerformed(evt);
@@ -165,8 +169,8 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(21, 21, 21)
-                .addComponent(jPanelFuncao, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
-                .addGap(41, 41, 41))
+                .addComponent(jPanelFuncao, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30))
         );
 
         pack();
