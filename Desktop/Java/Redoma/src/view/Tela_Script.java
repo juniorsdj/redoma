@@ -87,6 +87,7 @@ public class Tela_Script extends javax.swing.JFrame {
         jSlider3.setMajorTickSpacing(10);
         jSlider3.setPaintLabels(true);
         jSlider3.setPaintTicks(true);
+        jSlider3.setValue(0);
 
         jCheckBoxTableHeap.setText(" Tabelas heap");
 
@@ -97,10 +98,12 @@ public class Tela_Script extends javax.swing.JFrame {
         jSlider1.setMajorTickSpacing(10);
         jSlider1.setPaintLabels(true);
         jSlider1.setPaintTicks(true);
+        jSlider1.setValue(0);
 
         jSlider2.setMajorTickSpacing(10);
         jSlider2.setPaintLabels(true);
         jSlider2.setPaintTicks(true);
+        jSlider2.setValue(0);
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jSlider1, org.jdesktop.beansbinding.ELProperty.create("${value}"), jTextField1, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
