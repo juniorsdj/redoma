@@ -5,6 +5,8 @@
  */
 package view;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author aldam
@@ -39,14 +41,17 @@ public class Tela_Resumo extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Resumo");
+        setPreferredSize(new java.awt.Dimension(500, 500));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Opções Selecionadas"));
+        jPanel1.setPreferredSize(new java.awt.Dimension(500, 500));
 
         jScrollBar1.setOrientation(javax.swing.JScrollBar.HORIZONTAL);
 
         jPanelFuncao.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jBtVoltar.setText("<< Voltar ");
+        jBtVoltar.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtVoltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtVoltarActionPerformed(evt);
@@ -55,6 +60,7 @@ public class Tela_Resumo extends javax.swing.JFrame {
         jPanelFuncao.add(jBtVoltar);
 
         jBtConcluir.setText("Concluir");
+        jBtConcluir.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtConcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtConcluirActionPerformed(evt);
@@ -63,6 +69,7 @@ public class Tela_Resumo extends javax.swing.JFrame {
         jPanelFuncao.add(jBtConcluir);
 
         jBtCancelar.setText("Cancelar");
+        jBtCancelar.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtCancelarActionPerformed(evt);
@@ -71,6 +78,7 @@ public class Tela_Resumo extends javax.swing.JFrame {
         jPanelFuncao.add(jBtCancelar);
 
         jBtAjuda.setText("Ajuda");
+        jBtAjuda.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtAjuda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtAjudaActionPerformed(evt);
@@ -90,14 +98,14 @@ public class Tela_Resumo extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1)
-                    .addComponent(jPanelFuncao, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE))
+                    .addComponent(jPanelFuncao, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanelFuncao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -110,24 +118,25 @@ public class Tela_Resumo extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtVoltarActionPerformed
-        Tela_Data_Base data_base = new Tela_Data_Base();
-        data_base.setVisible(true);
-        dispose();
+        Tela_Script script = new Tela_Script();
+        script.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jBtVoltarActionPerformed
 
     private void jBtConcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtConcluirActionPerformed
@@ -135,7 +144,10 @@ public class Tela_Resumo extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtConcluirActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed
-       dispose();
+        int resposta = JOptionPane.showConfirmDialog(null, "Deseja Sair Realmente ?");
+        if (resposta == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }  
     }//GEN-LAST:event_jBtCancelarActionPerformed
 
     private void jBtAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAjudaActionPerformed
