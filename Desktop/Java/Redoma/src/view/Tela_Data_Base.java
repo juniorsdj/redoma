@@ -5,6 +5,8 @@
  */
 package view;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author aldam
@@ -14,9 +16,6 @@ public class Tela_Data_Base extends javax.swing.JFrame {
     /**
      * Creates new form Tela_Data_Base
      */
-    
-    
-    
     public Tela_Data_Base() {
         initComponents();
     }
@@ -176,7 +175,10 @@ public class Tela_Data_Base extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtAvancarActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed
-        System.exit(0);
+        int resposta = JOptionPane.showConfirmDialog(null, "Deseja Sair Realmente ?");
+        if (resposta == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
     }//GEN-LAST:event_jBtCancelarActionPerformed
 
     private void jBtAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAjudaActionPerformed

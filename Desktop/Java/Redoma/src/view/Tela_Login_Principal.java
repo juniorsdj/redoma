@@ -5,6 +5,8 @@
  */
 package view;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author aldam
@@ -185,7 +187,10 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtConectarActionPerformed
 
     private void jBtSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtSairActionPerformed
-        System.exit(0);
+        int resposta = JOptionPane.showConfirmDialog(null, "Deseja Sair Realmente ?");
+        if (resposta == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }  
     }//GEN-LAST:event_jBtSairActionPerformed
 
     private void jBtAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAjudaActionPerformed

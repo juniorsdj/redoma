@@ -5,6 +5,8 @@
  */
 package view;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author aldam
@@ -281,7 +283,10 @@ public class Tela_Script extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtAvançarActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed
-        dispose();
+        int resposta = JOptionPane.showConfirmDialog(null, "Deseja Sair Realmente ?");
+        if (resposta == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }            
     }//GEN-LAST:event_jBtCancelarActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
