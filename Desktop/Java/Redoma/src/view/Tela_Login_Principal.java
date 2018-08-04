@@ -17,6 +17,7 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
     public Tela_Login_Principal() {
         initComponents();
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -178,8 +179,9 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtConectarActionPerformed
-       Tela_Script script = new Tela_Script();
-       script.setVisible(true);
+       Tela_Data_Base tdb = new Tela_Data_Base();
+       tdb.setVisible(true);
+       this.dispose();
     }//GEN-LAST:event_jBtConectarActionPerformed
 
     private void jBtSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtSairActionPerformed

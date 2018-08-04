@@ -14,6 +14,9 @@ public class Tela_Data_Base extends javax.swing.JFrame {
     /**
      * Creates new form Tela_Data_Base
      */
+    
+    
+    
     public Tela_Data_Base() {
         initComponents();
     }
@@ -167,15 +170,13 @@ public class Tela_Data_Base extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtAvancarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAvancarActionPerformed
-        Tela_Resumo resumo = new Tela_Resumo();
-        resumo.setVisible(true);
-        dispose();
+        Tela_Script telascript = new Tela_Script();
+        telascript.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jBtAvancarActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed
-        Tela_Script script = new Tela_Script();
-        script.setVisible(true);
-        dispose();
+        System.exit(0);
     }//GEN-LAST:event_jBtCancelarActionPerformed
 
     private void jBtAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAjudaActionPerformed

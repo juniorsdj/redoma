@@ -269,15 +269,15 @@ public class Tela_Script extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtVoltarActionPerformed
-      Tela_Login_Principal login = new Tela_Login_Principal();
-      login.setVisible(true);
-      dispose();
+        Tela_Data_Base data_base = new Tela_Data_Base();
+        data_base.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jBtVoltarActionPerformed
 
     private void jBtAvançarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAvançarActionPerformed
-        Tela_Data_Base data_base = new Tela_Data_Base();
-        data_base.setVisible(true);
-        dispose();
+        Tela_Resumo resumo = new Tela_Resumo();
+        resumo.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jBtAvançarActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed

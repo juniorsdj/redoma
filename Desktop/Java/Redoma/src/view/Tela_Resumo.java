@@ -132,9 +132,9 @@ public class Tela_Resumo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtVoltarActionPerformed
-        Tela_Data_Base data_base = new Tela_Data_Base();
-        data_base.setVisible(true);
-        dispose();
+        Tela_Script script = new Tela_Script();
+        script.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jBtVoltarActionPerformed
 
     private void jBtConcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtConcluirActionPerformed
@@ -142,7 +142,7 @@ public class Tela_Resumo extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtConcluirActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed
-       dispose();
+       System.exit(0);
     }//GEN-LAST:event_jBtCancelarActionPerformed
 
     private void jBtAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAjudaActionPerformed
