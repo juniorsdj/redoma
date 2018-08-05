@@ -5,11 +5,9 @@
  */
 package view;
 
- Gledson
 import javax.swing.JOptionPane;
 
 import java.sql.Connection;
- master
 
 /**
  *
