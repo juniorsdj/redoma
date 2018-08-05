@@ -62,7 +62,7 @@ public class Tela_Data_Base extends javax.swing.JFrame {
 
         jLbdUsuario.setText("Banco de Dados de Usuários");
 
-        jCheckBoxFolhaPagamento.setText("Folha de Pagamento");
+        jCheckBoxFolhaPagamento.setText("AdventureWorks2014");
 
         jCheckBoxAcademico.setText("Acadêmico");
 
