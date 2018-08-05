@@ -5,21 +5,30 @@
  */
 package view;
 
+ Gledson
 import javax.swing.JOptionPane;
+
+import java.sql.Connection;
+ master
 
 /**
  *
  * @author aldam
  */
 public class Tela_Data_Base extends javax.swing.JFrame {
-
+    private static Connection conection;
     /**
      * Creates new form Tela_Data_Base
      */
+    public Tela_Data_Base(Connection conection) {
+        this.conection = conection;
+        initComponents();
+    }
+    
     public Tela_Data_Base() {
         initComponents();
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -58,7 +67,7 @@ public class Tela_Data_Base extends javax.swing.JFrame {
 
         jLbdUsuario.setText("Banco de Dados de Usuários");
 
-        jCheckBoxFolhaPagamento.setText("Folha de Pagamento");
+        jCheckBoxFolhaPagamento.setText("AdventureWorks2014");
 
         jCheckBoxAcademico.setText("Acadêmico");
 
@@ -175,10 +184,13 @@ public class Tela_Data_Base extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtAvancarActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed
+
         int resposta = JOptionPane.showConfirmDialog(null, "Deseja Sair Realmente ?");
         if (resposta == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
+
+
     }//GEN-LAST:event_jBtCancelarActionPerformed
 
     private void jBtAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAjudaActionPerformed

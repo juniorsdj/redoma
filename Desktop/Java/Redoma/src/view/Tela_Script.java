@@ -5,7 +5,13 @@
  */
 package view;
 
+
 import javax.swing.JOptionPane;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 /**
  *
@@ -13,10 +19,13 @@ import javax.swing.JOptionPane;
  */
 public class Tela_Script extends javax.swing.JFrame {
 
+    private static Connection conection;
+
     /**
      * Creates new form Tela_Data_Base
      */
-    public Tela_Script() {
+    public Tela_Script(Connection conection) {
+        this.conection = conection;
         initComponents();
     }
 
@@ -85,6 +94,14 @@ public class Tela_Script extends javax.swing.JFrame {
         jCheckBoxIndiceNaoUtilizado.setText("Índices não utilizados");
 
         jCheckBoxMaiorIndice.setText("Os top 10 - maiores indices");
+        
+        jSliderFragCluster.setMajorTickSpacing(5);
+        jSliderFragCluster.setPaintLabels(true);
+        jSliderFragCluster.setPaintTicks(true);
+
+        jSliderFragNaoCluster.setMajorTickSpacing(5);
+        jSliderFragNaoCluster.setPaintLabels(true);
+        jSliderFragNaoCluster.setPaintTicks(true);
 
         jSlider3.setMajorTickSpacing(10);
         jSlider3.setPaintLabels(true);
@@ -121,6 +138,12 @@ public class Tela_Script extends javax.swing.JFrame {
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jSlider3, org.jdesktop.beansbinding.ELProperty.create("${value}"), jTextField3, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
+
+
+        jSliderFragCluster1.setMajorTickSpacing(5);
+        jSliderFragCluster1.setPaintLabels(true);
+        jSliderFragCluster1.setPaintTicks(true);
+        
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -274,12 +297,18 @@ public class Tela_Script extends javax.swing.JFrame {
         Tela_Data_Base data_base = new Tela_Data_Base();
         data_base.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jBtVoltarActionPerformed
-
+    }
     private void jBtAvançarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAvançarActionPerformed
-        Tela_Resumo resumo = new Tela_Resumo();
-        resumo.setVisible(true);
-        this.dispose();
+        try {
+            this.conection.close();
+            Tela_Resumo resumo = new Tela_Resumo();
+            resumo.setVisible(true);
+            this.dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(Tela_Script.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     }//GEN-LAST:event_jBtAvançarActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed
@@ -324,7 +353,7 @@ public class Tela_Script extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Tela_Script().setVisible(true);
+                new Tela_Script(conection).setVisible(true);
             }
         });
     }
