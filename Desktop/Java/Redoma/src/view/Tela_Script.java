@@ -86,6 +86,14 @@ public class Tela_Script extends javax.swing.JFrame {
         jCheckBoxIndiceNaoUtilizado.setText("Índices não utilizados");
 
         jCheckBoxMaiorIndice.setText("Os top 10 - maiores indices");
+        
+        jSliderFragCluster.setMajorTickSpacing(5);
+        jSliderFragCluster.setPaintLabels(true);
+        jSliderFragCluster.setPaintTicks(true);
+
+        jSliderFragNaoCluster.setMajorTickSpacing(5);
+        jSliderFragNaoCluster.setPaintLabels(true);
+        jSliderFragNaoCluster.setPaintTicks(true);
 
         jCheckBoxTableHeap.setText(" Tabelas heap");
 
@@ -93,6 +101,10 @@ public class Tela_Script extends javax.swing.JFrame {
 
         jCheckBoxIndexClusterTipoVariavel.setText("Ííndices clusterizados com tipos de dados variantes");
 
+        jSliderFragCluster1.setMajorTickSpacing(5);
+        jSliderFragCluster1.setPaintLabels(true);
+        jSliderFragCluster1.setPaintTicks(true);
+        
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
