@@ -89,15 +89,12 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
         jPanelPrincipal.setBorder(javax.swing.BorderFactory.createTitledBorder("Redoma - Tela de Login"));
 
         jBtCredito.setText("Créditos");
-
         jBtCredito.setPreferredSize(new java.awt.Dimension(100, 30));
-
         jBtCredito.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jBtCreditoMousePressed(evt);
             }
         });
-
 
         jLsimblo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/download.jpg"))); // NOI18N
 
@@ -108,9 +105,6 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
         jLnomUsuario.setText("Nome do Usuário:");
 
         jLsenha.setText("Senha:");
-
-
-        jComboBoxAutenticar.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Autenticação do SQL Server" }));
 
         jTextFieldNomServidor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -123,7 +117,12 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxAutenticar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Autenticação do SQL Server" }));
+        jComboBoxAutenticar.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Autenticação do SQL Server" }));
+        jComboBoxAutenticar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxAutenticarActionPerformed(evt);
+            }
+        });
 
         jTextFieldNomUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -136,33 +135,6 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
                 jPasswordFieldSenhaActionPerformed(evt);
             }
         });
-
-        jPanelFuncao.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        jBtConectar.setText("Conectar");
-        jBtConectar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtConectarActionPerformed(evt);
-            }
-        });
-        jPanelFuncao.add(jBtConectar);
-
-        jBtSair.setText("Sair");
-        jBtSair.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtSairActionPerformed(evt);
-            }
-        });
-        jPanelFuncao.add(jBtSair);
-
-        jBtAjuda.setText("Ajuda");
-        jBtAjuda.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtAjudaActionPerformed(evt);
-            }
-        });
-        jPanelFuncao.add(jBtAjuda);
-
 
         javax.swing.GroupLayout jPanelPrincipalLayout = new javax.swing.GroupLayout(jPanelPrincipal);
         jPanelPrincipal.setLayout(jPanelPrincipalLayout);
@@ -291,11 +263,8 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
             Tela_Data_Base tdb = new Tela_Data_Base();
             tdb.setVisible(true);
             this.dispose();
-        } catch (ClassNotFoundException e) {
-            // Erro caso o driver JDBC não foi instalado
-            e.printStackTrace();
-        } catch (SQLException e) {
-            // Erro caso haja problemas para se conectar ao banco de dados
+        } catch (ClassNotFoundException | SQLException e) {
+            JOptionPane.showMessageDialog(null, "Usuario ou senha incorretos !");
             e.printStackTrace();
         }
 
