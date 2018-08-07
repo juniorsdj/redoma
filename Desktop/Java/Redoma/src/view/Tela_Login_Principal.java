@@ -20,10 +20,16 @@ import java.sql.Statement;
 public class Tela_Login_Principal extends javax.swing.JFrame {
 
     private Connection connection;
+
     private String nomeServidor;
     private String usuario;
+    //mudar para password
     private char[] senha;
 
+    public Connection getConnection() {
+        return connection;
+    }
+    
     public String getNomeServidor() {
         return nomeServidor;
     }
@@ -118,11 +124,6 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
         });
 
         jComboBoxAutenticar.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Autenticação do SQL Server" }));
-        jComboBoxAutenticar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxAutenticarActionPerformed(evt);
-            }
-        });
 
         jTextFieldNomUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -259,8 +260,8 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url);
-            System.out.println(connection);
-            Tela_Data_Base tdb = new Tela_Data_Base();
+            //passando as informações da conexao
+            Tela_Data_Base tdb = new Tela_Data_Base(getConnection());
             tdb.setVisible(true);
             this.dispose();
         } catch (ClassNotFoundException | SQLException e) {
