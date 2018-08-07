@@ -118,6 +118,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Master"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxMasterActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxMsdb">
           <Properties>
@@ -133,6 +136,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Folha de Pagamento"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxFolhaPagamentoActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxAcademico">
           <Properties>
@@ -148,6 +154,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="DataMart"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxDataMartActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JScrollBar" name="jScrollBar1">
           <Properties>

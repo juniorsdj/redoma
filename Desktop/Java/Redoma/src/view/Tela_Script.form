@@ -95,18 +95,20 @@
                       </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jCheckBoxIndexClusterTipoVariavel" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxFileGroup" min="-2" max="-2" attributes="0"/>
                               <Component id="jCheckBoxTableHeap" min="-2" max="-2" attributes="0"/>
                               <Component id="jCheckBoxIndiceNaoUtilizado" min="-2" max="-2" attributes="0"/>
                               <Component id="jCheckBoxABC" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabelOpcaoIndex" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jCheckBoxFragCluster" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                  <Component id="jSlider2" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jTextField2" min="-2" pref="42" max="-2" attributes="0"/>
+                              <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                                  <Component id="checkFileGroupPrimary" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jCheckBoxIndexClusterTipoVariavel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jCheckBoxFragCluster" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                                      <Component id="jSlider2" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jTextField2" min="-2" pref="42" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -153,7 +155,7 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jCheckBoxMaiorIndice" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jCheckBoxFileGroup" min="-2" max="-2" attributes="0"/>
+                  <Component id="checkFileGroupPrimary" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="32767" attributes="0"/>
                   <Component id="jCheckBoxIndexClusterTipoVariavel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -238,10 +240,13 @@
             <Property name="text" type="java.lang.String" value=" Tabelas heap"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBoxFileGroup">
+        <Component class="javax.swing.JCheckBox" name="checkFileGroupPrimary">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#xcd;ndices localizado no Filegroup PRIMARY"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkFileGroupPrimaryActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxIndexClusterTipoVariavel">
           <Properties>

@@ -5,6 +5,18 @@
  */
 package view;
 
+import java.sql.Connection;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,6 +30,31 @@ public class Tela_Resumo extends javax.swing.JFrame {
      */
     public Tela_Resumo() {
         initComponents();
+    }
+    private Tela_Script telaScript;
+
+    public Tela_Script getTelaScript() {
+        return telaScript;
+    }
+
+    public void setTelaScript(Tela_Script telaScript) {
+        this.telaScript = telaScript;
+    }
+
+    public void salvarEmTxt(String select) {
+        Path caminho = Paths.get("C:/Users/PC/Desktop/Informações Sobre Indices.txt");
+        //e necessario converter o string em bytes
+        byte[] textoEmByte = select.getBytes();
+        try {
+            //gravando os dados no txt
+            Files.write(caminho, textoEmByte);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro: " + e);
+        }
+    }
+    
+    public Connection pegarConexao(){
+        return getTelaScript().conection;
     }
 
     /**
@@ -134,24 +171,25 @@ public class Tela_Resumo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtVoltarActionPerformed
-        Tela_Script script = new Tela_Script();
-        script.setVisible(true);
+        this.getTelaScript().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jBtVoltarActionPerformed
 
     private void jBtConcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtConcluirActionPerformed
-        // TODO add your handling code here:
+  
+        salvarEmTxt("Aqui o texto que vai ser salvo, no caso o select");
     }//GEN-LAST:event_jBtConcluirActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed
-        int resposta = JOptionPane.showConfirmDialog(null, "Deseja Sair Realmente ?");
+        int resposta = JOptionPane.showConfirmDialog(null, "Deseja Realmente Sair ?");
         if (resposta == JOptionPane.YES_OPTION) {
             System.exit(0);
-        }  
+        }
     }//GEN-LAST:event_jBtCancelarActionPerformed
 
     private void jBtAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAjudaActionPerformed
-        // TODO add your handling code here:
+
+        
     }//GEN-LAST:event_jBtAjudaActionPerformed
 
     /**

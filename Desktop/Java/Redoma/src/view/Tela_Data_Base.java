@@ -14,7 +14,7 @@ import java.sql.Connection;
  * @author aldam
  */
 public class Tela_Data_Base extends javax.swing.JFrame {
-    private static Connection conection;
+    public static Connection conection;
     /**
      * Creates new form Tela_Data_Base
      */
@@ -23,6 +23,21 @@ public class Tela_Data_Base extends javax.swing.JFrame {
         initComponents();
     }
     
+    
+//    public Tela_Data_Base(Tela_Script ts) {
+//        ts = new Tela_Script();
+//        initComponents();
+//    }
+    private Tela_Script telaScript;
+
+    public Tela_Script getTelaScript() {
+        return telaScript;
+    }
+
+    public void setTelaScript(Tela_Script telaScript) {
+        this.telaScript = telaScript;
+    }
+  
     public Tela_Data_Base() {
         initComponents();
     }
@@ -53,25 +68,39 @@ public class Tela_Data_Base extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("DataBase");
-        setPreferredSize(new java.awt.Dimension(500, 500));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Selecione o(s) DataBase(s)"));
 
         jLbdsistemico.setText("Banco de Dados Sistêmico");
 
         jCheckBoxMaster.setText("Master");
+        jCheckBoxMaster.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMasterActionPerformed(evt);
+            }
+        });
 
         jCheckBoxMsdb.setText("Msdb");
 
         jLbdUsuario.setText("Banco de Dados de Usuários");
 
-        jCheckBoxFolhaPagamento.setText("AdventureWorks2014");
+        jCheckBoxFolhaPagamento.setText("Folha de Pagamento");
+        jCheckBoxFolhaPagamento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxFolhaPagamentoActionPerformed(evt);
+            }
+        });
 
         jCheckBoxAcademico.setText("Acadêmico");
 
         jCheckBoxDWcoportativo.setText("DW Coportativo");
 
         jCheckBoxDataMart.setText("DataMart");
+        jCheckBoxDataMart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxDataMartActionPerformed(evt);
+            }
+        });
 
         jScrollBar1.setOrientation(javax.swing.JScrollBar.HORIZONTAL);
         jScrollBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -176,14 +205,28 @@ public class Tela_Data_Base extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtAvancarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAvancarActionPerformed
-        Tela_Script telascript = new Tela_Script();
-        telascript.setVisible(true);
-        this.dispose();
+        if(getTelaScript() == null){//nao foi ainda para outra tela
+            //cria nova instancia
+            //passando esta tela como parametro e conexao
+            setTelaScript(new Tela_Script(conection));
+            //a tela script agora conhece esta tela caso ela precise voltar
+            //guardando o caminho de volta
+            getTelaScript().setTelaDataBase(this);
+            getTelaScript().setVisible(true);
+            //fechar esta janela
+            this.dispose();  
+          }else{
+            //ja passou pela 3 tela e voltou pra essa
+            this.getTelaScript().setVisible(true);
+            this.dispose();
+          }
+        
+        
     }//GEN-LAST:event_jBtAvancarActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed
 
-        int resposta = JOptionPane.showConfirmDialog(null, "Deseja Sair Realmente ?");
+        int resposta = JOptionPane.showConfirmDialog(null, "Deseja Realmente Sair ?");
         if (resposta == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
@@ -194,6 +237,18 @@ public class Tela_Data_Base extends javax.swing.JFrame {
     private void jBtAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAjudaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jBtAjudaActionPerformed
+
+    private void jCheckBoxMasterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMasterActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxMasterActionPerformed
+
+    private void jCheckBoxDataMartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxDataMartActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxDataMartActionPerformed
+
+    private void jCheckBoxFolhaPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxFolhaPagamentoActionPerformed
+
+    }//GEN-LAST:event_jCheckBoxFolhaPagamentoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -225,7 +280,7 @@ public class Tela_Data_Base extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Tela_Data_Base().setVisible(true);
+                new Tela_Data_Base(conection).setVisible(true);
             }
         });
     }
