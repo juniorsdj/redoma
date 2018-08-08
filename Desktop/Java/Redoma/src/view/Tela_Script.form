@@ -30,7 +30,7 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jPanelFuncao" max="32767" attributes="0"/>
+                  <Component id="jPanelFuncao" pref="702" max="32767" attributes="0"/>
                   <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -68,48 +68,42 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jCheckBoxFragNaoCluster" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="jTextField1" min="-2" pref="42" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                                  <Component id="jCheckBoxFillFactor" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jTextField3" min="-2" pref="42" max="-2" attributes="0"/>
+                              </Group>
                               <Component id="jCheckBoxMaiorIndice" min="-2" max="-2" attributes="0"/>
                               <Component id="jCheckBoxPermisssaoEscrita" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabelOpcaoPermissao" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jCheckBoxPermissaoSA" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="jCheckBoxFillFactor" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="jSlider3" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="jTextField3" min="-2" pref="42" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="jCheckBoxFragNaoCluster" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="jSlider1" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                  <Component id="jTextField1" min="-2" pref="42" max="-2" attributes="0"/>
-                              </Group>
                           </Group>
-                          <EmptySpace pref="173" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jCheckBoxTableHeap" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxIndiceNaoUtilizado" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxABC" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabelOpcaoIndex" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="jSlider2" alignment="0" pref="376" max="32767" attributes="0"/>
+                                  <Component id="jCheckBoxTableHeap" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jCheckBoxABC" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabelOpcaoIndex" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="checkFileGroupPrimary" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jCheckBoxIndexClusterTipoVariavel" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jCheckBoxFragCluster" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                      <Component id="jSlider2" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="jTextField2" min="-2" pref="42" max="-2" attributes="0"/>
                                   </Group>
+                                  <Component id="jCheckBoxIndiceNaoUtilizado" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jSlider1" alignment="0" max="32767" attributes="0"/>
                               </Group>
+                              <Component id="jSlider3" alignment="0" min="-2" pref="387" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
@@ -130,35 +124,36 @@
                   <Component id="jCheckBoxABC" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jLabelOpcaoIndex" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jCheckBoxFragNaoCluster" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jSlider1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jSlider2" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="jCheckBoxFragCluster" min="-2" pref="23" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                  <Component id="jSlider1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jCheckBoxFragCluster" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                      <Component id="jTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                  <EmptySpace pref="14" max="32767" attributes="0"/>
+                  <Component id="jSlider2" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jCheckBoxFillFactor" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jSlider3" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jTextField3" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="jSlider3" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jCheckBoxIndiceNaoUtilizado" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jCheckBoxMaiorIndice" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="checkFileGroupPrimary" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                   <Component id="jCheckBoxIndexClusterTipoVariavel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                   <Component id="jCheckBoxTableHeap" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jScrollBar1" min="-2" pref="17" max="-2" attributes="0"/>
@@ -194,12 +189,12 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxFragNaoCluster">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Indeces com fragmenta&#xe7;&#xe3;o n&#xe3;o clusterizado"/>
+            <Property name="text" type="java.lang.String" value="Indices com fragmenta&#xe7;&#xe3;o n&#xe3;o clusterizado"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxFragCluster">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Indeces com fragmenta&#xe7;&#xe3;o clusterizado"/>
+            <Property name="text" type="java.lang.String" value="Indices com fragmenta&#xe7;&#xe3;o clusterizado"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JScrollBar" name="jScrollBar1">
@@ -216,20 +211,29 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="&#xcd;ndices com Fillfactor menor "/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxFillFactorActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxIndiceNaoUtilizado">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#xcd;ndices n&#xe3;o utilizados"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxIndiceNaoUtilizadoActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxMaiorIndice">
           <Properties>
             <Property name="text" type="java.lang.String" value="Os top 10 - maiores indices"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxMaiorIndiceActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JSlider" name="jSlider3">
           <Properties>
-            <Property name="majorTickSpacing" type="int" value="10"/>
+            <Property name="majorTickSpacing" type="int" value="5"/>
             <Property name="paintLabels" type="boolean" value="true"/>
             <Property name="paintTicks" type="boolean" value="true"/>
             <Property name="value" type="int" value="0"/>
@@ -239,6 +243,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value=" Tabelas heap"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxTableHeapActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="checkFileGroupPrimary">
           <Properties>
@@ -252,10 +259,13 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="&#xcd;&#xed;ndices clusterizados com tipos de dados variantes"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxIndexClusterTipoVariavelActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JSlider" name="jSlider1">
           <Properties>
-            <Property name="majorTickSpacing" type="int" value="10"/>
+            <Property name="majorTickSpacing" type="int" value="5"/>
             <Property name="paintLabels" type="boolean" value="true"/>
             <Property name="paintTicks" type="boolean" value="true"/>
             <Property name="value" type="int" value="0"/>
@@ -263,7 +273,7 @@
         </Component>
         <Component class="javax.swing.JSlider" name="jSlider2">
           <Properties>
-            <Property name="majorTickSpacing" type="int" value="10"/>
+            <Property name="majorTickSpacing" type="int" value="5"/>
             <Property name="paintLabels" type="boolean" value="true"/>
             <Property name="paintTicks" type="boolean" value="true"/>
             <Property name="value" type="int" value="0"/>

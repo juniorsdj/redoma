@@ -59,14 +59,13 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
+              <Component id="jScrollBar1" alignment="0" max="32767" attributes="0"/>
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jCheckBoxDWcoportativo" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxAcademico" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxFolhaPagamento" min="-2" max="-2" attributes="0"/>
+                              <Component id="jCheckBoxCurso" min="-2" max="-2" attributes="0"/>
                               <Component id="jCheckBoxMsdb" min="-2" max="-2" attributes="0"/>
                               <Component id="jLbdsistemico" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jCheckBoxMaster" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -75,12 +74,15 @@
                           <EmptySpace pref="322" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
-                          <Component id="jCheckBoxDataMart" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jCheckBoxAdventureWorks2014" min="-2" max="-2" attributes="0"/>
+                              <Component id="jCheckBoxNorthwind" min="-2" max="-2" attributes="0"/>
+                              <Component id="jCheckBoxDataMart" min="-2" max="-2" attributes="0"/>
+                          </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
-              <Component id="jScrollBar1" alignment="0" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -94,14 +96,14 @@
                   <Component id="jCheckBoxMsdb" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jLbdUsuario" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="jCheckBoxFolhaPagamento" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                  <Component id="jCheckBoxAdventureWorks2014" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jCheckBoxAcademico" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="jCheckBoxDWcoportativo" min="-2" max="-2" attributes="0"/>
+                  <Component id="jCheckBoxCurso" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jCheckBoxDataMart" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jCheckBoxNorthwind" min="-2" max="-2" attributes="0"/>
                   <EmptySpace pref="119" max="32767" attributes="0"/>
                   <Component id="jScrollBar1" min="-2" max="-2" attributes="0"/>
               </Group>
@@ -126,28 +128,31 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Msdb"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxMsdbActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLbdUsuario">
           <Properties>
             <Property name="text" type="java.lang.String" value="Banco de Dados de Usu&#xe1;rios"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBoxFolhaPagamento">
+        <Component class="javax.swing.JCheckBox" name="jCheckBoxCurso">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Folha de Pagamento"/>
+            <Property name="text" type="java.lang.String" value="Curso"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxFolhaPagamentoActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxCursoActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBoxAcademico">
+        <Component class="javax.swing.JCheckBox" name="jCheckBoxNorthwind">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Acad&#xea;mico"/>
+            <Property name="text" type="java.lang.String" value="Northwind"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBoxDWcoportativo">
+        <Component class="javax.swing.JCheckBox" name="jCheckBoxAdventureWorks2014">
           <Properties>
-            <Property name="text" type="java.lang.String" value="DW Coportativo"/>
+            <Property name="text" type="java.lang.String" value="AdventureWorks2014"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxDataMart">

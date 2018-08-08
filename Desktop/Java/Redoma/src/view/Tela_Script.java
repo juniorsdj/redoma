@@ -112,25 +112,45 @@ public class Tela_Script extends javax.swing.JFrame {
 
         jCheckBoxABC.setText("abc");
 
-        jCheckBoxFragNaoCluster.setText("Indeces com fragmentação não clusterizado");
+        jCheckBoxFragNaoCluster.setText("Indices com fragmentação não clusterizado");
 
-        jCheckBoxFragCluster.setText("Indeces com fragmentação clusterizado");
+        jCheckBoxFragCluster.setText("Indices com fragmentação clusterizado");
 
         jScrollBar1.setOrientation(javax.swing.JScrollBar.HORIZONTAL);
         jScrollBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jCheckBoxFillFactor.setText("Índices com Fillfactor menor ");
+        jCheckBoxFillFactor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxFillFactorActionPerformed(evt);
+            }
+        });
 
         jCheckBoxIndiceNaoUtilizado.setText("Índices não utilizados");
+        jCheckBoxIndiceNaoUtilizado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxIndiceNaoUtilizadoActionPerformed(evt);
+            }
+        });
 
         jCheckBoxMaiorIndice.setText("Os top 10 - maiores indices");
+        jCheckBoxMaiorIndice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMaiorIndiceActionPerformed(evt);
+            }
+        });
 
-        jSlider3.setMajorTickSpacing(10);
+        jSlider3.setMajorTickSpacing(5);
         jSlider3.setPaintLabels(true);
         jSlider3.setPaintTicks(true);
         jSlider3.setValue(0);
 
         jCheckBoxTableHeap.setText(" Tabelas heap");
+        jCheckBoxTableHeap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxTableHeapActionPerformed(evt);
+            }
+        });
 
         checkFileGroupPrimary.setText("Índices localizado no Filegroup PRIMARY");
         checkFileGroupPrimary.addActionListener(new java.awt.event.ActionListener() {
@@ -140,13 +160,18 @@ public class Tela_Script extends javax.swing.JFrame {
         });
 
         jCheckBoxIndexClusterTipoVariavel.setText("Ííndices clusterizados com tipos de dados variantes");
+        jCheckBoxIndexClusterTipoVariavel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxIndexClusterTipoVariavelActionPerformed(evt);
+            }
+        });
 
-        jSlider1.setMajorTickSpacing(10);
+        jSlider1.setMajorTickSpacing(5);
         jSlider1.setPaintLabels(true);
         jSlider1.setPaintTicks(true);
         jSlider1.setValue(0);
 
-        jSlider2.setMajorTickSpacing(10);
+        jSlider2.setMajorTickSpacing(5);
         jSlider2.setPaintLabels(true);
         jSlider2.setPaintTicks(true);
         jSlider2.setValue(0);
@@ -176,40 +201,36 @@ public class Tela_Script extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jCheckBoxFragNaoCluster)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(4, 4, 4)
+                                .addComponent(jCheckBoxFillFactor)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jCheckBoxMaiorIndice)
                             .addComponent(jCheckBoxPermisssaoEscrita)
                             .addComponent(jLabelOpcaoPermissao)
-                            .addComponent(jCheckBoxPermissaoSA)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jCheckBoxFillFactor)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jCheckBoxFragNaoCluster)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(10, 10, 10)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(173, Short.MAX_VALUE))
+                            .addComponent(jCheckBoxPermissaoSA))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBoxTableHeap)
-                            .addComponent(jCheckBoxIndiceNaoUtilizado)
-                            .addComponent(jCheckBoxABC)
-                            .addComponent(jLabelOpcaoIndex)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jSlider2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                                .addComponent(jCheckBoxTableHeap, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jCheckBoxABC, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabelOpcaoIndex, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(checkFileGroupPrimary, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jCheckBoxIndexClusterTipoVariavel, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                     .addComponent(jCheckBoxFragCluster)
-                                    .addGap(6, 6, 6)
-                                    .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jCheckBoxIndiceNaoUtilizado, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jSlider1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -225,31 +246,33 @@ public class Tela_Script extends javax.swing.JFrame {
                 .addComponent(jCheckBoxABC)
                 .addGap(18, 18, 18)
                 .addComponent(jLabelOpcaoIndex)
-                .addGap(3, 3, 3)
+                .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBoxFragNaoCluster)
-                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jCheckBoxFragCluster, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(8, 8, 8)
+                .addGap(6, 6, 6)
+                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBoxFragCluster, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBoxFillFactor)
-                    .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
+                .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBoxIndiceNaoUtilizado)
                 .addGap(18, 18, 18)
                 .addComponent(jCheckBoxMaiorIndice)
                 .addGap(18, 18, 18)
                 .addComponent(checkFileGroupPrimary)
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addGap(30, 30, 30)
                 .addComponent(jCheckBoxIndexClusterTipoVariavel)
-                .addGap(18, 18, 18)
+                .addGap(21, 21, 21)
                 .addComponent(jCheckBoxTableHeap)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -295,7 +318,7 @@ public class Tela_Script extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanelFuncao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanelFuncao, javax.swing.GroupLayout.DEFAULT_SIZE, 702, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -356,6 +379,34 @@ public class Tela_Script extends javax.swing.JFrame {
     private void checkFileGroupPrimaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkFileGroupPrimaryActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_checkFileGroupPrimaryActionPerformed
+
+    private void jCheckBoxFillFactorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxFillFactorActionPerformed
+           int parametroFill = jSlider3.getValue();
+           String SQL = "SELECT DB_NAME() AS DBNAME, a.name AS IndexName, \n" +
+                         " a.OrigFillFactor AS Fill_Factor, b.table_name\n" +
+                         "FROM sysindexes AS a\n" +
+                         "INNER JOIN information_schema.tables AS b \n" +
+                         " ON (OBJECT_ID(b.table_name) = a.id) \n" +
+                         " AND b.table_type = 'BASE TABLE'\n" +
+                         "WHERE a.OrigFillFactor < " + parametroFill + "\n" +
+                         "ORDER BY a.OrigFillFactor DESC";
+    }//GEN-LAST:event_jCheckBoxFillFactorActionPerformed
+
+    private void jCheckBoxIndiceNaoUtilizadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxIndiceNaoUtilizadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxIndiceNaoUtilizadoActionPerformed
+
+    private void jCheckBoxMaiorIndiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMaiorIndiceActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxMaiorIndiceActionPerformed
+
+    private void jCheckBoxIndexClusterTipoVariavelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxIndexClusterTipoVariavelActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxIndexClusterTipoVariavelActionPerformed
+
+    private void jCheckBoxTableHeapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxTableHeapActionPerformed
+        
+    }//GEN-LAST:event_jCheckBoxTableHeapActionPerformed
 
     /**
      * @param args the command line arguments

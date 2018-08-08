@@ -79,7 +79,7 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
         jLnomUsuario = new javax.swing.JLabel();
         jLsenha = new javax.swing.JLabel();
         jTextFieldNomServidor = new javax.swing.JTextField();
-        jComboBoxAutenticar = new javax.swing.JComboBox<String>();
+        jComboBoxAutenticar = new javax.swing.JComboBox<>();
         jTextFieldNomUsuario = new javax.swing.JTextField();
         jPasswordFieldSenha = new javax.swing.JPasswordField();
         jPanelFuncao = new javax.swing.JPanel();
@@ -123,7 +123,7 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxAutenticar.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Autenticação do SQL Server" }));
+        jComboBoxAutenticar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Autenticação do SQL Server" }));
 
         jTextFieldNomUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

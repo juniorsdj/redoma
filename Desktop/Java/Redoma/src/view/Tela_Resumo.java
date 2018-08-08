@@ -78,7 +78,6 @@ public class Tela_Resumo extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Resumo");
-        setPreferredSize(new java.awt.Dimension(500, 500));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Opções Selecionadas"));
         jPanel1.setPreferredSize(new java.awt.Dimension(500, 500));
@@ -124,6 +123,15 @@ public class Tela_Resumo extends javax.swing.JFrame {
         jPanelFuncao.add(jBtAjuda);
 
         jTextPaneDadosSelecionados.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jTextPaneDadosSelecionados.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                jTextPaneDadosSelecionadosAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
         jScrollPane1.setViewportView(jTextPaneDadosSelecionados);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -191,6 +199,10 @@ public class Tela_Resumo extends javax.swing.JFrame {
 
         
     }//GEN-LAST:event_jBtAjudaActionPerformed
+
+    private void jTextPaneDadosSelecionadosAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jTextPaneDadosSelecionadosAncestorAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextPaneDadosSelecionadosAncestorAdded
 
     /**
      * @param args the command line arguments
