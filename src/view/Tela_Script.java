@@ -5,13 +5,15 @@
  */
 package view;
 
-
-import javax.swing.JOptionPane;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import javax.swing.JOptionPane;
+import view.Tela_Data_Base;
 
 /**
  *
@@ -19,8 +21,7 @@ import java.util.logging.Logger;
  */
 public class Tela_Script extends javax.swing.JFrame {
 
-    private static Connection conection;
-
+    public static Connection conection;
     /**
      * Creates new form Tela_Data_Base
      */
@@ -32,6 +33,32 @@ public class Tela_Script extends javax.swing.JFrame {
     public Tela_Script() {
         initComponents();
     }
+//    public Tela_Script(Tela_Data_Base tdb) {
+//        this.tdb = tdb;
+//        initComponents();
+//   }
+
+    private Tela_Data_Base telaDataBase;
+    private Tela_Resumo telaResumo;
+
+    public Tela_Data_Base getTelaDataBase() {
+        return telaDataBase;
+    }
+
+    public void setTelaDataBase(Tela_Data_Base telaDataBase) {
+        this.telaDataBase = telaDataBase;
+    }
+
+    public Tela_Resumo getTelaResumo() {
+        return telaResumo;
+    }
+
+    public void setTelaResumo(Tela_Resumo telaResumo) {
+        this.telaResumo = telaResumo;
+    }
+    
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -57,7 +84,7 @@ public class Tela_Script extends javax.swing.JFrame {
         jCheckBoxMaiorIndice = new javax.swing.JCheckBox();
         jSlider3 = new javax.swing.JSlider();
         jCheckBoxTableHeap = new javax.swing.JCheckBox();
-        jCheckBoxFileGroup = new javax.swing.JCheckBox();
+        checkFileGroupPrimary = new javax.swing.JCheckBox();
         jCheckBoxIndexClusterTipoVariavel = new javax.swing.JCheckBox();
         jSlider1 = new javax.swing.JSlider();
         jSlider2 = new javax.swing.JSlider();
@@ -72,7 +99,6 @@ public class Tela_Script extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Opções de Script");
-        setPreferredSize(new java.awt.Dimension(700, 700));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Selecione as opções abaixo"));
 
@@ -106,7 +132,12 @@ public class Tela_Script extends javax.swing.JFrame {
 
         jCheckBoxTableHeap.setText(" Tabelas heap");
 
-        jCheckBoxFileGroup.setText("Índices localizado no Filegroup PRIMARY");
+        checkFileGroupPrimary.setText("Índices localizado no Filegroup PRIMARY");
+        checkFileGroupPrimary.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkFileGroupPrimaryActionPerformed(evt);
+            }
+        });
 
         jCheckBoxIndexClusterTipoVariavel.setText("Ííndices clusterizados com tipos de dados variantes");
 
@@ -166,18 +197,19 @@ public class Tela_Script extends javax.swing.JFrame {
                         .addContainerGap(173, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBoxIndexClusterTipoVariavel)
-                            .addComponent(jCheckBoxFileGroup)
                             .addComponent(jCheckBoxTableHeap)
                             .addComponent(jCheckBoxIndiceNaoUtilizado)
                             .addComponent(jCheckBoxABC)
                             .addComponent(jLabelOpcaoIndex)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jCheckBoxFragCluster)
-                                .addGap(6, 6, 6)
-                                .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(checkFileGroupPrimary, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jCheckBoxIndexClusterTipoVariavel, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jCheckBoxFragCluster)
+                                    .addGap(6, 6, 6)
+                                    .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -214,7 +246,7 @@ public class Tela_Script extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jCheckBoxMaiorIndice)
                 .addGap(18, 18, 18)
-                .addComponent(jCheckBoxFileGroup)
+                .addComponent(checkFileGroupPrimary)
                 .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(jCheckBoxIndexClusterTipoVariavel)
                 .addGap(18, 18, 18)
@@ -283,32 +315,47 @@ public class Tela_Script extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jBtVoltarActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        Tela_Data_Base data_base = new Tela_Data_Base();
-        data_base.setVisible(true);
+    private void jBtVoltarActionPerformed(java.awt.event.ActionEvent evt) {
+        this.getTelaDataBase().setVisible(true);
         this.dispose();
     }
     private void jBtAvançarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAvançarActionPerformed
-        try {
-            this.conection.close();
-            Tela_Resumo resumo = new Tela_Resumo();
-            resumo.setVisible(true);
-            this.dispose();
-        } catch (SQLException ex) {
-            Logger.getLogger(Tela_Script.class.getName()).log(Level.SEVERE, null, ex);
-        }
+     //   try {
+             //this.conection.close();
+            //existe algo dentro do objeto telaResumo que esta dentro de telaScript
+            if (getTelaResumo() == null) {//nao foi ainda para outra tela
+                //cria nova instancia
+                //passando esta tela como parametro
+                setTelaResumo(new Tela_Resumo());
+                //a tela script agora conhece esta tela caso ela precise voltar
+                //guardando o caminho de volta
+                getTelaResumo().setTelaScript(this);
+                getTelaResumo().setVisible(true);
+                this.dispose();
+            } else {
+                //ja passou pela 3 tela e voltou pra essa
+                this.getTelaResumo().setVisible(true);
+                this.dispose();
+            }
+     //   } catch (SQLException ex) {
+     //       Logger.getLogger(Tela_Script.class.getName()).log(Level.SEVERE, null, ex);
+     //   }
     }//GEN-LAST:event_jBtAvançarActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed
-        int resposta = JOptionPane.showConfirmDialog(null, "Deseja Sair Realmente ?");
+        int resposta = JOptionPane.showConfirmDialog(null, "Deseja Realmente Sair ?");
         if (resposta == JOptionPane.YES_OPTION) {
             System.exit(0);
-        }            
+        }
     }//GEN-LAST:event_jBtCancelarActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void checkFileGroupPrimaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkFileGroupPrimaryActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_checkFileGroupPrimaryActionPerformed
 
     /**
      * @param args the command line arguments
@@ -347,12 +394,12 @@ public class Tela_Script extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox checkFileGroupPrimary;
     private javax.swing.JButton jBtAjuda;
     private javax.swing.JButton jBtAvançar;
     private javax.swing.JButton jBtCancelar;
     private javax.swing.JButton jBtVoltar;
     private javax.swing.JCheckBox jCheckBoxABC;
-    private javax.swing.JCheckBox jCheckBoxFileGroup;
     private javax.swing.JCheckBox jCheckBoxFillFactor;
     private javax.swing.JCheckBox jCheckBoxFragCluster;
     private javax.swing.JCheckBox jCheckBoxFragNaoCluster;
