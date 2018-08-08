@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import model.bean.IndicesNoPrimary;
 
 /**
  *
@@ -56,6 +57,64 @@ public class Tela_Resumo extends javax.swing.JFrame {
     public Connection pegarConexao(){
         return getTelaScript().conection;
     }
+    
+    //List<Object> lista ;
+    
+    public List<IndicesNoPrimary> selecionarIndicesNoPrimary(){
+          String sql = "Select  OBJECT_NAME(i.object_id) As Tabela,\n" +
+"        i.name As Indice, \n" +
+"	 i.object_id IddoObjetoIndice,\n" +
+"	 fg.name as GrupoDeARQUIVO,\n" +
+"	 i.type_desc as TipoDeIndice,\n" +
+"	 o.type as TipoTabela\n" +
+"from sys.indexes as i \n" +
+"INNER JOIN sys.data_spaces AS ds ON i.data_space_id = ds.data_space_id\n" +
+"inner join sys.filegroups as fg on fg.data_space_id = ds.data_space_id\n" +
+"inner join sys.objects as o on o.object_id = i.object_id";  
+          //abrir conexao;
+          Connection minhaConexao = getTelaScript().conection;
+          PreparedStatement stmt = null;
+          ResultSet rs = null;
+          
+          List<IndicesNoPrimary> listaResultSet = new ArrayList<>();
+          
+        try {
+            //É preciso percorrer o PreparedStatement
+            /*toda a consulta ta denro do do stmt que e a declaracao ja prepada
+            (Prepared Stamtement)*/
+            //Preparou tudo mas e preciso executar
+            stmt = minhaConexao.prepareStatement(sql);
+            //retorna um resultset o executeQuery()
+            //valores retornados estao em rs
+            rs = stmt.executeQuery();//query porque e consulta 
+            //para percorrer o resultSet
+            
+            while(rs.next()){//enquanto houver próximo;
+                IndicesNoPrimary inp = new IndicesNoPrimary();
+              
+                inp.setNomeDaTabela(rs.getString("Tabela"));
+                inp.setNomeDoIndice(rs.getString("Indice"));
+                inp.setIdDoObjeto(rs.getLong("IddoObjetoIndice"));
+                inp.setGrupoDeArquivo(rs.getString("GrupoDeARQUIVO"));
+                inp.setTipoDeIndice(rs.getString("TipoDeIndice"));
+                inp.setTipoDeTabela(rs.getString("TipoTabela"));
+                
+                
+                listaResultSet.add(inp);
+            }
+            
+        } catch (SQLException ex) {
+             System.err.println("Erro :"+ex);
+        } finally{
+              try {
+                  minhaConexao.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(Tela_Resumo.class.getName()).log(Level.SEVERE, null, ex);
+              }
+        }
+        return listaResultSet;
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.

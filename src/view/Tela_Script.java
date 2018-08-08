@@ -354,7 +354,19 @@ public class Tela_Script extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void checkFileGroupPrimaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkFileGroupPrimaryActionPerformed
-        // TODO add your handling code here:
+            if(checkFileGroupPrimary.isSelected()){
+                String selectFG = " Select    OBJECT_NAME(i.object_id) As Tabela,\n" +
+                                        "i.name As Indice, \n" +
+                                        "i.object_id IddoObjetoIndice,\n" +
+                                        "fg.name as GrupoDeARQUIVO,\n" +
+                                        "i.type_desc as TipoDeIndice,\n" +
+                                        "o.type as TipoTabela\n" +
+                                    "from sys.indexes as i \n" +
+                                    "inner join sys.data_spaces AS ds ON i.data_space_id = ds.data_space_id\n" +
+                                    "inner join sys.filegroups as fg on fg.data_space_id = ds.data_space_id\n" +
+                                    "inner join sys.objects as o on o.object_id = i.object_id\n" +
+                                    "where (o.type ='U') and (fg.filegroup_guid IS NULL) and (OBJECT_NAME(i.object_id) <> 'sysdiagrams')";
+            }
     }//GEN-LAST:event_checkFileGroupPrimaryActionPerformed
 
     /**
