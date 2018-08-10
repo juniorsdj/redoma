@@ -5,11 +5,10 @@
  */
 package view;
 
-import java.sql.Connection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.DriverManager;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,6 +17,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import bean.IndicesNoPrimary;
 
 /**
  *
@@ -53,10 +53,65 @@ public class Tela_Resumo extends javax.swing.JFrame {
         }
     }
     
+     //List<Object> lista ;
+
+    public List<IndicesNoPrimary> selecionarIndicesNoPrimary() {
+        String sql = "Select  OBJECT_NAME(i.object_id) As Tabela,\n"
+                + "        i.name As Indice, \n"
+                + "	 i.object_id IddoObjetoIndice,\n"
+                + "	 fg.name as GrupoDeARQUIVO,\n"
+                + "	 i.type_desc as TipoDeIndice,\n"
+                + "	 o.type as TipoTabela\n"
+                + "from sys.indexes as i \n"
+                + "INNER JOIN sys.data_spaces AS ds ON i.data_space_id = ds.data_space_id\n"
+                + "inner join sys.filegroups as fg on fg.data_space_id = ds.data_space_id\n"
+                + "inner join sys.objects as o on o.object_id = i.object_id";
+        //abrir conexao;
+        Connection minhaConexao = getTelaScript().conection;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        List<IndicesNoPrimary> listaResultSet = new ArrayList<>();
+
+        try {
+            //É preciso percorrer o PreparedStatement
+            /*toda a consulta ta denro do do stmt que e a declaracao ja prepada
+            (Prepared Stamtement)*/
+            //Preparou tudo mas e preciso executar
+            stmt = minhaConexao.prepareStatement(sql);
+            //retorna um resultset o executeQuery()
+            //valores retornados estao em rs
+            rs = stmt.executeQuery();//query porque e consulta 
+            //para percorrer o resultSet
+
+            while (rs.next()) {//enquanto houver próximo;
+                IndicesNoPrimary inp = new IndicesNoPrimary();
+
+                inp.setNomeDaTabela(rs.getString("Tabela"));
+                inp.setNomeDoIndice(rs.getString("Indice"));
+                inp.setIdDoObjeto(rs.getLong("IddoObjetoIndice"));
+                inp.setGrupoDeArquivo(rs.getString("GrupoDeARQUIVO"));
+                inp.setTipoDeIndice(rs.getString("TipoDeIndice"));
+                inp.setTipoDeTabela(rs.getString("TipoTabela"));
+
+                listaResultSet.add(inp);
+            }
+
+        } catch (SQLException ex) {
+            System.err.println("Erro :" + ex);
+        } finally {
+            try {
+                minhaConexao.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Tela_Resumo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return listaResultSet;
+    }
+    
     public Connection pegarConexao(){
         return getTelaScript().conection;
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -80,14 +135,12 @@ public class Tela_Resumo extends javax.swing.JFrame {
         setTitle("Resumo");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Opções Selecionadas"));
-        jPanel1.setPreferredSize(new java.awt.Dimension(500, 500));
 
         jScrollBar1.setOrientation(javax.swing.JScrollBar.HORIZONTAL);
 
         jPanelFuncao.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jBtVoltar.setText("<< Voltar ");
-        jBtVoltar.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtVoltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtVoltarActionPerformed(evt);
@@ -96,7 +149,6 @@ public class Tela_Resumo extends javax.swing.JFrame {
         jPanelFuncao.add(jBtVoltar);
 
         jBtConcluir.setText("Concluir");
-        jBtConcluir.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtConcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtConcluirActionPerformed(evt);
@@ -105,7 +157,6 @@ public class Tela_Resumo extends javax.swing.JFrame {
         jPanelFuncao.add(jBtConcluir);
 
         jBtCancelar.setText("Cancelar");
-        jBtCancelar.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtCancelarActionPerformed(evt);
@@ -114,7 +165,6 @@ public class Tela_Resumo extends javax.swing.JFrame {
         jPanelFuncao.add(jBtCancelar);
 
         jBtAjuda.setText("Ajuda");
-        jBtAjuda.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtAjuda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtAjudaActionPerformed(evt);
@@ -123,15 +173,6 @@ public class Tela_Resumo extends javax.swing.JFrame {
         jPanelFuncao.add(jBtAjuda);
 
         jTextPaneDadosSelecionados.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jTextPaneDadosSelecionados.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                jTextPaneDadosSelecionadosAncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-        });
         jScrollPane1.setViewportView(jTextPaneDadosSelecionados);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -143,14 +184,14 @@ public class Tela_Resumo extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1)
-                    .addComponent(jPanelFuncao, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE))
+                    .addComponent(jPanelFuncao, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanelFuncao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -163,19 +204,18 @@ public class Tela_Resumo extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtVoltarActionPerformed
@@ -184,25 +224,19 @@ public class Tela_Resumo extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtVoltarActionPerformed
 
     private void jBtConcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtConcluirActionPerformed
-  
         salvarEmTxt("Aqui o texto que vai ser salvo, no caso o select");
     }//GEN-LAST:event_jBtConcluirActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed
-        int resposta = JOptionPane.showConfirmDialog(null, "Deseja Realmente Sair ?");
+        int resposta = JOptionPane.showConfirmDialog(null, "Deseja Sair Realmente ?");
         if (resposta == JOptionPane.YES_OPTION) {
             System.exit(0);
-        }
+        } 
     }//GEN-LAST:event_jBtCancelarActionPerformed
 
     private void jBtAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAjudaActionPerformed
-
-        
-    }//GEN-LAST:event_jBtAjudaActionPerformed
-
-    private void jTextPaneDadosSelecionadosAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jTextPaneDadosSelecionadosAncestorAdded
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextPaneDadosSelecionadosAncestorAdded
+    }//GEN-LAST:event_jBtAjudaActionPerformed
 
     /**
      * @param args the command line arguments

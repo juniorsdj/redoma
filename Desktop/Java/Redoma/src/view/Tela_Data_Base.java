@@ -1,19 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package view;
 
-import javax.swing.JOptionPane;
-
 import java.sql.Connection;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author aldam
  */
 public class Tela_Data_Base extends javax.swing.JFrame {
+   
+    /**
+     * Creates new form Tela_Data_Base
+     */
     public static Connection conection;
     /**
      * Creates new form Tela_Data_Base
@@ -37,11 +36,11 @@ public class Tela_Data_Base extends javax.swing.JFrame {
     public void setTelaScript(Tela_Script telaScript) {
         this.telaScript = telaScript;
     }
-  
+    
     public Tela_Data_Base() {
         initComponents();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -56,9 +55,9 @@ public class Tela_Data_Base extends javax.swing.JFrame {
         jCheckBoxMaster = new javax.swing.JCheckBox();
         jCheckBoxMsdb = new javax.swing.JCheckBox();
         jLbdUsuario = new javax.swing.JLabel();
-        jCheckBoxCurso = new javax.swing.JCheckBox();
-        jCheckBoxNorthwind = new javax.swing.JCheckBox();
-        jCheckBoxAdventureWorks2014 = new javax.swing.JCheckBox();
+        jCheckBoxFolhaPagamento = new javax.swing.JCheckBox();
+        jCheckBoxAcademico = new javax.swing.JCheckBox();
+        Curso = new javax.swing.JCheckBox();
         jCheckBoxDataMart = new javax.swing.JCheckBox();
         jScrollBar1 = new javax.swing.JScrollBar();
         jPanelFuncao = new javax.swing.JPanel();
@@ -74,38 +73,18 @@ public class Tela_Data_Base extends javax.swing.JFrame {
         jLbdsistemico.setText("Banco de Dados Sistêmico");
 
         jCheckBoxMaster.setText("Master");
-        jCheckBoxMaster.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxMasterActionPerformed(evt);
-            }
-        });
 
         jCheckBoxMsdb.setText("Msdb");
-        jCheckBoxMsdb.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxMsdbActionPerformed(evt);
-            }
-        });
 
         jLbdUsuario.setText("Banco de Dados de Usuários");
 
-        jCheckBoxCurso.setText("Curso");
-        jCheckBoxCurso.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxCursoActionPerformed(evt);
-            }
-        });
+        jCheckBoxFolhaPagamento.setText("AdventureWorks2014");
 
-        jCheckBoxNorthwind.setText("Northwind");
+        jCheckBoxAcademico.setText("AdventureWorks");
 
-        jCheckBoxAdventureWorks2014.setText("AdventureWorks2014");
+        Curso.setText("Curso");
 
         jCheckBoxDataMart.setText("DataMart");
-        jCheckBoxDataMart.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxDataMartActionPerformed(evt);
-            }
-        });
 
         jScrollBar1.setOrientation(javax.swing.JScrollBar.HORIZONTAL);
         jScrollBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -114,24 +93,25 @@ public class Tela_Data_Base extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBoxCurso)
+                            .addComponent(Curso)
+                            .addComponent(jCheckBoxAcademico)
+                            .addComponent(jCheckBoxFolhaPagamento)
                             .addComponent(jCheckBoxMsdb)
                             .addComponent(jLbdsistemico)
                             .addComponent(jCheckBoxMaster)
                             .addComponent(jLbdUsuario))
-                        .addContainerGap(322, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBoxAdventureWorks2014)
-                            .addComponent(jCheckBoxNorthwind)
-                            .addComponent(jCheckBoxDataMart))
+                        .addComponent(jCheckBoxDataMart)
                         .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -144,22 +124,21 @@ public class Tela_Data_Base extends javax.swing.JFrame {
                 .addComponent(jCheckBoxMsdb)
                 .addGap(18, 18, 18)
                 .addComponent(jLbdUsuario)
-                .addGap(7, 7, 7)
-                .addComponent(jCheckBoxAdventureWorks2014)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCheckBoxFolhaPagamento)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBoxCurso)
+                .addComponent(jCheckBoxAcademico)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(Curso)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBoxDataMart)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jCheckBoxNorthwind)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPanelFuncao.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jBtAvancar.setText("Avançar >>");
-        jBtAvancar.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtAvancar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtAvancarActionPerformed(evt);
@@ -168,7 +147,6 @@ public class Tela_Data_Base extends javax.swing.JFrame {
         jPanelFuncao.add(jBtAvancar);
 
         jBtCancelar.setText("Cancelar");
-        jBtCancelar.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtCancelarActionPerformed(evt);
@@ -177,7 +155,6 @@ public class Tela_Data_Base extends javax.swing.JFrame {
         jPanelFuncao.add(jBtCancelar);
 
         jBtAjuda.setText("Ajuda");
-        jBtAjuda.setPreferredSize(new java.awt.Dimension(100, 30));
         jBtAjuda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtAjudaActionPerformed(evt);
@@ -193,25 +170,26 @@ public class Tela_Data_Base extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanelFuncao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jPanelFuncao, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(32, 32, 32)
-                .addComponent(jPanelFuncao, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
-                .addGap(39, 39, 39))
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanelFuncao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtAvancarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAvancarActionPerformed
-        if(getTelaScript() == null){//nao foi ainda para outra tela
+          if(getTelaScript() == null){//nao foi ainda para outra tela
             //cria nova instancia
             //passando esta tela como parametro e conexao
             setTelaScript(new Tela_Script(conection));
@@ -226,39 +204,18 @@ public class Tela_Data_Base extends javax.swing.JFrame {
             this.getTelaScript().setVisible(true);
             this.dispose();
           }
-        
-        
     }//GEN-LAST:event_jBtAvancarActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed
-
-        int resposta = JOptionPane.showConfirmDialog(null, "Deseja Realmente Sair ?");
+        int resposta = JOptionPane.showConfirmDialog(null, "Deseja Sair Realmente ?");
         if (resposta == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
-
-
     }//GEN-LAST:event_jBtCancelarActionPerformed
 
     private void jBtAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAjudaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jBtAjudaActionPerformed
-
-    private void jCheckBoxMasterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMasterActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBoxMasterActionPerformed
-
-    private void jCheckBoxDataMartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxDataMartActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBoxDataMartActionPerformed
-
-    private void jCheckBoxCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxCursoActionPerformed
-
-    }//GEN-LAST:event_jCheckBoxCursoActionPerformed
-
-    private void jCheckBoxMsdbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMsdbActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBoxMsdbActionPerformed
 
     /**
      * @param args the command line arguments
@@ -290,21 +247,21 @@ public class Tela_Data_Base extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Tela_Data_Base(conection).setVisible(true);
+                new Tela_Data_Base().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox Curso;
     private javax.swing.JButton jBtAjuda;
     private javax.swing.JButton jBtAvancar;
     private javax.swing.JButton jBtCancelar;
-    private javax.swing.JCheckBox jCheckBoxAdventureWorks2014;
-    private javax.swing.JCheckBox jCheckBoxCurso;
+    private javax.swing.JCheckBox jCheckBoxAcademico;
     private javax.swing.JCheckBox jCheckBoxDataMart;
+    private javax.swing.JCheckBox jCheckBoxFolhaPagamento;
     private javax.swing.JCheckBox jCheckBoxMaster;
     private javax.swing.JCheckBox jCheckBoxMsdb;
-    private javax.swing.JCheckBox jCheckBoxNorthwind;
     private javax.swing.JLabel jLbdUsuario;
     private javax.swing.JLabel jLbdsistemico;
     private javax.swing.JPanel jPanel1;
