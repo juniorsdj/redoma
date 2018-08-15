@@ -580,6 +580,27 @@ public class Tela_Script extends javax.swing.JFrame {
         });
     }
 
+    // talela clusterizado
+     if (jCheckBoxFragCluster.isSelected()) {
+            String clustetizado
+                    = "SELECT object_name(SysBases.object_id) ,\n"
+                    + "SisIndex.name AS[IndexName],\n"
+                    + "SysBases.Index_type_desc,\n"
+                    + "SysBases.avg_fragmentation_in_percent,\n"
+                    + "SysBases.avg_fragment_size_in_pages,\n"
+                    + "SysBases.avg_page_space_used_in_percent,\n"
+                    + "SysBases.record_count,\n"
+                    + "SysBases.ghost_record_count,\n"
+                    + "SysBases.fragment_count,\n"
+                    + "SysBases.avg_fragment_size_in_pages \n "
+                    + "FROM sys.dm_db_index_physical_stats(db_id(DB_NAME()), NULL, NULL, NULL , 'DETAILED')\n"
+                    + "SysBases JOIN sys.tables SisTabelas WITH(nolock) ON \n"
+                    + "SysBases.object_id = SisTabelas.object_id JOIN sys.indexes SisIndex WITH(nolock) ON \n"
+                    + "SysBases.object_id = SisIndex.object_id AND SysBases.index_id = SisIndex.index_id \n"
+                    + "WHERE SisTabelas.is_ms_shipped =  > 1 and index_type_desc = 'CLUSTERED INDEX'\n"
+                    + "order by SysBases.avg_fragment_size_in_pages desc";
+        }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox checkFileGroupPrimary;
     private javax.swing.JButton jBtAjuda;
