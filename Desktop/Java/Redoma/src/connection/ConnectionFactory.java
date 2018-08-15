@@ -24,8 +24,8 @@ public class ConnectionFactory {
     /*+ "databaseName=AdventureWorks;"
             + "user=MyUserName;passwor d=*****;";  
     Connection con;*/
-    private final String USER = "elvis";
-    private final String PASS = "";
+    private final String USER = " ";
+    private final String PASS = " ";
 
     /*public ConnectionFactory() {
         try {
