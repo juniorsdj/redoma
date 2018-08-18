@@ -44,18 +44,18 @@ public class BasesDinamicas extends JFrame {
      */
     //monta uma tela para inclusão dos checkboxes
     public BasesDinamicas(Connection con) {
-       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
         contentPane = new JPanel();
       
         setContentPane(contentPane);
         ListarCheckbox(getDb(con));
         for (int i = 0; i< this.checkboxes.size();i++) {
-              JCheckBox checkBox =this.checkboxes.get(i);
+              JCheckBox checkBox = this.checkboxes.get(i);
               checkBox.setBounds(10,20,10,10);
               contentPane.add(checkBox);
         }
-                setVisible(true);
+        setVisible(true);
     }
     
     //transforma a lista de bases em uma lista de checkbox

@@ -40,6 +40,7 @@ public class Tela_Script extends javax.swing.JFrame {
 
     private Tela_Data_Base telaDataBase;
     private Tela_Resumo telaResumo;
+    private String select;
 
     public Tela_Data_Base getTelaDataBase() {
         return telaDataBase;
@@ -55,6 +56,14 @@ public class Tela_Script extends javax.swing.JFrame {
 
     public void setTelaResumo(Tela_Resumo telaResumo) {
         this.telaResumo = telaResumo;
+    }
+    
+    public String getSelect(){
+        return this.select;
+    }
+    
+    public void setSelect(String select){
+        this.select = select;
     }
     
     
@@ -329,14 +338,11 @@ public class Tela_Script extends javax.swing.JFrame {
                 setTelaResumo(new Tela_Resumo());
                 //a tela script agora conhece esta tela caso ela precise voltar
                 //guardando o caminho de volta
-                getTelaResumo().setTelaScript(this);
-                getTelaResumo().setVisible(true);
-                this.dispose();
-            } else {
+                getTelaResumo().setTelaScript(this);              
+            } 
                 //ja passou pela 3 tela e voltou pra essa
                 this.getTelaResumo().setVisible(true);
                 this.dispose();
-            }
      //   } catch (SQLException ex) {
      //       Logger.getLogger(Tela_Script.class.getName()).log(Level.SEVERE, null, ex);
      //   }
@@ -355,7 +361,7 @@ public class Tela_Script extends javax.swing.JFrame {
 
     private void checkFileGroupPrimaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkFileGroupPrimaryActionPerformed
             if(checkFileGroupPrimary.isSelected()){
-                String selectFG = " Select    OBJECT_NAME(i.object_id) As Tabela,\n" +
+                setSelect("Select    OBJECT_NAME(i.object_id) As Tabela,\n" +
                                         "i.name As Indice, \n" +
                                         "i.object_id IddoObjetoIndice,\n" +
                                         "fg.name as GrupoDeARQUIVO,\n" +
@@ -365,7 +371,7 @@ public class Tela_Script extends javax.swing.JFrame {
                                     "inner join sys.data_spaces AS ds ON i.data_space_id = ds.data_space_id\n" +
                                     "inner join sys.filegroups as fg on fg.data_space_id = ds.data_space_id\n" +
                                     "inner join sys.objects as o on o.object_id = i.object_id\n" +
-                                    "where (o.type ='U') and (fg.filegroup_guid IS NULL) and (OBJECT_NAME(i.object_id) <> 'sysdiagrams')";
+                                    "where (o.type ='U') and (fg.filegroup_guid IS NULL) and (OBJECT_NAME(i.object_id) <> 'sysdiagrams')"); 
             }
     }//GEN-LAST:event_checkFileGroupPrimaryActionPerformed
 

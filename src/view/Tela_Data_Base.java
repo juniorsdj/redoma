@@ -17,9 +17,29 @@ public class Tela_Data_Base extends javax.swing.JFrame {
       /**
      * Creates new form Tela_Data_Base
      */
+    
+    public static Connection conection;
+    /**
+     * Creates new form Tela_Data_Base
+     */
+    public Tela_Data_Base(Connection conection) {
+        this.conection = conection;
+        initComponents();
+    }
+    
 
     public Tela_Data_Base() {
         initComponents();
+    }
+    
+    private Tela_Script telaScript;
+
+    public Tela_Script getTelaScript() {
+        return telaScript;
+    }
+
+    public void setTelaScript(Tela_Script telaScript) {
+        this.telaScript = telaScript;
     }
     
     /**
@@ -170,9 +190,16 @@ public class Tela_Data_Base extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtAvancarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAvancarActionPerformed
-        Tela_Script telascript = new Tela_Script();
-        telascript.setVisible(true);
-        this.dispose();
+           if(getTelaScript() == null){//nao foi ainda para outra tela
+            //cria nova instancia
+            //passando esta tela como parametro e conexao
+            setTelaScript(new Tela_Script(conection));
+            //a tela script agora conhece esta tela caso ela precise voltar
+            //guardando o caminho de volta
+            getTelaScript().setTelaDataBase(this); 
+          }//ja passou pela 3 tela e voltou pra essa
+            this.getTelaScript().setVisible(true);
+            this.dispose();
     }//GEN-LAST:event_jBtAvancarActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed

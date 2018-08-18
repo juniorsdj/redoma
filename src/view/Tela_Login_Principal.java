@@ -13,7 +13,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.Alert;
 import util.ConnectionFactory;
 
 /**
@@ -46,7 +45,7 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
         jLnomUsuario = new javax.swing.JLabel();
         jLsenha = new javax.swing.JLabel();
         jTextFieldNomServidor = new javax.swing.JTextField();
-        jComboBoxAutenticar = new javax.swing.JComboBox<>();
+        jComboBoxAutenticar = new javax.swing.JComboBox<String>();
         jTextFieldNomUsuario = new javax.swing.JTextField();
         jPasswordField1 = new javax.swing.JPasswordField();
         jPanelFuncao = new javax.swing.JPanel();
@@ -90,7 +89,7 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxAutenticar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Autenticação do SQL Server" }));
+        jComboBoxAutenticar.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Autenticação do SQL Server" }));
 
         jTextFieldNomUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -223,7 +222,7 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
         
       if (con!= null) {
              BasesDinamicas tdb = new BasesDinamicas(con);
-              tdb.setVisible(true);
+             tdb.setVisible(true);
              this.dispose();
          } 
     }//GEN-LAST:event_jBtConectarActionPerformed
