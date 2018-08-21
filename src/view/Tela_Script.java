@@ -329,9 +329,7 @@ public class Tela_Script extends javax.swing.JFrame {
         this.dispose();
     }
     private void jBtAvançarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAvançarActionPerformed
-     //   try {
-             //this.conection.close();
-            //existe algo dentro do objeto telaResumo que esta dentro de telaScript
+
             if (getTelaResumo() == null) {//nao foi ainda para outra tela
                 //cria nova instancia
                 //passando esta tela como parametro
@@ -361,17 +359,20 @@ public class Tela_Script extends javax.swing.JFrame {
 
     private void checkFileGroupPrimaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkFileGroupPrimaryActionPerformed
             if(checkFileGroupPrimary.isSelected()){
-                setSelect("Select    OBJECT_NAME(i.object_id) As Tabela,\n" +
-                                        "i.name As Indice, \n" +
-                                        "i.object_id IddoObjetoIndice,\n" +
-                                        "fg.name as GrupoDeARQUIVO,\n" +
-                                        "i.type_desc as TipoDeIndice,\n" +
-                                        "o.type as TipoTabela\n" +
-                                    "from sys.indexes as i \n" +
-                                    "inner join sys.data_spaces AS ds ON i.data_space_id = ds.data_space_id\n" +
-                                    "inner join sys.filegroups as fg on fg.data_space_id = ds.data_space_id\n" +
-                                    "inner join sys.objects as o on o.object_id = i.object_id\n" +
-                                    "where (o.type ='U') and (fg.filegroup_guid IS NULL) and (OBJECT_NAME(i.object_id) <> 'sysdiagrams')"); 
+               //criação do metodo setSelect para setar o os indices no grupo de arquivos primary
+                setSelect("Select    OBJECT_NAME(i.object_id) As Tabela,\n"
+                + "             i.name As Indice, \n"
+                + "             i.object_id IddoObjetoIndice,\n"
+                + "             fg.name as GrupoDeARQUIVO,\n"
+                + "             i.type_desc as TipoDeIndice,\n"
+                + "             o.type as TipoTabela\n"
+                + "  from sys.indexes as i  \n"
+                + "       inner join sys.data_spaces AS ds ON i.data_space_id = ds.data_space_id\n"
+                + "       inner join sys.filegroups as fg on fg.data_space_id = ds.data_space_id \n"
+                + "       inner join sys.objects as o on o.object_id = i.object_id\n"
+                + "	  inner join sys.master_files as smf on smf.data_space_id = ds.data_space_id\n"
+                + "	  inner join sys.databases as db on db.database_id = smf.database_id\n"
+                + " where((o.type ='U') and (fg.filegroup_guid IS NULL) and (OBJECT_NAME(i.object_id) <> 'sysdiagrams') and (db.database_id = 7))"); 
             }
     }//GEN-LAST:event_checkFileGroupPrimaryActionPerformed
 

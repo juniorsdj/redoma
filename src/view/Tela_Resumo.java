@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.bean.IndicesNoPrimary;
+import util.Arquivo;
 
 /**
  *
@@ -46,124 +47,14 @@ public class Tela_Resumo extends javax.swing.JFrame {
     public void setTelaScript(Tela_Script telaScript) {
         this.telaScript = telaScript;
     }
-    private boolean diretorioCriado;
-    private boolean arquivoCriado;
-    private boolean textoAdicionado;
-    private File filewriter, diretorio, arquivo;
-
-    public boolean isTextoAdicionado() {
-        return textoAdicionado;
-    }
-
-    public void setTextoAdicionado(boolean textoAdicionado) {
-        this.textoAdicionado = textoAdicionado;
-    }
-
-    public File getDiretorio() {
-        return diretorio;
-    }
-
-    public void setDiretorio(File diretorio) {
-        this.diretorio = diretorio;
-    }
-
-    public File getArquivo() {
-        return arquivo;
-    }
-
-    public void setArquivo(File arquivo) {
-        this.arquivo = arquivo;
-    }
-
-    public File getFilewriter() {
-        return filewriter;
-    }
-
-    public void setFilewriter(File filewriter) {
-        this.filewriter = filewriter;
-    }
-
-    public boolean isDiretorioCriado() {
-        return diretorioCriado;
-    }
-
-    public void setDiretorioCriado(boolean diretorioCriado) {
-        this.diretorioCriado = diretorioCriado;
-    }
-
-    public boolean isArquivoCriado() {
-        return arquivoCriado;
-    }
-
-    public void setArquivoCriado(boolean arquivoCriado) {
-        this.arquivoCriado = arquivoCriado;
-    }
-
-    //retorna o diretorio criado
-    public boolean criarDiretorio() {
-        //criando diretorio
-        File novoDiretorio = new File("C:/Redoma");
-        boolean diretorioFoiCriado = novoDiretorio.mkdir();//comando para criar diretorio     
-        setDiretorioCriado(false);
-        setDiretorio(novoDiretorio);
-        return diretorioFoiCriado;
-    }
-
-    public boolean criarArquivoTxt(File diretorio, String nomeDoArquivo) {
-        //criando arquivo no diretorio
-        //se o diretorio ainda nao foi criado
-        boolean arquivoFoiCriado = false;
-        File infoSobreIndices = new File(diretorio, nomeDoArquivo);
-        try {
-            arquivoFoiCriado = infoSobreIndices.createNewFile();
-            setArquivoCriado(true);
-            setArquivo(infoSobreIndices);
-        } catch (IOException ex) {
-            Logger.getLogger(Tela_Resumo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return arquivoFoiCriado;
-    }
-
-    public void excluirArquivo() {
-        getArquivo().delete();
-    }
-
-    public void salvarEmTxt(String linha, File arquivo) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo, true))) {
-            bw.write(linha);
-            bw.newLine();
-            bw.flush();//pegar toda a string do tunelamento
-            bw.close();
-
-        } catch (IOException ex) {
-            Logger.getLogger(Tela_Resumo.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
     public Connection pegarConexao() {
         return getTelaScript().conection;
     }
 
     //List<Object> lista ;
-    public List<String> selecionarIndicesNoPrimary() {
+    public List<String> selecionarIndicesNoPrimary(String selectNoPrimary) {
+        //pegando a conexao com o banco
         Connection con = ConnectionFactory.getConnection();
-
-        String sql = "Select    OBJECT_NAME(i.object_id) As Tabela,\n"
-                + "             i.name As Indice, \n"
-                + "             i.object_id IddoObjetoIndice,\n"
-                + "             fg.name as GrupoDeARQUIVO,\n"
-                + "             i.type_desc as TipoDeIndice,\n"
-                + "             o.type as TipoTabela\n"
-                + "  from sys.indexes as i  \n"
-                + "       inner join sys.data_spaces AS ds ON i.data_space_id = ds.data_space_id\n"
-                + "       inner join sys.filegroups as fg on fg.data_space_id = ds.data_space_id \n"
-                + "       inner join sys.objects as o on o.object_id = i.object_id\n"
-                + "	  inner join sys.master_files as smf on smf.data_space_id = ds.data_space_id\n"
-                + "	  inner join sys.databases as db on db.database_id = smf.database_id\n"
-                + " where((o.type ='U') and (fg.filegroup_guid IS NULL) and (OBJECT_NAME(i.object_id) <> 'sysdiagrams') and db.database_id = 7)";
-        //abrir conexao;
-        //Connection minhaConexao = pegarConexao();
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -171,14 +62,14 @@ public class Tela_Resumo extends javax.swing.JFrame {
         List<String> listaResultSetString = new ArrayList<>();
 
         try {
-            stmt = con.prepareStatement(sql);
+            stmt = con.prepareStatement(selectNoPrimary);
             //PEGANDO O ID
             //   where((o.type ='U') and (fg.filegroup_guid IS NULL) and (OBJECT_NAME(i.object_id) <> 'sysdiagrams') and db.database_id = ?)";
             //   stmt.setInt(1, getIdDoBanco());
             rs = stmt.executeQuery();
             //para percorrer o resultSet
             IndicesNoPrimary inp = new IndicesNoPrimary();
-            //adicionando o corpo da tabela no array de String posicao get(0)
+            //adicionando o cabeçaho da tabela no array de String posicao get(0)
             listaResultSetString.add(inp.cabecalho());
             System.out.println(inp.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
@@ -321,32 +212,54 @@ public class Tela_Resumo extends javax.swing.JFrame {
 
     private void jBtConcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtConcluirActionPerformed
         //saber se o diretorio foi criado
-        boolean diretorio = criarDiretorio();
-        if (diretorio == true) {
-            System.out.println("O diretorio foi criado pela primeira vez");
-            System.out.println("O diretorio foi criado em-->" + getDiretorio().getAbsolutePath());
-            //o diretorio ja foi criado
-        } else if (diretorio == false) {
-            System.out.println("O diretorio já existe!");
-            System.out.println("O diretorio já existe em-->" + getDiretorio().getAbsolutePath());
+        Arquivo novoArquivo = new Arquivo();
+        novoArquivo.criarDiretorio();
+        novoArquivo.criarArquivoTxt("NovoArquivo");
+        
+        List<String> resultado = selecionarIndicesNoPrimary(getTelaScript().getSelect());
+        
+        //salvarEmTxt(resultado.toString(), novoArquivo.getArquivo());
+        
+        
+        String select = "";
+        int count = 0;
+        for (String linha : resultado) {
+            select = select+ linha +"\n";
+            System.out.println(select);
+            count++;
         }
-
-        boolean arquivo = criarArquivoTxt(getDiretorio(), "indicesNoPrimary.txt");
-        if (arquivo == true) {
-            System.out.println("O arquivo foi criado pela primeira vez");
-            System.out.println("O arquivo foi criado em-->" + getArquivo().getAbsolutePath());
-            //o diretorio ja foi criado
-        } else if (arquivo == false) {
-            System.out.println("O arquivo já existe!");
-            System.out.println("O arquivo já existe em-->" + getArquivo().getAbsolutePath());
-            getArquivo().delete();//deleto para sobrescrever
-            criarArquivoTxt(getDiretorio(), "indicesNoPrimary.txt");
-        }
-        //adicionando ao arquivo.txt
-        for (String linha : selecionarIndicesNoPrimary()) {
-            salvarEmTxt(linha, getArquivo());
-        }
-        System.exit(0);
+        novoArquivo.salvarNoTxt(select, novoArquivo.getArquivo());
+        
+//        String select = selecionarIndicesNoPrimary(getTelaScript().getSelect());
+        
+        
+        
+//        boolean diretorio = criarDiretorio();
+//        if (diretorio == true) {
+//            System.out.println("O diretorio foi criado pela primeira vez");
+//            System.out.println("O diretorio foi criado em-->" + getDiretorio().getAbsolutePath());
+//            //o diretorio ja foi criado
+//        } else if (diretorio == false) {
+//            System.out.println("O diretorio já existe!");
+//            System.out.println("O diretorio já existe em-->" + getDiretorio().getAbsolutePath());
+//        }
+//
+//        boolean arquivo = criarArquivoTxt(getDiretorio(), "indicesNoPrimary.txt");
+//        if (arquivo == true) {
+//            System.out.println("O arquivo foi criado pela primeira vez");
+//            System.out.println("O arquivo foi criado em-->" + getArquivo().getAbsolutePath());
+//            //o diretorio ja foi criado
+//        } else if (arquivo == false) {
+//            System.out.println("O arquivo já existe!");
+//            System.out.println("O arquivo já existe em-->" + getArquivo().getAbsolutePath());
+//            getArquivo().delete();//deleto para sobrescrever
+//            criarArquivoTxt(getDiretorio(), "indicesNoPrimary.txt");
+//        }
+//        //adicionando ao arquivo.txt
+//        for (String linha : selecionarIndicesNoPrimary(getTelaScript().getSelect())) {
+//            salvarEmTxt(linha, getArquivo());
+//        }
+//        System.exit(0);
     }//GEN-LAST:event_jBtConcluirActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed
