@@ -1,82 +1,60 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package connection;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+package connection;
 
 /**
  *
- * @author aldam
+ * @author Valmir Andrade; esta classe visa eliminar da tela principal de login a
+ * logica utilizada para fazer login na aplicação deixando a tela mais limpa e
+ * focada nos componetes de visualização do usuario.
  */
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 public class ConnectionFactory {
 
-    private final String DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-    private final String connectionUrl = "jdbc:sqlserver://localhost:1433;";
-    /*+ "databaseName=AdventureWorks;"
-            + "user=MyUserName;passwor d=*****;";  
-    Connection con;*/
-    private final String USER = " ";
-    private final String PASS = " ";
+    private Connection connection;
+    private String nomeServidor;
+    private String usuario;
+    private String senha;
 
-    /*public ConnectionFactory() {
+    public Connection getConnection(String servidor, String usuario, String senha) {
+        this.nomeServidor = servidor;
+        this.usuario = usuario;
+        this.senha = senha;
+        
         try {
-            this.con = DriverManager.getConnection(connectionUrl);
-        } catch (SQLException ex) {
-            Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro de comunicação com o servidor de banco de dados "
+                    + "\n porque esta faltando um driver");
         }
-    }*/
-    public Connection getConnection() {
+        String url = "jdbc:sqlserver://" + this.nomeServidor + 
+                    ";user=" + this.usuario + 
+                    ";password=" + this.senha + ";";
+       
         try {
-            Class.forName(DRIVER);
+            connection = DriverManager.getConnection(url);
+            System.out.println(connection);
+        } // Erro caso o driver JDBC não foi instalado
+        catch (SQLException e) {
+            // Erro caso haja problemas para se conectar ao banco de dados
+            //   JOptionPane.showMessageDialog(null, "Ocorreu um erro ao tentar conectar-se ao servidor verifique se o nome do servidor "
+            //         + "\n e os dados de usuario e senha estão corretos.");
 
-            return DriverManager.getConnection(DRIVER, USER, PASS);
-        } catch (ClassNotFoundException | SQLException ex) {
-            throw new RuntimeException("Erro na conexão: ", ex);
+            e.printStackTrace();
         }
+        return connection;
     }
 
-    public static void closeConnection(Connection con) {
+    public void Close() {
         try {
-            if (con != null) {
-                con.close();
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public static void closeConnection(Connection con, PreparedStatement stmt) {
-        closeConnection(con);
-
-        try {
-            if (stmt != null) {
-                stmt.close();
-            }
+            connection.close();
         } catch (SQLException ex) {
             Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    public static void closeConnection(Connection con, PreparedStatement stmt, ResultSet rs) {
-        closeConnection(con, stmt);
-
-        try {
-            if (rs != null) {
-                rs.close();
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
 }
-

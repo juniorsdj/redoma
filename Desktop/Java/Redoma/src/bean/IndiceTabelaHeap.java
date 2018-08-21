@@ -10,7 +10,21 @@ package bean;
  * @author aldam
  */
 public class IndiceTabelaHeap {
-
+    
+    private String nomeDoBanco;
+    private String nomeTabela;
+    private String tipoDeIndice;
+    private int restricaoIndice;
+    private String nomeDoArq;
+    private String TipoArquivo;
+    private boolean duplaKey;
+    private boolean primaryKey;
+    private boolean constante;
+    private int fillFactor;
+    private long padded;
+    private boolean desabilitado;
+    private boolean indeceBloq;
+    private boolean indeceBloqDB;
     /**
      * @return the nomeDoArq
      */
@@ -150,18 +164,5 @@ public class IndiceTabelaHeap {
     public void setIndeceBloqDB(boolean indeceBloqDB) {
         this.indeceBloqDB = indeceBloqDB;
     }
-    private String nomeDoBanco;
-    private String nomeTabela;
-    private String tipoDeIndice;
-    private int restricaoIndice;
-    private String nomeDoArq;
-    private String TipoArquivo;
-    private boolean duplaKey;
-    private boolean primaryKey;
-    private boolean constante;
-    private int fillFactor;
-    private long padded;
-    private boolean desabilitado;
-    private boolean indeceBloq;
-    private boolean indeceBloqDB;
+    
 }

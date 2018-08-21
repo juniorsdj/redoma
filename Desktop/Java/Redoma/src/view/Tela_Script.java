@@ -43,6 +43,10 @@ public class Tela_Script extends javax.swing.JFrame {
     private Tela_Data_Base telaDataBase;
     private Tela_Resumo telaResumo;
 
+    public Tela_Script(Connection con, List<String> opcoesSelected) {
+        
+    }
+
     public Tela_Data_Base getTelaDataBase() {
         return telaDataBase;
     }
