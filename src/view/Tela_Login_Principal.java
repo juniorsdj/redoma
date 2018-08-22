@@ -20,14 +20,17 @@ import util.ConnectionFactory;
  * @author aldam
  */
 public class Tela_Login_Principal extends javax.swing.JFrame {
+
     /**
      * Creates new form telaLogin
      */
-    
-     private Connection con;
+
+    private Connection con;
+
     public Tela_Login_Principal() {
         initComponents();
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -216,20 +219,20 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtConectarActionPerformed
-   
-      ConnectionFactory fabrica = new ConnectionFactory();
-      con = fabrica.getConnection(jTextFieldNomServidor.getText(),jTextFieldNomUsuario.getText(), new String(jPasswordField1.getPassword())); 
-        
-      if (con!= null) {
-             BasesDinamicas tdb = new BasesDinamicas(con);
-             tdb.setVisible(true);
-             this.dispose();
-         } 
+
+        ConnectionFactory fabrica = new ConnectionFactory();
+        con = fabrica.getConnection(jTextFieldNomServidor.getText(), jTextFieldNomUsuario.getText(), new String(jPasswordField1.getPassword()));
+
+        if (con != null) {
+            BasesDinamicas tdb = new BasesDinamicas(con);
+            tdb.setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_jBtConectarActionPerformed
 
     private void jBtSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtSairActionPerformed
         int resposta = JOptionPane.showConfirmDialog(null, "Deseja Sair Realmente ?");
-        if ( con !=null){
+        if (con != null) {
             try {
                 con.close();
             } catch (SQLException ex) {
@@ -238,9 +241,9 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
             }
         }
         if (resposta == JOptionPane.YES_OPTION) {
-            
+
             System.exit(0);
-        }  
+        }
     }//GEN-LAST:event_jBtSairActionPerformed
 
     private void jBtAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAjudaActionPerformed
@@ -299,7 +302,7 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
             }
         });
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtAjuda;

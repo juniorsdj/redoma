@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.bean.IndicesNoPrimary;
+import util.ConnectionFactory;
 import view.Tela_Data_Base;
 
 /**
@@ -75,14 +76,6 @@ public class Tela_Script extends javax.swing.JFrame {
         this.telaResumo = telaResumo;
     }
 
-    public String getSelect() {
-        return this.select;
-    }
-
-    public void setSelect(String select) {
-        this.select = select;
-    }
-
     public void selecionarTop10() {
 
         String selectTop10 = "select TOP (10) object_id,\n"
@@ -104,9 +97,6 @@ public class Tela_Script extends javax.swing.JFrame {
 
         try {
             stmt = conection.prepareStatement(selectTop10);
-            //PEGANDO O ID
-            //   where((o.type ='U') and (fg.filegroup_guid IS NULL) and (OBJECT_NAME(i.object_id) <> 'sysdiagrams') and db.database_id = ?)";
-            //   stmt.setInt(1, getIdDoBanco());
             rs = stmt.executeQuery();
             //para percorrer o resultSet
             IndicesNoPrimary inp = new IndicesNoPrimary();
@@ -116,9 +106,6 @@ public class Tela_Script extends javax.swing.JFrame {
                 inp.setNomeDaTabela(rs.getString("object_id"));
                 inp.setNomeDoIndice(rs.getString("index_type_desc"));
                 inp.setIdDoObjeto(rs.getLong("avg_fragmentation_in_percent"));
-//                inp.setGrupoDeArquivo(rs.getString("GrupoDeARQUIVO"));
-//                inp.setTipoDeIndice(rs.getString("TipoDeIndice"));
-//                inp.setTipoDeTabela(rs.getString("TipoTabela"));
 
                 System.out.println(inp.toString());
                 //adicionando o corpo da tabela no array de String
@@ -131,10 +118,7 @@ public class Tela_Script extends javax.swing.JFrame {
 
     public void selecionarIndicesNoPrimary() {
         //pegando a conexao com o banco    
-
-        System.out.println("id do banco" + getIdBanco());
-
-        String selectNoPrimary = "Select    OBJECT_NAME(i.object_id) As Tabela,\n"
+        String selectNoPrimary = "Select distinct OBJECT_NAME(i.object_id) As Tabela,\n"
                 + "             i.name As Indice, \n"
                 + "             i.object_id IddoObjetoIndice,\n"
                 + "             fg.name as GrupoDeARQUIVO,\n"
@@ -146,18 +130,15 @@ public class Tela_Script extends javax.swing.JFrame {
                 + "       inner join sys.objects as o on o.object_id = i.object_id\n"
                 + "	  inner join sys.master_files as smf on smf.data_space_id = ds.data_space_id\n"
                 + "	  inner join sys.databases as db on db.database_id = smf.database_id\n"
-                + " where((o.type ='U') and (fg.filegroup_guid IS NULL) and (OBJECT_NAME(i.object_id) <> 'sysdiagrams') and (db.database_id =" + this.getIdBanco() + "))";
+                + " where((o.type ='U') and (fg.filegroup_guid IS NULL) and (OBJECT_NAME(i.object_id) <> 'sysdiagrams'))";
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try {
             stmt = conection.prepareStatement(selectNoPrimary);
-            //PEGANDO O ID
-            //   where((o.type ='U') and (fg.filegroup_guid IS NULL) and (OBJECT_NAME(i.object_id) <> 'sysdiagrams') and db.database_id = ?)";
-            //   stmt.setInt(1, getIdDoBanco());
             rs = stmt.executeQuery();
-            //para percorrer o resultSet
+            
             IndicesNoPrimary inp = new IndicesNoPrimary();
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
             listaResultSetString.add(inp.cabecalho());
@@ -177,8 +158,7 @@ public class Tela_Script extends javax.swing.JFrame {
         } catch (SQLException ex) {
             System.err.println("Erro :" + ex);
         } finally {
-            //fechando a conexao com o banco de dados
-
+            ConnectionFactory.close();
         }
     }
 
@@ -446,21 +426,6 @@ public class Tela_Script extends javax.swing.JFrame {
         this.dispose();
     }
     private void jBtAvançarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAvançarActionPerformed
-
-        if (getTelaResumo() == null) {//nao foi ainda para outra tela
-            //cria nova instancia
-            //passando esta tela como parametro
-            setTelaResumo(new Tela_Resumo());
-                //a tela script agora conhece esta tela caso ela precise voltar
-            //guardando o caminho de volta
-            getTelaResumo().setTelaScript(this);
-        }
-        //ja passou pela 3 tela e voltou pra essa
-        this.getTelaResumo().setVisible(true);
-        this.dispose();
-     //   } catch (SQLException ex) {
-        //       Logger.getLogger(Tela_Script.class.getName()).log(Level.SEVERE, null, ex);
-        //   }  //existe algo dentro do objeto telaResumo que esta dentro de telaScript
         if (getTelaResumo() == null) {//nao foi ainda para outra tela
             //cria nova instancia
             //passando esta tela como parametro

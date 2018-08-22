@@ -9,16 +9,17 @@ public class Tela_Resumo extends javax.swing.JFrame {
 
     public static Connection conection;
     private static List<String> listaResultSetString;
-    
+
     public Tela_Resumo() {
         initComponents();
     }
-     public Tela_Resumo(Connection conection, List<String> listaResultSetString) {
+
+    public Tela_Resumo(Connection conection, List<String> listaResultSetString) {
         this.conection = conection;
         this.listaResultSetString = listaResultSetString;
         initComponents();
     }
-    
+
     private Tela_Script telaScript;
 
     public Tela_Script getTelaScript() {
@@ -28,6 +29,7 @@ public class Tela_Resumo extends javax.swing.JFrame {
     public void setTelaScript(Tela_Script telaScript) {
         this.telaScript = telaScript;
     }
+
     public Connection pegarConexao() {
         return getTelaScript().conection;
     }
@@ -154,12 +156,12 @@ public class Tela_Resumo extends javax.swing.JFrame {
 //        System.out.println(listaResultSetString.toString());
         Arquivo novoArquivo = new Arquivo();
         novoArquivo.criarDiretorio();
-        novoArquivo.criarArquivoTxt("resultado");
-     
+        novoArquivo.criarArquivoTxt("Indices");
+
         for (String linha : listaResultSetString) {
-             novoArquivo.salvarNoTxt(linha, novoArquivo.getArquivo());
-        }    
-//        System.exit(0);
+            novoArquivo.salvarNoTxt(linha, novoArquivo.getArquivo());
+        }
+        System.exit(0);
     }//GEN-LAST:event_jBtConcluirActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed
