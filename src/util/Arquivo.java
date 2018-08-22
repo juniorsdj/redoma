@@ -14,7 +14,6 @@ public class Arquivo {
     private File arquivo, diretorio;
 
     public Arquivo() {
-//        File diretorio = new File("C:/Redoma");
     }
 
     public File getArquivo() {
@@ -44,19 +43,13 @@ public class Arquivo {
         } catch (Exception e) {
             System.out.println("O diretorio nao foi criado" + e);
         }
-
-//        setDiretorioCriado(false);
-//        setDiretorio(novoDiretorio);
-        
     }
 
     //criando arquivo no diretorio
     public void criarArquivoTxt(String nomeDoArquivo) {
         //se o diretorio ainda nao foi criado
         File diretorio = getDiretorio();
-//        boolean arquivoFoiCriado = false;
-        //o tipo e txt
-        File arquivo = new File(diretorio, nomeDoArquivo+".txt");
+        File arquivo = new File(diretorio, nomeDoArquivo + ".txt");
         try {
             arquivo.createNewFile();
             System.out.println("Arquivo criado com sucesso!");
@@ -66,7 +59,7 @@ public class Arquivo {
             System.out.println("Erro o arquivo nao foi criado" + ex);
             Logger.getLogger(Tela_Resumo.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
     //salva o conteudo do select no arquivo

@@ -1,43 +1,24 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
-import connection.ConnectionFactory;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import model.bean.IndicesNoPrimary;
 import util.Arquivo;
 
-/**
- *
- * @author aldam
- */
 public class Tela_Resumo extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Tela_Resumo
-     */
+    public static Connection conection;
+    private static List<String> listaResultSetString;
+    
     public Tela_Resumo() {
         initComponents();
     }
+     public Tela_Resumo(Connection conection, List<String> listaResultSetString) {
+        this.conection = conection;
+        this.listaResultSetString = listaResultSetString;
+        initComponents();
+    }
+    
     private Tela_Script telaScript;
 
     public Tela_Script getTelaScript() {
@@ -49,48 +30,6 @@ public class Tela_Resumo extends javax.swing.JFrame {
     }
     public Connection pegarConexao() {
         return getTelaScript().conection;
-    }
-
-    //List<Object> lista ;
-    public List<String> selecionarIndicesNoPrimary(String selectNoPrimary) {
-        //pegando a conexao com o banco
-        Connection con = ConnectionFactory.getConnection();
-
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        List<String> listaResultSetString = new ArrayList<>();
-
-        try {
-            stmt = con.prepareStatement(selectNoPrimary);
-            //PEGANDO O ID
-            //   where((o.type ='U') and (fg.filegroup_guid IS NULL) and (OBJECT_NAME(i.object_id) <> 'sysdiagrams') and db.database_id = ?)";
-            //   stmt.setInt(1, getIdDoBanco());
-            rs = stmt.executeQuery();
-            //para percorrer o resultSet
-            IndicesNoPrimary inp = new IndicesNoPrimary();
-            //adicionando o cabeçaho da tabela no array de String posicao get(0)
-            listaResultSetString.add(inp.cabecalho());
-            System.out.println(inp.cabecalho());
-            while (rs.next()) {//enquanto houver próximo;
-                inp.setNomeDaTabela(rs.getString("Tabela"));
-                inp.setNomeDoIndice(rs.getString("Indice"));
-                inp.setIdDoObjeto(rs.getLong("IddoObjetoIndice"));
-                inp.setGrupoDeArquivo(rs.getString("GrupoDeARQUIVO"));
-                inp.setTipoDeIndice(rs.getString("TipoDeIndice"));
-                inp.setTipoDeTabela(rs.getString("TipoTabela"));
-
-                System.out.println(inp.toString());
-                //adicionando o corpo da tabela no array de String
-                listaResultSetString.add(inp.toString());
-            }
-        } catch (SQLException ex) {
-            System.err.println("Erro :" + ex);
-        } finally {
-            //fechando a conexao com o banco de dados
-            ConnectionFactory.closeConnection(con);
-        }
-        return listaResultSetString;
     }
 
     /**
@@ -212,53 +151,14 @@ public class Tela_Resumo extends javax.swing.JFrame {
 
     private void jBtConcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtConcluirActionPerformed
         //saber se o diretorio foi criado
+//        System.out.println(listaResultSetString.toString());
         Arquivo novoArquivo = new Arquivo();
         novoArquivo.criarDiretorio();
-        novoArquivo.criarArquivoTxt("NovoArquivo");
-        
-        List<String> resultado = selecionarIndicesNoPrimary(getTelaScript().getSelect());
-        
-        //salvarEmTxt(resultado.toString(), novoArquivo.getArquivo());
-        
-        
-        String select = "";
-        int count = 0;
-        for (String linha : resultado) {
-            select = select+ linha +"\n";
-            System.out.println(select);
-            count++;
-        }
-        novoArquivo.salvarNoTxt(select, novoArquivo.getArquivo());
-        
-//        String select = selecionarIndicesNoPrimary(getTelaScript().getSelect());
-        
-        
-        
-//        boolean diretorio = criarDiretorio();
-//        if (diretorio == true) {
-//            System.out.println("O diretorio foi criado pela primeira vez");
-//            System.out.println("O diretorio foi criado em-->" + getDiretorio().getAbsolutePath());
-//            //o diretorio ja foi criado
-//        } else if (diretorio == false) {
-//            System.out.println("O diretorio já existe!");
-//            System.out.println("O diretorio já existe em-->" + getDiretorio().getAbsolutePath());
-//        }
-//
-//        boolean arquivo = criarArquivoTxt(getDiretorio(), "indicesNoPrimary.txt");
-//        if (arquivo == true) {
-//            System.out.println("O arquivo foi criado pela primeira vez");
-//            System.out.println("O arquivo foi criado em-->" + getArquivo().getAbsolutePath());
-//            //o diretorio ja foi criado
-//        } else if (arquivo == false) {
-//            System.out.println("O arquivo já existe!");
-//            System.out.println("O arquivo já existe em-->" + getArquivo().getAbsolutePath());
-//            getArquivo().delete();//deleto para sobrescrever
-//            criarArquivoTxt(getDiretorio(), "indicesNoPrimary.txt");
-//        }
-//        //adicionando ao arquivo.txt
-//        for (String linha : selecionarIndicesNoPrimary(getTelaScript().getSelect())) {
-//            salvarEmTxt(linha, getArquivo());
-//        }
+        novoArquivo.criarArquivoTxt("resultado");
+     
+        for (String linha : listaResultSetString) {
+             novoArquivo.salvarNoTxt(linha, novoArquivo.getArquivo());
+        }    
 //        System.exit(0);
     }//GEN-LAST:event_jBtConcluirActionPerformed
 

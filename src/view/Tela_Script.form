@@ -221,6 +221,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Os top 10 - maiores indices"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxMaiorIndiceActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JSlider" name="jSlider3">
           <Properties>

@@ -9,10 +9,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import model.bean.IndicesNoPrimary;
 import view.Tela_Data_Base;
 
 /**
@@ -22,6 +27,15 @@ import view.Tela_Data_Base;
 public class Tela_Script extends javax.swing.JFrame {
 
     public static Connection conection;
+    public static List<String> selectedBancos;
+    private List<String> listaResultSetString = new ArrayList<>();
+
+    private String idBanco;
+
+    private String getIdBanco() {
+        return idBanco;
+    }
+
     /**
      * Creates new form Tela_Data_Base
      */
@@ -33,10 +47,13 @@ public class Tela_Script extends javax.swing.JFrame {
     public Tela_Script() {
         initComponents();
     }
-//    public Tela_Script(Tela_Data_Base tdb) {
-//        this.tdb = tdb;
-//        initComponents();
-//   }
+
+    public Tela_Script(Connection conection, List<String> selectedBancos) {
+        this.conection = conection;
+        this.selectedBancos = selectedBancos;
+        this.idBanco = selectedBancos.get(0);
+        initComponents();
+    }
 
     private Tela_Data_Base telaDataBase;
     private Tela_Resumo telaResumo;
@@ -57,17 +74,113 @@ public class Tela_Script extends javax.swing.JFrame {
     public void setTelaResumo(Tela_Resumo telaResumo) {
         this.telaResumo = telaResumo;
     }
-    
-    public String getSelect(){
+
+    public String getSelect() {
         return this.select;
     }
-    
-    public void setSelect(String select){
+
+    public void setSelect(String select) {
         this.select = select;
     }
-    
-    
-    
+
+    public void selecionarTop10() {
+
+        String selectTop10 = "select TOP (10) object_id,\n"
+                + "index_type_desc,\n"
+                + "avg_fragmentation_in_percent \n"
+                + "from sys.dm_db_index_physical_stats (   \n"
+                + this.getIdBanco()
+                + "  , null\n"
+                + "  , null\n"
+                + "  , null\n"
+                + "  , null\n"
+                + ") \n"
+                + "where avg_fragmentation_in_percent >= 0 and\n"
+                + "index_id > 0\n"
+                + "order by avg_fragmentation_in_percent desc";
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            stmt = conection.prepareStatement(selectTop10);
+            //PEGANDO O ID
+            //   where((o.type ='U') and (fg.filegroup_guid IS NULL) and (OBJECT_NAME(i.object_id) <> 'sysdiagrams') and db.database_id = ?)";
+            //   stmt.setInt(1, getIdDoBanco());
+            rs = stmt.executeQuery();
+            //para percorrer o resultSet
+            IndicesNoPrimary inp = new IndicesNoPrimary();
+            //adicionando o cabeçaho da tabela no array de String posicao get(0)
+            listaResultSetString.add(String.format("|%-20s|%-30s|%-20s|\n", "object_id", "index_type_desc", "avg_fragmentation_in_percent"));
+            while (rs.next()) {//enquanto houver próximo;
+                inp.setNomeDaTabela(rs.getString("object_id"));
+                inp.setNomeDoIndice(rs.getString("index_type_desc"));
+                inp.setIdDoObjeto(rs.getLong("avg_fragmentation_in_percent"));
+//                inp.setGrupoDeArquivo(rs.getString("GrupoDeARQUIVO"));
+//                inp.setTipoDeIndice(rs.getString("TipoDeIndice"));
+//                inp.setTipoDeTabela(rs.getString("TipoTabela"));
+
+                System.out.println(inp.toString());
+                //adicionando o corpo da tabela no array de String
+                listaResultSetString.add(inp.toString());
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erro :" + ex);
+        }
+    }
+
+    public void selecionarIndicesNoPrimary() {
+        //pegando a conexao com o banco    
+
+        System.out.println("id do banco" + getIdBanco());
+
+        String selectNoPrimary = "Select    OBJECT_NAME(i.object_id) As Tabela,\n"
+                + "             i.name As Indice, \n"
+                + "             i.object_id IddoObjetoIndice,\n"
+                + "             fg.name as GrupoDeARQUIVO,\n"
+                + "             i.type_desc as TipoDeIndice,\n"
+                + "             o.type as TipoTabela\n"
+                + "  from sys.indexes as i  \n"
+                + "       inner join sys.data_spaces AS ds ON i.data_space_id = ds.data_space_id\n"
+                + "       inner join sys.filegroups as fg on fg.data_space_id = ds.data_space_id \n"
+                + "       inner join sys.objects as o on o.object_id = i.object_id\n"
+                + "	  inner join sys.master_files as smf on smf.data_space_id = ds.data_space_id\n"
+                + "	  inner join sys.databases as db on db.database_id = smf.database_id\n"
+                + " where((o.type ='U') and (fg.filegroup_guid IS NULL) and (OBJECT_NAME(i.object_id) <> 'sysdiagrams') and (db.database_id =" + this.getIdBanco() + "))";
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            stmt = conection.prepareStatement(selectNoPrimary);
+            //PEGANDO O ID
+            //   where((o.type ='U') and (fg.filegroup_guid IS NULL) and (OBJECT_NAME(i.object_id) <> 'sysdiagrams') and db.database_id = ?)";
+            //   stmt.setInt(1, getIdDoBanco());
+            rs = stmt.executeQuery();
+            //para percorrer o resultSet
+            IndicesNoPrimary inp = new IndicesNoPrimary();
+            //adicionando o cabeçaho da tabela no array de String posicao get(0)
+            listaResultSetString.add(inp.cabecalho());
+            System.out.println(inp.cabecalho());
+            while (rs.next()) {//enquanto houver próximo;
+                inp.setNomeDaTabela(rs.getString("Tabela"));
+                inp.setNomeDoIndice(rs.getString("Indice"));
+                inp.setIdDoObjeto(rs.getLong("IddoObjetoIndice"));
+                inp.setGrupoDeArquivo(rs.getString("GrupoDeARQUIVO"));
+                inp.setTipoDeIndice(rs.getString("TipoDeIndice"));
+                inp.setTipoDeTabela(rs.getString("TipoTabela"));
+
+                System.out.println(inp.toString());
+                //adicionando o corpo da tabela no array de String
+                listaResultSetString.add(inp.toString());
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erro :" + ex);
+        } finally {
+            //fechando a conexao com o banco de dados
+
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -133,6 +246,11 @@ public class Tela_Script extends javax.swing.JFrame {
         jCheckBoxIndiceNaoUtilizado.setText("Índices não utilizados");
 
         jCheckBoxMaiorIndice.setText("Os top 10 - maiores indices");
+        jCheckBoxMaiorIndice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMaiorIndiceActionPerformed(evt);
+            }
+        });
 
         jSlider3.setMajorTickSpacing(10);
         jSlider3.setPaintLabels(true);
@@ -210,15 +328,14 @@ public class Tela_Script extends javax.swing.JFrame {
                             .addComponent(jCheckBoxIndiceNaoUtilizado)
                             .addComponent(jCheckBoxABC)
                             .addComponent(jLabelOpcaoIndex)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(checkFileGroupPrimary, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jCheckBoxIndexClusterTipoVariavel, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jCheckBoxFragCluster)
-                                    .addGap(6, 6, 6)
-                                    .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(checkFileGroupPrimary)
+                            .addComponent(jCheckBoxIndexClusterTipoVariavel)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jCheckBoxFragCluster)
+                                .addGap(6, 6, 6)
+                                .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -330,20 +447,31 @@ public class Tela_Script extends javax.swing.JFrame {
     }
     private void jBtAvançarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAvançarActionPerformed
 
-            if (getTelaResumo() == null) {//nao foi ainda para outra tela
-                //cria nova instancia
-                //passando esta tela como parametro
-                setTelaResumo(new Tela_Resumo());
+        if (getTelaResumo() == null) {//nao foi ainda para outra tela
+            //cria nova instancia
+            //passando esta tela como parametro
+            setTelaResumo(new Tela_Resumo());
                 //a tela script agora conhece esta tela caso ela precise voltar
-                //guardando o caminho de volta
-                getTelaResumo().setTelaScript(this);              
-            } 
-                //ja passou pela 3 tela e voltou pra essa
-                this.getTelaResumo().setVisible(true);
-                this.dispose();
+            //guardando o caminho de volta
+            getTelaResumo().setTelaScript(this);
+        }
+        //ja passou pela 3 tela e voltou pra essa
+        this.getTelaResumo().setVisible(true);
+        this.dispose();
      //   } catch (SQLException ex) {
-     //       Logger.getLogger(Tela_Script.class.getName()).log(Level.SEVERE, null, ex);
-     //   }
+        //       Logger.getLogger(Tela_Script.class.getName()).log(Level.SEVERE, null, ex);
+        //   }  //existe algo dentro do objeto telaResumo que esta dentro de telaScript
+        if (getTelaResumo() == null) {//nao foi ainda para outra tela
+            //cria nova instancia
+            //passando esta tela como parametro
+            setTelaResumo(new Tela_Resumo(conection, listaResultSetString));
+            //a tela script agora conhece esta tela caso ela precise voltar
+            //guardando o caminho de volta
+            getTelaResumo().setTelaScript(this);
+        }
+        //ja passou pela 3 tela e voltou pra essa
+        this.getTelaResumo().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jBtAvançarActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed
@@ -358,23 +486,16 @@ public class Tela_Script extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void checkFileGroupPrimaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkFileGroupPrimaryActionPerformed
-            if(checkFileGroupPrimary.isSelected()){
-               //criação do metodo setSelect para setar o os indices no grupo de arquivos primary
-                setSelect("Select    OBJECT_NAME(i.object_id) As Tabela,\n"
-                + "             i.name As Indice, \n"
-                + "             i.object_id IddoObjetoIndice,\n"
-                + "             fg.name as GrupoDeARQUIVO,\n"
-                + "             i.type_desc as TipoDeIndice,\n"
-                + "             o.type as TipoTabela\n"
-                + "  from sys.indexes as i  \n"
-                + "       inner join sys.data_spaces AS ds ON i.data_space_id = ds.data_space_id\n"
-                + "       inner join sys.filegroups as fg on fg.data_space_id = ds.data_space_id \n"
-                + "       inner join sys.objects as o on o.object_id = i.object_id\n"
-                + "	  inner join sys.master_files as smf on smf.data_space_id = ds.data_space_id\n"
-                + "	  inner join sys.databases as db on db.database_id = smf.database_id\n"
-                + " where((o.type ='U') and (fg.filegroup_guid IS NULL) and (OBJECT_NAME(i.object_id) <> 'sysdiagrams') and (db.database_id = 7))"); 
-            }
+        if (checkFileGroupPrimary.isSelected()) {
+            selecionarIndicesNoPrimary();
+        }
     }//GEN-LAST:event_checkFileGroupPrimaryActionPerformed
+
+    private void jCheckBoxMaiorIndiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMaiorIndiceActionPerformed
+        if (jCheckBoxMaiorIndice.isSelected()) {
+            selecionarTop10();
+        } 
+    }//GEN-LAST:event_jCheckBoxMaiorIndiceActionPerformed
 
     /**
      * @param args the command line arguments
