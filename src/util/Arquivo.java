@@ -4,6 +4,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import view.Tela_Resumo;
@@ -75,6 +78,23 @@ public class Arquivo {
             Logger.getLogger(Tela_Resumo.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
+
+    }
+
+//    inserir formatado no arquivo txt
+    public void printWriter(File arquivo, List<Object> lista, int contador) {
+        List<String> selectAtual = (List<String>) lista.get(contador);
+        try (FileWriter fw = new FileWriter(arquivo, true);
+                PrintWriter gravarArquivo = new PrintWriter(fw)) {
+            for (String linha : selectAtual) { // dá "warning: [unchecked] unchecked cast"
+                gravarArquivo.printf(linha+"%n");
+            }
+            gravarArquivo.printf("%n");
+        } catch (IOException ex) {
+            Logger.getLogger(Tela_Resumo.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     public void excluirArquivo(File arquivo) {

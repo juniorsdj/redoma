@@ -1,22 +1,27 @@
 package view;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import util.Arquivo;
 
 public class Tela_Resumo extends javax.swing.JFrame {
 
     public static Connection conection;
-    private static List<String> listaResultSetString;
+    private static List<Object> listacomlistaComTodosSelects;
 
     public Tela_Resumo() {
         initComponents();
     }
 
-    public Tela_Resumo(Connection conection, List<String> listaResultSetString) {
+    public Tela_Resumo(Connection conection, List<Object> listacomlistaComTodosSelects) {
         this.conection = conection;
-        this.listaResultSetString = listaResultSetString;
+        this.listacomlistaComTodosSelects = listacomlistaComTodosSelects;
         initComponents();
     }
 
@@ -147,6 +152,8 @@ public class Tela_Resumo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtVoltarActionPerformed
+        //para zerar as adicoes 
+        this.getTelaScript().setListaComTodosSelects(new ArrayList<>());
         this.getTelaScript().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jBtVoltarActionPerformed
@@ -157,11 +164,23 @@ public class Tela_Resumo extends javax.swing.JFrame {
         Arquivo novoArquivo = new Arquivo();
         novoArquivo.criarDiretorio();
         novoArquivo.criarArquivoTxt("Indices");
-
-        for (String linha : listaResultSetString) {
-            novoArquivo.salvarNoTxt(linha, novoArquivo.getArquivo());
+        
+  //      String pularUmaLinha = "";
+        int count = 0;
+        for (Object object : listacomlistaComTodosSelects) {
+             novoArquivo.printWriter(novoArquivo.getArquivo(),listacomlistaComTodosSelects, count);
+             count++;
         }
-        System.exit(0);
+//        novoArquivo.printWriter(novoArquivo.getArquivo(),listacomlistaComTodosSelects);
+        
+//        for (String select : listacomlistaComTodosSelects) {
+//            novoArquivo.salvarNoTxt(select, novoArquivo.getArquivo());
+////            novoArquivo.salvarNoTxt(pularUmaLinha, novoArquivo.getArquivo());
+//        }
+        
+//        novoArquivo.salvarNoTxt(s, novoArquivo.getArquivo());
+
+       // System.exit(0);
     }//GEN-LAST:event_jBtConcluirActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed

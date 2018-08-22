@@ -58,7 +58,6 @@ public class IndicesNoPrimary {
     }
     public String cabecalho(){
         String cabecalhoTabela = String.format("|%-20s|%-30s|%-20s|%-20s|%-20s|%-20s|\n", "nomeDaTabela","nomeDoIndice","idDoObjeto","grupoDeArquivo","tipoDeIndice","tipoDeTabela");
-       // System.out.println(cabecalho);
         return cabecalhoTabela;
     }
 

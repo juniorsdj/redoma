@@ -29,8 +29,16 @@ public class Tela_Script extends javax.swing.JFrame {
 
     public static Connection conection;
     public static List<String> selectedBancos;
-    private List<String> listaResultSetString = new ArrayList<>();
+    private List<Object> listaComTodosSelects = new ArrayList<>();
 
+    public List<Object> getListaComTodosSelects() {
+        return listaComTodosSelects;
+    }
+
+    public void setListaComTodosSelects(List<Object> listaComTodosSelects) {
+        this.listaComTodosSelects = listaComTodosSelects;
+    }
+    
     private String idBanco;
 
     private String getIdBanco() {
@@ -77,7 +85,7 @@ public class Tela_Script extends javax.swing.JFrame {
     }
 
     public void selecionarTop10() {
-
+        List<String> listaResultSetString = new ArrayList<>();
         String selectTop10 = "select TOP (10) object_id,\n"
                 + "index_type_desc,\n"
                 + "avg_fragmentation_in_percent \n"
@@ -114,9 +122,11 @@ public class Tela_Script extends javax.swing.JFrame {
         } catch (SQLException ex) {
             System.err.println("Erro :" + ex);
         }
+        getListaComTodosSelects().add(listaResultSetString);
     }
 
     public void selecionarIndicesNoPrimary() {
+        List<String> listaResultSetString = new ArrayList<>();
         //pegando a conexao com o banco    
         String selectNoPrimary = "Select distinct OBJECT_NAME(i.object_id) As Tabela,\n"
                 + "             i.name As Indice, \n"
@@ -128,8 +138,6 @@ public class Tela_Script extends javax.swing.JFrame {
                 + "       inner join sys.data_spaces AS ds ON i.data_space_id = ds.data_space_id\n"
                 + "       inner join sys.filegroups as fg on fg.data_space_id = ds.data_space_id \n"
                 + "       inner join sys.objects as o on o.object_id = i.object_id\n"
-                + "	  inner join sys.master_files as smf on smf.data_space_id = ds.data_space_id\n"
-                + "	  inner join sys.databases as db on db.database_id = smf.database_id\n"
                 + " where((o.type ='U') and (fg.filegroup_guid IS NULL) and (OBJECT_NAME(i.object_id) <> 'sysdiagrams'))";
 
         PreparedStatement stmt = null;
@@ -138,7 +146,7 @@ public class Tela_Script extends javax.swing.JFrame {
         try {
             stmt = conection.prepareStatement(selectNoPrimary);
             rs = stmt.executeQuery();
-            
+
             IndicesNoPrimary inp = new IndicesNoPrimary();
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
             listaResultSetString.add(inp.cabecalho());
@@ -160,6 +168,8 @@ public class Tela_Script extends javax.swing.JFrame {
         } finally {
             ConnectionFactory.close();
         }
+        //adicionando o resultado do select ao listaComTodosSelects
+        getListaComTodosSelects().add(listaResultSetString);
     }
 
     /**
@@ -429,7 +439,13 @@ public class Tela_Script extends javax.swing.JFrame {
         if (getTelaResumo() == null) {//nao foi ainda para outra tela
             //cria nova instancia
             //passando esta tela como parametro
-            setTelaResumo(new Tela_Resumo(conection, listaResultSetString));
+            if (jCheckBoxMaiorIndice.isSelected()) {
+                selecionarTop10();
+            }
+            if (checkFileGroupPrimary.isSelected()) {
+                selecionarIndicesNoPrimary();
+            }
+            setTelaResumo(new Tela_Resumo(conection, getListaComTodosSelects()));
             //a tela script agora conhece esta tela caso ela precise voltar
             //guardando o caminho de volta
             getTelaResumo().setTelaScript(this);
@@ -451,15 +467,11 @@ public class Tela_Script extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void checkFileGroupPrimaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkFileGroupPrimaryActionPerformed
-        if (checkFileGroupPrimary.isSelected()) {
-            selecionarIndicesNoPrimary();
-        }
+
     }//GEN-LAST:event_checkFileGroupPrimaryActionPerformed
 
     private void jCheckBoxMaiorIndiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMaiorIndiceActionPerformed
-        if (jCheckBoxMaiorIndice.isSelected()) {
-            selecionarTop10();
-        } 
+
     }//GEN-LAST:event_jCheckBoxMaiorIndiceActionPerformed
 
     /**
