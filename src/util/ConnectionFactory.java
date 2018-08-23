@@ -13,6 +13,8 @@ package util;
  */
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -117,9 +119,25 @@ public class ConnectionFactory {
         }
         return connection;
     }
+    
+    public static void fecharStmtERs(PreparedStatement stmt, ResultSet rs){
+        //primeiro -- verificar se con esta aberto ou nao
+        //se for null e pq ta fechada
+        if (stmt != null && rs !=null) {
+            try {
+                //fechar o statement
+                stmt.close();
+                rs.close();
+            } catch (SQLException ex) {
+                //printar no console em vermelho err
+                System.err.println("Captura do Erro" + ex);
+            }
+        }
+    }
 
     public static void close() {
         try {
+            System.out.println("Fechando a conexão!");
             connection.close();
         } catch (SQLException ex) {
             Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);

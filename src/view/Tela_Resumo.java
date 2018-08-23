@@ -9,18 +9,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import util.Arquivo;
+import util.ConnectionFactory;
 
 public class Tela_Resumo extends javax.swing.JFrame {
-
-    public static Connection conection;
     private static List<Object> listacomlistaComTodosSelects;
 
     public Tela_Resumo() {
         initComponents();
     }
 
-    public Tela_Resumo(Connection conection, List<Object> listacomlistaComTodosSelects) {
-        this.conection = conection;
+    public Tela_Resumo( List<Object> listacomlistaComTodosSelects) {
         this.listacomlistaComTodosSelects = listacomlistaComTodosSelects;
         initComponents();
     }
@@ -35,8 +33,12 @@ public class Tela_Resumo extends javax.swing.JFrame {
         this.telaScript = telaScript;
     }
 
-    public Connection pegarConexao() {
-        return getTelaScript().conection;
+    public static List<Object> getListacomlistaComTodosSelects() {
+        return listacomlistaComTodosSelects;
+    }
+
+    public static void setListacomlistaComTodosSelects(List<Object> listacomlistaComTodosSelects) {
+        Tela_Resumo.listacomlistaComTodosSelects = listacomlistaComTodosSelects;
     }
 
     /**
@@ -169,6 +171,9 @@ public class Tela_Resumo extends javax.swing.JFrame {
              novoArquivo.printWriter(novoArquivo.getArquivo(),listacomlistaComTodosSelects, count);
              count++;
         }
+        //fechando a conexao aqui pois posso me arrepender e voltar para a tela Script
+        ConnectionFactory.close();
+        //fechando o programa
         System.exit(0);
     }//GEN-LAST:event_jBtConcluirActionPerformed
 

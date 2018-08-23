@@ -65,22 +65,6 @@ public class Arquivo {
 
     }
 
-    //salva o conteudo do select no arquivo
-    public void salvarNoTxt(String linha, File arquivo) {
-        //append true
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo, true))) {
-            bw.write(linha);
-            bw.newLine();
-            bw.flush();//pegar toda a string do tunelamento
-            bw.close();
-
-        } catch (IOException ex) {
-            Logger.getLogger(Tela_Resumo.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
 //    inserir formatado no arquivo txt
     public void printWriter(File arquivo, List<Object> lista, int contador) {
         List<String> selectAtual = (List<String>) lista.get(contador);
