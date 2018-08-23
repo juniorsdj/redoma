@@ -11,15 +11,15 @@ package model.bean;
  */
 public class MaioresIndices {
 
-    private String idDoObjeto;
+    private long idDoObjeto;
     private String descricaoDoIndice;
     private double fragmentacao;
 
-    public String getIdDoObjeto() {
+    public long getIdDoObjeto() {
         return idDoObjeto;
     }
 
-    public void setIdDoObjeto(String idDoObjeto) {
+    public void setIdDoObjeto(long idDoObjeto) {
         this.idDoObjeto = idDoObjeto;
     }
 

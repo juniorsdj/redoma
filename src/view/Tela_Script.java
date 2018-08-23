@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import model.bean.IndicesClusterNaoVariantes;
 import model.bean.IndicesFillFactor;
 import model.bean.IndicesNaoUtilizados;
 import model.bean.IndicesNoPrimary;
@@ -115,7 +116,7 @@ public class Tela_Script extends javax.swing.JFrame {
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
             listaResultSetString.add(mi.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
-                mi.setIdDoObjeto(rs.getString("idDoObjeto"));
+                mi.setIdDoObjeto(rs.getLong("idDoObjeto"));
                 mi.setDescricaoDoIndice(rs.getString("descricaoDoIndice"));
                 mi.setFragmentacao(rs.getDouble("fragmentacao"));
 
@@ -268,6 +269,55 @@ public class Tela_Script extends javax.swing.JFrame {
                 System.out.println(sHeap.toString());
                 //adicionando o corpo da tabela no array de String
                 listaResultSetString.add(sHeap.toString());
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erro :" + ex);
+        } finally {
+            ConnectionFactory.fecharStmtERs(stmt, rs);
+        }
+        //adicionando o resultado do select ao listaComTodosSelects
+        getListaComTodosSelects().add(listaResultSetString);
+    }
+    public void selecionarNaoVariantes() {
+        List<String> listaResultSetString = new ArrayList<>();
+        //pegando a conexao com o banco    
+        String selectNaoVariantes = "SELECT distinct\n" +
+"                clmns.column_id AS id,\n" +
+"                clmns.name AS name,\n" +
+"                ISNULL(baset.name, N'') AS systemType,\n" +
+"                ik.type_desc as descricao\n" +
+"                FROM information_schema.tables,\n" +
+"                sys.tables AS tbl\n" +
+"                INNER JOIN sys.all_columns AS clmns ON clmns.object_id=tbl.object_id\n" +
+"                LEFT OUTER JOIN sys.types AS baset ON (baset.user_type_id = clmns.system_type_id and baset.user_type_id = baset.system_type_id) or ((baset.system_type_id = clmns.system_type_id) and (baset.user_type_id = clmns.user_type_id) and (baset.is_user_defined = 0) and (baset.is_assembly_type = 1))\n" +
+"                LEFT OUTER JOIN sys.indexes AS ik ON ik.object_id = clmns.object_id\n" +
+"                LEFT OUTER JOIN sys.index_columns AS cik ON cik.index_id = ik.index_id and cik.column_id = clmns.column_id and cik.object_id = clmns.object_id and 0 = cik.is_included_column\n" +
+"	         WHERE table_type = 'base table' \n" +
+"                and ik.type = 1\n" +
+"                and baset.name in ('nchar','ntext','nvarchar','sql_variant','text','varbinary','varchar')\n" +
+"                ORDER BY\n" +
+"                id ASC;";
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conection.prepareStatement(selectNaoVariantes);
+            rs = stmt.executeQuery();
+
+            IndicesClusterNaoVariantes icnv = new IndicesClusterNaoVariantes();
+            listaResultSetString.add(icnv.nomedoSelect());
+            //adicionando o cabeçaho da tabela no array de String posicao get(0)
+            listaResultSetString.add(icnv.cabecalho());
+            System.out.println(icnv.cabecalho());
+            while (rs.next()) {//enquanto houver próximo;
+                icnv.setId(rs.getInt("id"));
+                icnv.setName(rs.getString("name"));
+                icnv.setSystemType(rs.getString("systemType"));
+                icnv.setDescricao(rs.getString("descricao"));
+
+                System.out.println(icnv.toString());
+                //adicionando o corpo da tabela no array de String
+                listaResultSetString.add(icnv.toString());
             }
         } catch (SQLException ex) {
             System.err.println("Erro :" + ex);
@@ -603,6 +653,9 @@ public class Tela_Script extends javax.swing.JFrame {
         }
         if (jCheckBoxIndiceNaoUtilizado.isSelected()) {
             selecionarIndicesNaoUtilizados();
+        }
+         if (jCheckBoxIndexClusterTipoVariavel.isSelected()) {
+            selecionarNaoVariantes();
         }
 
         if (getTelaResumo() == null) {//nao foi ainda para outra tela
