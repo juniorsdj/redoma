@@ -387,7 +387,6 @@ public class Tela_Script extends javax.swing.JFrame {
         jCheckBoxPermissaoSA = new javax.swing.JCheckBox();
         jCheckBoxPermisssaoEscrita = new javax.swing.JCheckBox();
         jLabelOpcaoIndex = new javax.swing.JLabel();
-        jCheckBoxABC = new javax.swing.JCheckBox();
         jCheckBoxFragNaoCluster = new javax.swing.JCheckBox();
         jCheckBoxFragCluster = new javax.swing.JCheckBox();
         jScrollBar1 = new javax.swing.JScrollBar();
@@ -422,8 +421,6 @@ public class Tela_Script extends javax.swing.JFrame {
 
         jLabelOpcaoIndex.setText("Opções de Indexação");
 
-        jCheckBoxABC.setText("abc");
-
         jCheckBoxFragNaoCluster.setText("Indeces com fragmentação não clusterizado");
 
         jCheckBoxFragCluster.setText("Indeces com fragmentação clusterizado");
@@ -456,7 +453,7 @@ public class Tela_Script extends javax.swing.JFrame {
             }
         });
 
-        jCheckBoxIndexClusterTipoVariavel.setText("Ííndices clusterizados com tipos de dados variantes");
+        jCheckBoxIndexClusterTipoVariavel.setText("Índices clusterizados com tipos de dados variantes");
 
         jSlider1.setMajorTickSpacing(10);
         jSlider1.setPaintLabels(true);
@@ -516,7 +513,6 @@ public class Tela_Script extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jCheckBoxTableHeap)
                             .addComponent(jCheckBoxIndiceNaoUtilizado)
-                            .addComponent(jCheckBoxABC)
                             .addComponent(jLabelOpcaoIndex)
                             .addComponent(checkFileGroupPrimary)
                             .addComponent(jCheckBoxIndexClusterTipoVariavel)
@@ -537,9 +533,7 @@ public class Tela_Script extends javax.swing.JFrame {
                 .addComponent(jCheckBoxPermissaoSA)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBoxPermisssaoEscrita)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBoxABC)
-                .addGap(18, 18, 18)
+                .addGap(41, 41, 41)
                 .addComponent(jLabelOpcaoIndex)
                 .addGap(3, 3, 3)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -734,7 +728,6 @@ public class Tela_Script extends javax.swing.JFrame {
     private javax.swing.JButton jBtAvançar;
     private javax.swing.JButton jBtCancelar;
     private javax.swing.JButton jBtVoltar;
-    private javax.swing.JCheckBox jCheckBoxABC;
     private javax.swing.JCheckBox jCheckBoxFillFactor;
     private javax.swing.JCheckBox jCheckBoxFragCluster;
     private javax.swing.JCheckBox jCheckBoxFragNaoCluster;
