@@ -94,7 +94,6 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jCheckBoxTableHeap" min="-2" max="-2" attributes="0"/>
                               <Component id="jCheckBoxIndiceNaoUtilizado" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxABC" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabelOpcaoIndex" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="checkFileGroupPrimary" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jCheckBoxIndexClusterTipoVariavel" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -121,9 +120,7 @@
                   <Component id="jCheckBoxPermissaoSA" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jCheckBoxPermisssaoEscrita" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="jCheckBoxABC" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
                   <Component id="jLabelOpcaoIndex" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -180,11 +177,6 @@
         <Component class="javax.swing.JLabel" name="jLabelOpcaoIndex">
           <Properties>
             <Property name="text" type="java.lang.String" value="Op&#xe7;&#xf5;es de Indexa&#xe7;&#xe3;o"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBoxABC">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="abc"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxFragNaoCluster">
@@ -248,7 +240,7 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxIndexClusterTipoVariavel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&#xcd;&#xed;ndices clusterizados com tipos de dados variantes"/>
+            <Property name="text" type="java.lang.String" value="&#xcd;ndices clusterizados com tipos de dados variantes"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JSlider" name="jSlider1">
