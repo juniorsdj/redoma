@@ -89,12 +89,15 @@ public class Arquivo {
             for (String linha : selectAtual) { // dá "warning: [unchecked] unchecked cast"
                 gravarArquivo.printf(linha+"%n");
             }
+            //pular uma linha
             gravarArquivo.printf("%n");
+            
+            fw.flush();
+            fw.close();
         } catch (IOException ex) {
             Logger.getLogger(Tela_Resumo.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     public void excluirArquivo(File arquivo) {

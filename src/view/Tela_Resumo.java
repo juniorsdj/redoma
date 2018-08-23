@@ -159,28 +159,17 @@ public class Tela_Resumo extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtVoltarActionPerformed
 
     private void jBtConcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtConcluirActionPerformed
-        //saber se o diretorio foi criado
-//        System.out.println(listaResultSetString.toString());
         Arquivo novoArquivo = new Arquivo();
         novoArquivo.criarDiretorio();
-        novoArquivo.criarArquivoTxt("Indices");
+        novoArquivo.criarArquivoTxt("Resultado");
         
-  //      String pularUmaLinha = "";
+        //salvando no arquivo resultado
         int count = 0;
         for (Object object : listacomlistaComTodosSelects) {
              novoArquivo.printWriter(novoArquivo.getArquivo(),listacomlistaComTodosSelects, count);
              count++;
         }
-//        novoArquivo.printWriter(novoArquivo.getArquivo(),listacomlistaComTodosSelects);
-        
-//        for (String select : listacomlistaComTodosSelects) {
-//            novoArquivo.salvarNoTxt(select, novoArquivo.getArquivo());
-////            novoArquivo.salvarNoTxt(pularUmaLinha, novoArquivo.getArquivo());
-//        }
-        
-//        novoArquivo.salvarNoTxt(s, novoArquivo.getArquivo());
-
-       // System.exit(0);
+        System.exit(0);
     }//GEN-LAST:event_jBtConcluirActionPerformed
 
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed

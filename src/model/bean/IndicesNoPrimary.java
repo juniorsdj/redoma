@@ -56,6 +56,12 @@ public class IndicesNoPrimary {
     public void setTipoDeTabela(String tipoDeTabela) {
         this.tipoDeTabela = tipoDeTabela;
     }
+    
+    public String nomedoSelect(){
+        String nomedoSelect = String.format("***Índices Localizados no FileGroup Primary***%n");
+        return nomedoSelect;
+    }
+    
     public String cabecalho(){
         String cabecalhoTabela = String.format("|%-20s|%-30s|%-20s|%-20s|%-20s|%-20s|\n", "nomeDaTabela","nomeDoIndice","idDoObjeto","grupoDeArquivo","tipoDeIndice","tipoDeTabela");
         return cabecalhoTabela;

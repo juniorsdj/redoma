@@ -17,7 +17,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import model.bean.IndicesFillFactor;
+import model.bean.IndicesNaoUtilizados;
 import model.bean.IndicesNoPrimary;
+import model.bean.MaioresIndices;
+import model.bean.TabelasHeap;
 import util.ConnectionFactory;
 import view.Tela_Data_Base;
 
@@ -38,7 +42,7 @@ public class Tela_Script extends javax.swing.JFrame {
     public void setListaComTodosSelects(List<Object> listaComTodosSelects) {
         this.listaComTodosSelects = listaComTodosSelects;
     }
-    
+
     private String idBanco;
 
     private String getIdBanco() {
@@ -86,19 +90,19 @@ public class Tela_Script extends javax.swing.JFrame {
 
     public void selecionarTop10() {
         List<String> listaResultSetString = new ArrayList<>();
-        String selectTop10 = "select TOP (10) object_id,\n"
-                + "index_type_desc,\n"
-                + "avg_fragmentation_in_percent \n"
-                + "from sys.dm_db_index_physical_stats (   \n"
-                + this.getIdBanco()
-                + "  , null\n"
-                + "  , null\n"
-                + "  , null\n"
-                + "  , null\n"
-                + ") \n"
-                + "where avg_fragmentation_in_percent >= 0 and\n"
-                + "index_id > 0\n"
-                + "order by avg_fragmentation_in_percent desc";
+        String selectTop10 = "select TOP (10) object_id as idDoObjeto,\n" +
+"                index_type_desc as descricaoDoIndice,\n" +
+"                avg_fragmentation_in_percent as fragmentacao\n" +
+"                from sys.dm_db_index_physical_stats (   \n" +
+"                "+this.getIdBanco()+"\n" +
+"                 , null\n" +
+"                , null\n" +
+"                 , null\n" +
+"                  , null\n" +
+"                ) \n" +
+"                where avg_fragmentation_in_percent >= 0 and\n" +
+"                index_id > 0\n" +
+"                order by avg_fragmentation_in_percent desc";
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -107,22 +111,24 @@ public class Tela_Script extends javax.swing.JFrame {
             stmt = conection.prepareStatement(selectTop10);
             rs = stmt.executeQuery();
             //para percorrer o resultSet
-            IndicesNoPrimary inp = new IndicesNoPrimary();
+            MaioresIndices mi = new MaioresIndices();
+            listaResultSetString.add(mi.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
-            listaResultSetString.add(String.format("|%-20s|%-30s|%-20s|\n", "object_id", "index_type_desc", "avg_fragmentation_in_percent"));
+            listaResultSetString.add(mi.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
-                inp.setNomeDaTabela(rs.getString("object_id"));
-                inp.setNomeDoIndice(rs.getString("index_type_desc"));
-                inp.setIdDoObjeto(rs.getLong("avg_fragmentation_in_percent"));
+                mi.setIdDoObjeto(rs.getString("idDoObjeto"));
+                mi.setDescricaoDoIndice(rs.getString("descricaoDoIndice"));
+                mi.setFragmentacao(rs.getDouble("fragmentacao"));
 
-                System.out.println(inp.toString());
+                System.out.println(mi.toString());
                 //adicionando o corpo da tabela no array de String
-                listaResultSetString.add(inp.toString());
+                listaResultSetString.add(mi.toString());
             }
         } catch (SQLException ex) {
             System.err.println("Erro :" + ex);
         }
         getListaComTodosSelects().add(listaResultSetString);
+
     }
 
     public void selecionarIndicesNoPrimary() {
@@ -148,6 +154,8 @@ public class Tela_Script extends javax.swing.JFrame {
             rs = stmt.executeQuery();
 
             IndicesNoPrimary inp = new IndicesNoPrimary();
+            //adicionando o que faz o select, ou seja seu script
+            listaResultSetString.add(inp.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
             listaResultSetString.add(inp.cabecalho());
             System.out.println(inp.cabecalho());
@@ -162,6 +170,146 @@ public class Tela_Script extends javax.swing.JFrame {
                 System.out.println(inp.toString());
                 //adicionando o corpo da tabela no array de String
                 listaResultSetString.add(inp.toString());
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erro :" + ex);
+        } finally {
+            ConnectionFactory.close();
+        }
+        //adicionando o resultado do select ao listaComTodosSelects
+        getListaComTodosSelects().add(listaResultSetString);
+    }
+
+    public void selecionarFillFactor() {
+        List<String> listaResultSetString = new ArrayList<>();
+        //pegando a conexao com o banco    
+        int parametroFill = Integer.parseInt(jTextField3.getText());
+        String selectFill = "SELECT DB_NAME() AS nomeDoBanco, i.name AS nomeDoIndice, \n" +
+"                 i.fill_factor AS fill_Factor, b.table_name as nomeDaTabela\n" +
+"               FROM sys.indexes AS i\n" +
+"                inner join sys.data_spaces AS ds ON i.data_space_id = ds.data_space_id\n" +
+"                inner join sys.filegroups as fg on fg.data_space_id = ds.data_space_id\n" +
+"                inner join sys.objects as o on o.object_id = i.object_id\n" +
+"                inner join sys.master_files as smf on smf.data_space_id = ds.data_space_id\n" +
+"                inner join sys.databases as db on db.database_id = smf.database_id\n" +
+"                INNER JOIN information_schema.tables AS b\n" +
+"                 ON (OBJECT_ID(b.table_name) = i.object_id) \n" +
+"                 AND b.table_type = 'BASE TABLE'\n" +
+"                WHERE i.fill_factor < "+parametroFill+"\n" +
+"                ORDER BY i.fill_factor DESC";
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conection.prepareStatement(selectFill);
+            rs = stmt.executeQuery();
+
+            IndicesFillFactor iff = new IndicesFillFactor();
+            listaResultSetString.add(iff.nomedoSelect());
+            //adicionando o cabeçaho da tabela no array de String posicao get(0)
+            listaResultSetString.add(iff.cabecalho());
+            System.out.println(iff.cabecalho());
+            while (rs.next()) {//enquanto houver próximo;
+                
+                iff.setNomeDoBanco(rs.getString("nomeDoBanco"));
+                iff.setNomeDoIndice(rs.getString("nomeDoIndice"));
+                iff.setFillFactor(rs.getInt("fill_Factor"));
+                iff.setNomeDaTabela(rs.getString("nomeDaTabela"));
+
+                System.out.println(iff.toString());
+                //adicionando o corpo da tabela no array de String
+                listaResultSetString.add(iff.toString());
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erro :" + ex);
+        } finally {
+            ConnectionFactory.close();
+        }
+        //adicionando o resultado do select ao listaComTodosSelects
+        getListaComTodosSelects().add(listaResultSetString);
+    }
+
+    public void selecionarTabelasHeap() {
+        List<String> listaResultSetString = new ArrayList<>();
+        //pegando a conexao com o banco    
+        String selectHeap = "SELECT DISTINCT i.name as  NomeIndice\n"
+                + "                     , i.type_desc as Descricao\n"
+                + "                     ,is_unique as chaveUnica\n"
+                + "                   ,is_primary_key as chavePrimaria\n"
+                + "                     FROM sys.indexes AS i\n"
+                + "                INNER JOIN sys.data_spaces AS ds ON i.data_space_id = ds.data_space_id\n"
+                + "                inner join sys.filegroups as fg on fg.data_space_id = ds.data_space_id \n"
+                + "                inner join sys.objects as o on o.object_id = i.object_id\n"
+                + "                inner join sys.master_files as smf on smf.data_space_id = ds.data_space_id\n"
+                + "                inner join sys.databases as db on db.database_id = smf.database_id\n"
+                + "                INNER JOIN information_schema.tables AS b\n"
+                + "                 ON (OBJECT_ID(b.table_name) = i.object_id) \n"
+                + "               AND b.table_type = 'BASE TABLE'\n"
+                + "                WHERE is_hypothetical = 0 AND i.index_id<> 0";
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conection.prepareStatement(selectHeap);
+            rs = stmt.executeQuery();
+
+            TabelasHeap sHeap = new TabelasHeap();
+            listaResultSetString.add(sHeap.nomedoSelect());
+            //adicionando o cabeçaho da tabela no array de String posicao get(0)
+            listaResultSetString.add(sHeap.cabecalho());
+            System.out.println(sHeap.cabecalho());
+            while (rs.next()) {//enquanto houver próximo;
+                sHeap.setNomeIndice(rs.getString("NomeIndice"));
+                sHeap.setDescricao(rs.getString("Descricao"));
+                sHeap.setChaveUnica(rs.getInt("chaveUnica"));
+                sHeap.setChavePrimaria(rs.getInt("chavePrimaria"));
+                
+                System.out.println(sHeap.toString());
+                //adicionando o corpo da tabela no array de String
+                listaResultSetString.add(sHeap.toString());
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erro :" + ex);
+        } finally {
+            ConnectionFactory.close();
+        }
+        //adicionando o resultado do select ao listaComTodosSelects
+        getListaComTodosSelects().add(listaResultSetString);
+    }
+
+    public void selecionarIndicesNaoUtilizados() {
+        List<String> listaResultSetString = new ArrayList<>();
+        //pegando a conexao com o banco    
+        String selectidxNaoU = "SELECT  OBJECT_NAME(i.[object_id]) AS nomeDaTabela ,\n" +
+"                     i.name as nomeDoIndice\n" +
+"                FROM    sys.indexes AS i\n" +
+"                       INNER JOIN sys.objects AS o ON i.[object_id] = o.[object_id]\n" +
+"                WHERE   i.index_id NOT IN ( SELECT  s.index_id\n" +
+"                                            FROM    sys.dm_db_index_usage_stats AS s\n" +
+"                                        WHERE   s.[object_id] = i.[object_id]\n" +
+"                                                  AND i.index_id = s.index_id\n" +
+"                                                 AND database_id = DB_ID() )\n" +
+"                      AND o.[type] = 'U'\n" +
+"                ORDER BY OBJECT_NAME(i.[object_id]) ASC";
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conection.prepareStatement(selectidxNaoU);
+            rs = stmt.executeQuery();
+
+            IndicesNaoUtilizados idxNaoUtilizados = new IndicesNaoUtilizados();
+            
+            listaResultSetString.add(idxNaoUtilizados.nomedoSelect());
+            //adicionando o cabeçaho da tabela no array de String posicao get(0)
+            listaResultSetString.add(idxNaoUtilizados.cabecalho());
+            System.out.println(idxNaoUtilizados.cabecalho());
+            while (rs.next()) {//enquanto houver próximo;
+                idxNaoUtilizados.setNomeDaTabela(rs.getString("nomeDaTabela"));
+                idxNaoUtilizados.setNomeDoIndice(rs.getString("nomeDoIndice"));
+                System.out.println(idxNaoUtilizados.toString());
+                //adicionando o corpo da tabela no array de String
+                listaResultSetString.add(idxNaoUtilizados.toString());
             }
         } catch (SQLException ex) {
             System.err.println("Erro :" + ex);
@@ -444,6 +592,15 @@ public class Tela_Script extends javax.swing.JFrame {
             }
             if (checkFileGroupPrimary.isSelected()) {
                 selecionarIndicesNoPrimary();
+            }
+            if (jCheckBoxFillFactor.isSelected()) {
+                selecionarFillFactor();
+            }
+            if (jCheckBoxTableHeap.isSelected()) {
+                selecionarTabelasHeap();
+            }
+            if (jCheckBoxIndiceNaoUtilizado.isSelected()) {
+                selecionarIndicesNaoUtilizados();
             }
             setTelaResumo(new Tela_Resumo(conection, getListaComTodosSelects()));
             //a tela script agora conhece esta tela caso ela precise voltar
