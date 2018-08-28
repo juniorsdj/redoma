@@ -68,8 +68,12 @@ public class ConnectionFactory {
         ConnectionFactory.database = database;
     }
     
+//    public static Connection getConnectionWindows(){
+//        
+//    }
     
-    public Connection getConnection(String servidor, String user, String  password) {
+    
+    public static Connection getConnection(String servidor, String user, String  password) {
         nomeServidor = servidor;
         usuario = user;
         senha = password;

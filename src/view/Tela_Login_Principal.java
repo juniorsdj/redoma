@@ -5,14 +5,17 @@
  */
 package view;
 
-import javax.swing.JOptionPane;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFormattedTextField;
+import javax.swing.JOptionPane;
+import javax.swing.text.MaskFormatter;
 import util.ConnectionFactory;
 
 /**
@@ -24,7 +27,6 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
     /**
      * Creates new form telaLogin
      */
-
     private Connection con;
 
     public Tela_Login_Principal() {
@@ -91,7 +93,13 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxAutenticar.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Autenticação do SQL Server" }));
+        jComboBoxAutenticar.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Autenticação do SQL Server", "Autenticação do Windows" }));
+        jComboBoxAutenticar.setToolTipText("");
+        jComboBoxAutenticar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxAutenticarActionPerformed(evt);
+            }
+        });
 
         jTextFieldNomUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -218,14 +226,15 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtConectarActionPerformed
-
-        ConnectionFactory fabrica = new ConnectionFactory();
-        con = fabrica.getConnection(jTextFieldNomServidor.getText(), jTextFieldNomUsuario.getText(), new String(jPasswordField1.getPassword()));
-
-        if (con != null) {
-            BasesDinamicas tdb = new BasesDinamicas(con);
-            tdb.setVisible(true);
-            this.dispose();
+        if (jComboBoxAutenticar.getSelectedIndex() == 0) {
+            con = ConnectionFactory.getConnection(jTextFieldNomServidor.getText(), jTextFieldNomUsuario.getText(), new String(jPasswordField1.getPassword()));
+            if (con != null) {
+                BasesDinamicas tdb = new BasesDinamicas(con);
+                tdb.setVisible(true);
+                this.dispose();
+            }
+        } else {
+            //chamar autenticacao pelo wwindows
         }
     }//GEN-LAST:event_jBtConectarActionPerformed
 
@@ -264,6 +273,20 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldNomUsuarioActionPerformed
 
+    private void jComboBoxAutenticarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxAutenticarActionPerformed
+        if (jComboBoxAutenticar.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(null, "Autenticação Sql Server!");
+            jTextFieldNomUsuario.setEnabled(true);
+            jPasswordField1.setEnabled(true);
+        }
+        if (jComboBoxAutenticar.getSelectedIndex() == 1) {
+            JOptionPane.showMessageDialog(null, "Autenticação Windows!");
+            
+            jPasswordField1.setEnabled(false);
+            jTextFieldNomUsuario.setEnabled(false);
+        }
+    }//GEN-LAST:event_jComboBoxAutenticarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -298,6 +321,7 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Tela_Login_Principal().setVisible(true);
+
             }
         });
     }

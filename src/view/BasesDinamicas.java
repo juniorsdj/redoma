@@ -63,10 +63,9 @@ public class BasesDinamicas extends JFrame {
             }
         }
         
-        //chama de novo a conexao agora passando o nome do banco
-        
-        Connection novaConexao = ConnectionFactory.getConnection(ConnectionFactory.getNomeServidor(), ConnectionFactory.getUsuario(), ConnectionFactory.getSenha(), database);
-        Tela_Script telascript = new Tela_Script(novaConexao, this.opcoesSelected);
+        // Chama de novo a conexao agora passando o nome do banco.
+        this.con = ConnectionFactory.getConnection(ConnectionFactory.getNomeServidor(), ConnectionFactory.getUsuario(), ConnectionFactory.getSenha(), database);
+        Tela_Script telascript = new Tela_Script(con, this.opcoesSelected);
         telascript.setVisible(true);
         this.dispose();
     }
