@@ -59,7 +59,6 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("TelaLogin");
         setName("Gerenciador de dados"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(500, 550));
 
         jPanelPrincipal.setBorder(javax.swing.BorderFactory.createTitledBorder("Redoma - Tela de Login"));
 

@@ -76,7 +76,7 @@
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="jSlider3" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="jTextField3" min="-2" pref="42" max="-2" attributes="0"/>
+                                          <Component id="txtFillFactor" min="-2" pref="42" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="jCheckBoxFragNaoCluster" min="-2" max="-2" attributes="0"/>
@@ -85,10 +85,10 @@
                                       </Group>
                                   </Group>
                                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                  <Component id="jTextField1" min="-2" pref="42" max="-2" attributes="0"/>
+                                  <Component id="txtIndiceNonClustered" min="-2" pref="42" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace pref="173" max="32767" attributes="0"/>
+                          <EmptySpace pref="177" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -102,7 +102,7 @@
                                   <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                                   <Component id="jSlider2" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jTextField2" min="-2" pref="42" max="-2" attributes="0"/>
+                                  <Component id="txtIndiceClustered" min="-2" pref="42" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -126,13 +126,13 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jCheckBoxFragNaoCluster" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jSlider1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtIndiceNonClustered" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jSlider2" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtIndiceClustered" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Component id="jCheckBoxFragCluster" min="-2" pref="23" max="-2" attributes="0"/>
                   </Group>
@@ -140,7 +140,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jCheckBoxFillFactor" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jSlider3" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jTextField3" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtFillFactor" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                   <Component id="jCheckBoxIndiceNaoUtilizado" min="-2" max="-2" attributes="0"/>
@@ -181,13 +181,16 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxFragNaoCluster">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Indeces com fragmenta&#xe7;&#xe3;o n&#xe3;o clusterizado"/>
+            <Property name="text" type="java.lang.String" value="&#xcd;ndices com fragmenta&#xe7;&#xe3;o n&#xe3;o clusterizado"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxFragCluster">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Indeces com fragmenta&#xe7;&#xe3;o clusterizado"/>
+            <Property name="text" type="java.lang.String" value="&#xcd;ndices com fragmenta&#xe7;&#xe3;o clusterizado"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxFragClusterActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JScrollBar" name="jScrollBar1">
           <Properties>
@@ -203,6 +206,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="&#xcd;ndices com Fillfactor menor "/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxFillFactorActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxIndiceNaoUtilizado">
           <Properties>
@@ -211,7 +217,7 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxMaiorIndice">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Os top 10 - maiores indices"/>
+            <Property name="text" type="java.lang.String" value="Os top 10 - maiores &#xcd;ndices"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxMaiorIndiceActionPerformed"/>
@@ -259,26 +265,26 @@
             <Property name="value" type="int" value="0"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextField1">
+        <Component class="javax.swing.JTextField" name="txtIndiceNonClustered">
           <BindingProperties>
-            <BindingProperty name="text" source="jSlider1" sourcePath="${value}" target="jTextField1" targetPath="text" updateStrategy="0" immediately="false">
+            <BindingProperty name="text" source="jSlider1" sourcePath="${value}" target="txtIndiceNonClustered" targetPath="text" updateStrategy="0" immediately="false">
               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
             </BindingProperty>
           </BindingProperties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtIndiceNonClusteredActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextField2">
+        <Component class="javax.swing.JTextField" name="txtIndiceClustered">
           <BindingProperties>
-            <BindingProperty name="text" source="jSlider2" sourcePath="${value}" target="jTextField2" targetPath="text" updateStrategy="0" immediately="false">
+            <BindingProperty name="text" source="jSlider2" sourcePath="${value}" target="txtIndiceClustered" targetPath="text" updateStrategy="0" immediately="false">
               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
             </BindingProperty>
           </BindingProperties>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextField3">
+        <Component class="javax.swing.JTextField" name="txtFillFactor">
           <BindingProperties>
-            <BindingProperty name="text" source="jSlider3" sourcePath="${value}" target="jTextField3" targetPath="text" updateStrategy="0" immediately="false">
+            <BindingProperty name="text" source="jSlider3" sourcePath="${value}" target="txtFillFactor" targetPath="text" updateStrategy="0" immediately="false">
               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
             </BindingProperty>
           </BindingProperties>

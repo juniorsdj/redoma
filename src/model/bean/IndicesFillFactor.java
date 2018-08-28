@@ -1,6 +1,7 @@
 package model.bean;
 
 public class IndicesFillFactor {
+
     private String nomeDoBanco;
     private String nomeDoIndice;
     private int fillFactor;
@@ -37,12 +38,12 @@ public class IndicesFillFactor {
     public void setNomeDaTabela(String nomeDaTabela) {
         this.nomeDaTabela = nomeDaTabela;
     }
-    
-     public String nomedoSelect(){
+
+    public String nomedoSelect() {
         String nomedoSelect = String.format("***Índices com Fill Factor***%n");
         return nomedoSelect;
     }
-    
+
     public String cabecalho() {
         String cabecalhoTabela = String.format("|%-20s|%-30s|%-20s|%-20s|\n",
                 "nomeDoBanco", "nomeDoIndice", "fillFactor", "nomeDaTabela");
@@ -55,8 +56,5 @@ public class IndicesFillFactor {
                 nomeDoIndice, fillFactor, nomeDaTabela);
         return corpoTabela;
     }
-    
-    
-    
-    
+
 }
