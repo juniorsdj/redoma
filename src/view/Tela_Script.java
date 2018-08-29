@@ -517,6 +517,11 @@ public class Tela_Script extends javax.swing.JFrame {
         jLabelOpcaoIndex.setText("Opções de Indexação");
 
         jCheckBoxFragNaoCluster.setText("Índices com fragmentação não clusterizado");
+        jCheckBoxFragNaoCluster.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxFragNaoClusterActionPerformed(evt);
+            }
+        });
 
         jCheckBoxFragCluster.setText("Índices com fragmentação clusterizado");
         jCheckBoxFragCluster.addActionListener(new java.awt.event.ActionListener() {
@@ -805,6 +810,10 @@ public class Tela_Script extends javax.swing.JFrame {
     private void jCheckBoxFragClusterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxFragClusterActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBoxFragClusterActionPerformed
+
+    private void jCheckBoxFragNaoClusterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxFragNaoClusterActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxFragNaoClusterActionPerformed
 
     /**
      * @param args the command line arguments

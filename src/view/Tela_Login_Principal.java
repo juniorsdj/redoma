@@ -5,6 +5,8 @@
  */
 package view;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -281,9 +283,19 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
         }
         if (jComboBoxAutenticar.getSelectedIndex() == 1) {
             JOptionPane.showMessageDialog(null, "Autenticação Windows!");
-            
-            jPasswordField1.setEnabled(false);
+            jTextFieldNomUsuario.setText("windows");
             jTextFieldNomUsuario.setEnabled(false);
+            jPasswordField1.setEnabled(false);
+            String nomeServidor;
+            try {
+                nomeServidor = InetAddress.getLocalHost().getHostName();
+                JOptionPane.showMessageDialog(null, "nome servidor!"+nomeServidor);
+            } catch (UnknownHostException ex) {
+                Logger.getLogger(Tela_Login_Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+           
         }
     }//GEN-LAST:event_jComboBoxAutenticarActionPerformed
 

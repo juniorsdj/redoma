@@ -7,7 +7,7 @@ public class IndicesClustered {
     private String nomeIndice;
     private String descricaoIndice;
     private int fragmentacao;
-
+   
     public String getNomeTabela() {
         return nomeTabela;
     }

@@ -59,12 +59,12 @@ public class BasesDinamicas extends JFrame {
             JCheckBox checkBox = this.checkboxes.get(i);
             if (checkBox.isSelected()) {
                 this.opcoesSelected.add(checkBox.getName());
-                database = checkboxes.get(i).getText();
+               // database = checkboxes.get(i).getText();
             }
         }
         
         // Chama de novo a conexao agora passando o nome do banco.
-        this.con = ConnectionFactory.getConnection(ConnectionFactory.getNomeServidor(), ConnectionFactory.getUsuario(), ConnectionFactory.getSenha(), database);
+        
         Tela_Script telascript = new Tela_Script(con, this.opcoesSelected);
         telascript.setVisible(true);
         this.dispose();

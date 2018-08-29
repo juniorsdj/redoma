@@ -183,6 +183,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="&#xcd;ndices com fragmenta&#xe7;&#xe3;o n&#xe3;o clusterizado"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxFragNaoClusterActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxFragCluster">
           <Properties>
