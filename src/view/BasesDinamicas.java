@@ -58,6 +58,7 @@ public class BasesDinamicas extends JFrame {
         for (int i = 0; i < this.checkboxes.size(); i++) {
             JCheckBox checkBox = this.checkboxes.get(i);
             if (checkBox.isSelected()) {
+                Bases base = new Bases();
                 this.opcoesSelected.add(checkBox.getName());
                // database = checkboxes.get(i).getText();
             }

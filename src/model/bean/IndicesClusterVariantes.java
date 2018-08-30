@@ -49,7 +49,7 @@ public class IndicesClusterVariantes {
     }
 
     public String nomedoSelect() {
-        String nomedoSelect = String.format("***Indices Clustered Não Variantes***%n");
+        String nomedoSelect = String.format("***Indices Clustered Variantes***%n");
         return nomedoSelect;
     }
 
