@@ -25,6 +25,7 @@ import model.bean.IndicesNoPrimary;
 import model.bean.IndicesNonClustered;
 import model.bean.MaioresIndices;
 import model.bean.TabelasHeap;
+import util.Bases;
 import util.ConnectionFactory;
 import view.Tela_Data_Base;
 
@@ -35,7 +36,7 @@ import view.Tela_Data_Base;
 public class Tela_Script extends javax.swing.JFrame {
 
     public static Connection conection;
-    public static List<String> selectedBancos;
+    public static List<Bases> selectedBancos;
     private List<Object> listaComTodosSelects = new ArrayList<>();
 
     public List<Object> getListaComTodosSelects() {
@@ -46,10 +47,15 @@ public class Tela_Script extends javax.swing.JFrame {
         this.listaComTodosSelects = listaComTodosSelects;
     }
 
-    private String idBanco;
+    private int idBanco;
 
-    private String getIdBanco() {
+    private int getIdBanco() {
         return idBanco;
+    }
+    private String nomeBanco;
+
+    private String getNomeBanco() {
+        return nomeBanco;
     }
 
     /**
@@ -64,10 +70,11 @@ public class Tela_Script extends javax.swing.JFrame {
         initComponents();
     }
 
-    public Tela_Script(Connection conection, List<String> selectedBancos) {
+    public Tela_Script(Connection conection, List<Bases> selectedBancos) {
         this.conection = conection;
         this.selectedBancos = selectedBancos;
-        this.idBanco = selectedBancos.get(0);
+        this.idBanco = selectedBancos.get(0).getId();
+        this.nomeBanco = selectedBancos.get(0).getNome();
         initComponents();
     }
 
@@ -94,7 +101,8 @@ public class Tela_Script extends javax.swing.JFrame {
         List<String> listaResultSetString = new ArrayList<>();
         //pegando a conexao com o banco    
         int parametroNonClustered = Integer.parseInt(txtIndiceNonClustered.getText());
-        String selectNonClustered = "SELECT object_name(SysBases.object_id) AS nomeTabela ,\n"
+        String selectNonClustered = "USE " + getNomeBanco() + ";"
+                + "SELECT object_name(SysBases.object_id) AS nomeTabela ,\n"
                 + "SisIndex.name AS  nomeIndice,\n"
                 + "SysBases.Index_type_desc AS descricaoIndice,\n"
                 + "SysBases.avg_fragmentation_in_percent AS fragmentacao\n"
@@ -114,6 +122,7 @@ public class Tela_Script extends javax.swing.JFrame {
             IndicesNonClustered inc = new IndicesNonClustered();
             listaResultSetString.add(inc.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
+            System.out.println(inc.nomedoSelect());
             listaResultSetString.add(inc.cabecalho());
             System.out.println(inc.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
@@ -132,6 +141,7 @@ public class Tela_Script extends javax.swing.JFrame {
         } finally {
             ConnectionFactory.fecharStmtERs(stmt, rs);
         }
+        System.out.println("*************************************************");
         //adicionando o resultado do select ao listaComTodosSelects
         getListaComTodosSelects().add(listaResultSetString);
     }
@@ -140,7 +150,8 @@ public class Tela_Script extends javax.swing.JFrame {
         List<String> listaResultSetString = new ArrayList<>();
         //pegando a conexao com o banco    
         int parametroClustered = Integer.parseInt(txtIndiceClustered.getText());
-        String selectClustered = "SELECT object_name(SysBases.object_id) AS nomeTabela ,\n"
+        String selectClustered = "USE " + getNomeBanco() + ";"
+                + "SELECT object_name(SysBases.object_id) AS nomeTabela ,\n"
                 + "SisIndex.name AS  nomeIndice,\n"
                 + "SysBases.Index_type_desc AS descricaoIndice,\n"
                 + "SysBases.avg_fragmentation_in_percent AS fragmentacao\n"
@@ -160,6 +171,7 @@ public class Tela_Script extends javax.swing.JFrame {
             IndicesClustered ic = new IndicesClustered();
             listaResultSetString.add(ic.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
+            System.out.println(ic.nomedoSelect());
             listaResultSetString.add(ic.cabecalho());
             System.out.println(ic.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
@@ -178,6 +190,7 @@ public class Tela_Script extends javax.swing.JFrame {
         } finally {
             ConnectionFactory.fecharStmtERs(stmt, rs);
         }
+        System.out.println("*************************************************");
         //adicionando o resultado do select ao listaComTodosSelects
         getListaComTodosSelects().add(listaResultSetString);
     }
@@ -186,7 +199,8 @@ public class Tela_Script extends javax.swing.JFrame {
         List<String> listaResultSetString = new ArrayList<>();
         //pegando a conexao com o banco    
         int parametroFill = Integer.parseInt(txtFillFactor.getText());
-        String selectFill = "SELECT DB_NAME() AS nomeDoBanco, i.name AS nomeDoIndice, \n"
+        String selectFill = "USE " + getNomeBanco() + ";"
+                + "SELECT DB_NAME() AS nomeDoBanco, i.name AS nomeDoIndice, \n"
                 + "                 i.fill_factor AS fill_Factor, b.table_name as nomeDaTabela\n"
                 + "               FROM sys.indexes AS i\n"
                 + "                inner join sys.data_spaces AS ds ON i.data_space_id = ds.data_space_id\n"
@@ -209,6 +223,7 @@ public class Tela_Script extends javax.swing.JFrame {
             IndicesFillFactor iff = new IndicesFillFactor();
             listaResultSetString.add(iff.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
+            System.out.println(iff.nomedoSelect());
             listaResultSetString.add(iff.cabecalho());
             System.out.println(iff.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
@@ -227,6 +242,7 @@ public class Tela_Script extends javax.swing.JFrame {
         } finally {
             ConnectionFactory.fecharStmtERs(stmt, rs);
         }
+        System.out.println("*************************************************");
         //adicionando o resultado do select ao listaComTodosSelects
         getListaComTodosSelects().add(listaResultSetString);
     }
@@ -234,7 +250,8 @@ public class Tela_Script extends javax.swing.JFrame {
     public void selecionarIndicesNaoUtilizados() {
         List<String> listaResultSetString = new ArrayList<>();
         //pegando a conexao com o banco    
-        String selectidxNaoU = "SELECT  OBJECT_NAME(i.[object_id]) AS nomeDaTabela ,\n"
+        String selectidxNaoU = "USE " + getNomeBanco() + ";"
+                + "SELECT  OBJECT_NAME(i.[object_id]) AS nomeDaTabela ,\n"
                 + "                     i.name as nomeDoIndice\n"
                 + "                FROM    sys.indexes AS i\n"
                 + "                       INNER JOIN sys.objects AS o ON i.[object_id] = o.[object_id]\n"
@@ -257,6 +274,7 @@ public class Tela_Script extends javax.swing.JFrame {
             listaResultSetString.add(idxNaoUtilizados.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
             listaResultSetString.add(idxNaoUtilizados.cabecalho());
+            System.out.println(idxNaoUtilizados.nomedoSelect());
             System.out.println(idxNaoUtilizados.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
                 idxNaoUtilizados.setNomeDaTabela(rs.getString("nomeDaTabela"));
@@ -270,12 +288,13 @@ public class Tela_Script extends javax.swing.JFrame {
         } finally {
             ConnectionFactory.fecharStmtERs(stmt, rs);
         }
+        System.out.println("*************************************************");
         //adicionando o resultado do select ao listaComTodosSelects
-
         getListaComTodosSelects().add(listaResultSetString);
     }
 
     public void selecionarTop10() {
+        //so essa função que passa nao pelo nome mais pelo id do banco
         List<String> listaResultSetString = new ArrayList<>();
         String selectTop10 = "select TOP (10) object_id as idDoObjeto,\n"
                 + "                index_type_desc as descricaoDoIndice,\n"
@@ -301,7 +320,9 @@ public class Tela_Script extends javax.swing.JFrame {
             MaioresIndices mi = new MaioresIndices();
             listaResultSetString.add(mi.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
+            System.out.println(mi.nomedoSelect());
             listaResultSetString.add(mi.cabecalho());
+            System.out.println(mi.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
                 mi.setIdDoObjeto(rs.getLong("idDoObjeto"));
                 mi.setDescricaoDoIndice(rs.getString("descricaoDoIndice"));
@@ -316,6 +337,7 @@ public class Tela_Script extends javax.swing.JFrame {
         } finally {
             ConnectionFactory.fecharStmtERs(stmt, rs);
         }
+        System.out.println("*************************************************");
         getListaComTodosSelects().add(listaResultSetString);
 
     }
@@ -323,7 +345,9 @@ public class Tela_Script extends javax.swing.JFrame {
     public void selecionarIndicesNoPrimary() {
         List<String> listaResultSetString = new ArrayList<>();
         //pegando a conexao com o banco    
-        String selectNoPrimary = "Select distinct OBJECT_NAME(i.object_id) As Tabela,\n"
+        //PARA USAR O COMANDO USE BANCO EU DEVO COLOCAR ; PARA FUNCIONAR
+        String selectNoPrimary = "USE " + getNomeBanco() + ";"
+                + "Select distinct OBJECT_NAME(i.object_id) As Tabela,\n"
                 + "             i.name As Indice, \n"
                 + "             i.object_id IddoObjetoIndice,\n"
                 + "             fg.name as GrupoDeARQUIVO,\n"
@@ -347,6 +371,7 @@ public class Tela_Script extends javax.swing.JFrame {
             listaResultSetString.add(inp.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
             listaResultSetString.add(inp.cabecalho());
+            System.out.println(inp.nomedoSelect());
             System.out.println(inp.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
                 inp.setNomeDaTabela(rs.getString("Tabela"));
@@ -365,6 +390,7 @@ public class Tela_Script extends javax.swing.JFrame {
         } finally {
             ConnectionFactory.fecharStmtERs(stmt, rs);
         }
+        System.out.println("*************************************************");
         //adicionando o resultado do select ao listaComTodosSelects
         getListaComTodosSelects().add(listaResultSetString);
     }
@@ -372,7 +398,8 @@ public class Tela_Script extends javax.swing.JFrame {
     public void selecionarVariantes() {
         List<String> listaResultSetString = new ArrayList<>();
         //pegando a conexao com o banco    
-        String selectVariantes = "SELECT distinct\n"
+        String selectVariantes = "USE " + getNomeBanco() + ";"
+                + "SELECT distinct\n"
                 + "                clmns.column_id AS id,\n"
                 + "                clmns.name AS name,\n"
                 + "                ISNULL(baset.name, N'') AS systemType,\n"
@@ -399,6 +426,7 @@ public class Tela_Script extends javax.swing.JFrame {
             listaResultSetString.add(icv.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
             listaResultSetString.add(icv.cabecalho());
+            System.out.println(icv.nomedoSelect());
             System.out.println(icv.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
                 icv.setId(rs.getInt("id"));
@@ -415,6 +443,7 @@ public class Tela_Script extends javax.swing.JFrame {
         } finally {
             ConnectionFactory.fecharStmtERs(stmt, rs);
         }
+        System.out.println("*************************************************");
         //adicionando o resultado do select ao listaComTodosSelects
         getListaComTodosSelects().add(listaResultSetString);
     }
@@ -422,7 +451,8 @@ public class Tela_Script extends javax.swing.JFrame {
     public void selecionarTabelasHeap() {
         List<String> listaResultSetString = new ArrayList<>();
         //pegando a conexao com o banco    
-        String selectHeap = "SELECT DISTINCT i.name as  NomeIndice\n"
+        String selectHeap = "USE " + getNomeBanco() + ";"
+                + "SELECT DISTINCT i.name as  NomeIndice\n"
                 + "                     , i.type_desc as Descricao\n"
                 + "                     ,is_unique as chaveUnica\n"
                 + "                   ,is_primary_key as chavePrimaria\n"
@@ -447,6 +477,7 @@ public class Tela_Script extends javax.swing.JFrame {
             listaResultSetString.add(sHeap.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
             listaResultSetString.add(sHeap.cabecalho());
+            System.out.println(sHeap.nomedoSelect());
             System.out.println(sHeap.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
                 sHeap.setNomeIndice(rs.getString("NomeIndice"));
@@ -463,6 +494,7 @@ public class Tela_Script extends javax.swing.JFrame {
         } finally {
             ConnectionFactory.fecharStmtERs(stmt, rs);
         }
+        System.out.println("*************************************************");
         //adicionando o resultado do select ao listaComTodosSelects
         getListaComTodosSelects().add(listaResultSetString);
     }
@@ -744,11 +776,11 @@ public class Tela_Script extends javax.swing.JFrame {
     }
     private void jBtAvançarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAvançarActionPerformed
 
-        if (jCheckBoxFragCluster.isSelected()) {
-            selecionarIndicesClustered();
-        }
         if (jCheckBoxFragNaoCluster.isSelected()) {
             selecionarIndicesNonClustered();
+        }
+        if (jCheckBoxFragCluster.isSelected()) {
+            selecionarIndicesClustered();
         }
         if (jCheckBoxFillFactor.isSelected()) {
             selecionarFillFactor();

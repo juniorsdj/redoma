@@ -28,7 +28,7 @@ public class BasesDinamicas extends JFrame {
     private final String consulta = "Select name,database_id From sys.databases;";
     private JPanel contentPane;
     private List<JCheckBox> checkboxes = new ArrayList<>();
-    private List<String> opcoesSelected = new ArrayList<>();
+    private List<Bases> opcoesSelected = new ArrayList<>();
     public int count;
     //declaracao de botoes 
     private javax.swing.JButton jBtAjuda = new javax.swing.JButton();
@@ -59,14 +59,17 @@ public class BasesDinamicas extends JFrame {
             JCheckBox checkBox = this.checkboxes.get(i);
             if (checkBox.isSelected()) {
                 Bases base = new Bases();
-                this.opcoesSelected.add(checkBox.getName());
-               // database = checkboxes.get(i).getText();
+                base.setNome(checkBox.getText());
+                base.setId(Integer.parseInt(checkBox.getName()));
+                System.out.println("id do banco: "+checkBox.getText());
+                System.out.println("nome do banco: "+checkBox.getName());
+                this.opcoesSelected.add(base);
+                // database = checkboxes.get(i).getText();
             }
         }
-        
+
         // Chama de novo a conexao agora passando o nome do banco.
-        
-        Tela_Script telascript = new Tela_Script(con, this.opcoesSelected);
+        Tela_Script telascript = new Tela_Script(this.con, this.opcoesSelected);
         telascript.setVisible(true);
         this.dispose();
     }
@@ -182,7 +185,7 @@ public class BasesDinamicas extends JFrame {
 
     }
 
-    public List<String> getOpcoesSelected() {
+    public List<Bases> getOpcoesSelected() {
         return opcoesSelected;
     }
 
