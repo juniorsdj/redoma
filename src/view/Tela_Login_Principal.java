@@ -31,8 +31,22 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
      */
     private Connection con;
 
+    public void recuperarNomeServidorLocal() {
+        String nomeServidor = null;
+        try {
+            nomeServidor = InetAddress.getLocalHost().getHostName();
+            //  JOptionPane.showMessageDialog(null, "nome servidor local :" + nomeServidor.toUpperCase());
+        } catch (UnknownHostException ex) {
+            JOptionPane.showMessageDialog(null, "erro ao recuperar o nome do servidor local" + ex);
+        }
+        this.jTextFieldNomServidor.setText(nomeServidor.toUpperCase());
+    }
+
     public Tela_Login_Principal() {
         initComponents();
+        //  Metodo para recuperar o nome do servidor local e ja deixar o campo 
+        //  preenchido.
+        recuperarNomeServidorLocal();
     }
 
     /**
@@ -229,14 +243,17 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
 
     private void jBtConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtConectarActionPerformed
         if (jComboBoxAutenticar.getSelectedIndex() == 0) {
+            // Autenticação usando usuario e senha.
             con = ConnectionFactory.getConnection(jTextFieldNomServidor.getText(), jTextFieldNomUsuario.getText(), new String(jPasswordField1.getPassword()));
-            if (con != null) {
-                BasesDinamicas tdb = new BasesDinamicas(con);
-                tdb.setVisible(true);
-                this.dispose();
-            }
         } else {
-            //chamar autenticacao pelo wwindows
+            // Autenticação pelo windows.
+            this.con = ConnectionFactory.getConnectionWindows(jTextFieldNomServidor.getText());
+        }
+        if (con != null) {//existe uma conexao aberta
+            //va para tela escolher bancos dinamicamente
+            BasesDinamicas tdb = new BasesDinamicas(con);
+            tdb.setVisible(true);
+            this.dispose();
         }
     }//GEN-LAST:event_jBtConectarActionPerformed
 
@@ -251,7 +268,6 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
             }
         }
         if (resposta == JOptionPane.YES_OPTION) {
-
             System.exit(0);
         }
     }//GEN-LAST:event_jBtSairActionPerformed
@@ -277,25 +293,16 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
 
     private void jComboBoxAutenticarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxAutenticarActionPerformed
         if (jComboBoxAutenticar.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(null, "Autenticação Sql Server!");
+            JOptionPane.showMessageDialog(null, "Autenticação via Sql Server!");
+            // Deixar campos habilitados entao enable recebe true;
             jTextFieldNomUsuario.setEnabled(true);
             jPasswordField1.setEnabled(true);
         }
         if (jComboBoxAutenticar.getSelectedIndex() == 1) {
-            JOptionPane.showMessageDialog(null, "Autenticação Windows!");
-            jTextFieldNomUsuario.setText("windows");
+            // Deixar campos desabilitados enato enable recebe false;
+            JOptionPane.showMessageDialog(null, "Autenticação via Windows!");
             jTextFieldNomUsuario.setEnabled(false);
             jPasswordField1.setEnabled(false);
-            String nomeServidor;
-            try {
-                nomeServidor = InetAddress.getLocalHost().getHostName();
-                JOptionPane.showMessageDialog(null, "nome servidor!"+nomeServidor);
-            } catch (UnknownHostException ex) {
-                Logger.getLogger(Tela_Login_Principal.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            
-           
         }
     }//GEN-LAST:event_jComboBoxAutenticarActionPerformed
 

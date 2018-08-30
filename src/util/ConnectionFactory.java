@@ -124,6 +124,22 @@ public class ConnectionFactory {
         return connection;
     }
     
+    public static Connection getConnectionWindows(String servidor) {
+        nomeServidor = servidor;
+        String url = "jdbc:sqlserver://" + nomeServidor + ";integratedSecurity=true;";
+        try {
+            connection = DriverManager.getConnection(url);
+            System.out.println(connection);
+        } // Erro caso o driver JDBC não foi instalado
+        catch (SQLException e) {
+            // Erro caso haja problemas para se conectar ao banco de dados
+            //   JOptionPane.showMessageDialog(null, "Ocorreu um erro ao tentar conectar-se ao servidor verifique se o nome do servidor "
+            //         + "\n e os dados de usuario e senha estão corretos.");
+            e.printStackTrace();
+        }
+        return connection;
+    }
+    
     public static void fecharStmtERs(PreparedStatement stmt, ResultSet rs){
         //primeiro -- verificar se con esta aberto ou nao
         //se for null e pq ta fechada
