@@ -124,6 +124,7 @@ public class ConnectionFactory {
         return connection;
     }
     
+    //método para conexao com sql server usando windows authentication
     public static Connection getConnectionWindows(String servidor) {
         nomeServidor = servidor;
         String url = "jdbc:sqlserver://" + nomeServidor + ";integratedSecurity=true;";

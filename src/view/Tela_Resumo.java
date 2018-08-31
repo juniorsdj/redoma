@@ -1,5 +1,6 @@
 package view;
 
+import com.microsoft.sqlserver.jdbc.StringUtils;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -12,13 +13,14 @@ import util.Arquivo;
 import util.ConnectionFactory;
 
 public class Tela_Resumo extends javax.swing.JFrame {
+
     private static List<Object> listacomlistaComTodosSelects;
 
     public Tela_Resumo() {
         initComponents();
     }
 
-    public Tela_Resumo( List<Object> listacomlistaComTodosSelects) {
+    public Tela_Resumo(List<Object> listacomlistaComTodosSelects) {
         this.listacomlistaComTodosSelects = listacomlistaComTodosSelects;
         initComponents();
     }
@@ -39,6 +41,23 @@ public class Tela_Resumo extends javax.swing.JFrame {
 
     public static void setListacomlistaComTodosSelects(List<Object> listacomlistaComTodosSelects) {
         Tela_Resumo.listacomlistaComTodosSelects = listacomlistaComTodosSelects;
+    }
+
+    public void adicionarTudoNaTelaResumo() {
+
+        List<String> listaTemporaria = BasesDinamicas.resumoOpcoes;    
+        //usando o String Builder para formatar a impressao
+        int contador = 0;
+        StringBuilder sb = new StringBuilder();
+        for (String s : listaTemporaria) {
+            sb.append(contador + "--> ");
+            sb.append(s);//append = acrescentar;
+            sb.append("\n");
+            contador++;
+        }
+        //remover os espacos em branco
+        String resumoDeTudo = sb.toString().trim();
+        jTextPaneDadosSelecionados.setText(resumoDeTudo);
     }
 
     /**
@@ -156,6 +175,11 @@ public class Tela_Resumo extends javax.swing.JFrame {
     private void jBtVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtVoltarActionPerformed
         //para zerar as adicoes 
         this.getTelaScript().setListaComTodosSelects(new ArrayList<>());
+        jTextPaneDadosSelecionados.setText("");
+        //Zerando o resumoOpcoes porque pode ser que mude as opcoes
+        BasesDinamicas.resumoOpcoes = new ArrayList<>();
+        //adicionando novamente o nome do banco a lista de resumoOpcoes
+        BasesDinamicas.resumoOpcoes.add("Nome(s) da Base(s) de Dados: " + getTelaScript().getNomeBanco());
         this.getTelaScript().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jBtVoltarActionPerformed
@@ -164,14 +188,14 @@ public class Tela_Resumo extends javax.swing.JFrame {
         Arquivo novoArquivo = new Arquivo();
         novoArquivo.criarDiretorio();
         novoArquivo.criarArquivoTxt("Resultado");
-        
+
         //salvando no arquivo resultado
         int count = 0;
         for (Object object : listacomlistaComTodosSelects) {
-             novoArquivo.printWriter(novoArquivo.getArquivo(),listacomlistaComTodosSelects, count);
-             count++;
+            novoArquivo.printWriter(novoArquivo.getArquivo(), listacomlistaComTodosSelects, count);
+            count++;
         }
-        //fechando a conexao aqui pois posso me arrepender e voltar para a tela Script
+        //fechando a conexao aqui
         ConnectionFactory.close();
         //fechando o programa
         System.exit(0);

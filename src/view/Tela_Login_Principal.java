@@ -5,6 +5,7 @@
  */
 package view;
 
+import java.awt.event.KeyEvent;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.Connection;
@@ -47,6 +48,17 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
         //  Metodo para recuperar o nome do servidor local e ja deixar o campo 
         //  preenchido.
         recuperarNomeServidorLocal();
+        jBtConectar.requestFocus();
+    }
+
+    public void autenticar() {
+        if (jComboBoxAutenticar.getSelectedIndex() == 0) {
+            // Autenticação usando usuario e senha.
+            con = ConnectionFactory.getConnection(jTextFieldNomServidor.getText(), jTextFieldNomUsuario.getText(), new String(jPasswordField1.getPassword()));
+        } else {
+            // Autenticação pelo windows.
+            this.con = ConnectionFactory.getConnectionWindows(jTextFieldNomServidor.getText());
+        }
     }
 
     /**
@@ -77,8 +89,18 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("TelaLogin");
         setName("Gerenciador de dados"); // NOI18N
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         jPanelPrincipal.setBorder(javax.swing.BorderFactory.createTitledBorder("Redoma - Tela de Login"));
+        jPanelPrincipal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jPanelPrincipalKeyPressed(evt);
+            }
+        });
 
         jBtCredito.setText("Créditos");
         jBtCredito.setPreferredSize(new java.awt.Dimension(100, 30));
@@ -116,10 +138,21 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
                 jComboBoxAutenticarActionPerformed(evt);
             }
         });
+        jComboBoxAutenticar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jComboBoxAutenticarKeyPressed(evt);
+            }
+        });
 
         jTextFieldNomUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldNomUsuarioActionPerformed(evt);
+            }
+        });
+
+        jPasswordField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jPasswordField1KeyPressed(evt);
             }
         });
 
@@ -196,6 +229,11 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
                 jBtConectarActionPerformed(evt);
             }
         });
+        jBtConectar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jBtConectarKeyPressed(evt);
+            }
+        });
         jPanelFuncao.add(jBtConectar);
 
         jBtSair.setText("Sair");
@@ -242,13 +280,7 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtConectarActionPerformed
-        if (jComboBoxAutenticar.getSelectedIndex() == 0) {
-            // Autenticação usando usuario e senha.
-            con = ConnectionFactory.getConnection(jTextFieldNomServidor.getText(), jTextFieldNomUsuario.getText(), new String(jPasswordField1.getPassword()));
-        } else {
-            // Autenticação pelo windows.
-            this.con = ConnectionFactory.getConnectionWindows(jTextFieldNomServidor.getText());
-        }
+        this.autenticar();
         if (con != null) {//existe uma conexao aberta
             //va para tela escolher bancos dinamicamente
             BasesDinamicas tdb = new BasesDinamicas(con);
@@ -305,6 +337,51 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
             jPasswordField1.setEnabled(false);
         }
     }//GEN-LAST:event_jComboBoxAutenticarActionPerformed
+
+    private void jBtConectarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBtConectarKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            this.autenticar();
+            if (con != null) {//existe uma conexao aberta
+                //va para tela escolher bancos dinamicamente
+                BasesDinamicas tdb = new BasesDinamicas(con);
+                tdb.setVisible(true);
+                this.dispose();
+            }
+        }
+    }//GEN-LAST:event_jBtConectarKeyPressed
+
+    private void jPasswordField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordField1KeyPressed
+        //para entrar quando clicar enter no campo senha
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            this.autenticar();
+            if (con != null) {//existe uma conexao aberta
+                //va para tela escolher bancos dinamicamente
+                BasesDinamicas tdb = new BasesDinamicas(con);
+                tdb.setVisible(true);
+                this.dispose();
+            }
+        }
+    }//GEN-LAST:event_jPasswordField1KeyPressed
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+
+    }//GEN-LAST:event_formKeyPressed
+
+    private void jPanelPrincipalKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanelPrincipalKeyPressed
+
+    }//GEN-LAST:event_jPanelPrincipalKeyPressed
+
+    private void jComboBoxAutenticarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jComboBoxAutenticarKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            this.autenticar();
+            if (con != null) {//existe uma conexao aberta
+                //va para tela escolher bancos dinamicamente
+                BasesDinamicas tdb = new BasesDinamicas(con);
+                tdb.setVisible(true);
+                this.dispose();
+            }
+        }
+    }//GEN-LAST:event_jComboBoxAutenticarKeyPressed
 
     /**
      * @param args the command line arguments

@@ -29,6 +29,8 @@ public class BasesDinamicas extends JFrame {
     private JPanel contentPane;
     private List<JCheckBox> checkboxes = new ArrayList<>();
     private List<Bases> opcoesSelected = new ArrayList<>();
+    //para exibir as opções selecionadas no fim do programa
+    public static List<String> resumoOpcoes = new ArrayList<String>();
     public int count;
     //declaracao de botoes 
     private javax.swing.JButton jBtAjuda = new javax.swing.JButton();
@@ -61,9 +63,10 @@ public class BasesDinamicas extends JFrame {
                 Bases base = new Bases();
                 base.setNome(checkBox.getText());
                 base.setId(Integer.parseInt(checkBox.getName()));
-                System.out.println("id do banco: "+checkBox.getText());
-                System.out.println("nome do banco: "+checkBox.getName());
+                System.out.println("id do banco: " + checkBox.getText());
+                System.out.println("nome do banco: " + checkBox.getName());
                 this.opcoesSelected.add(base);
+                resumoOpcoes.add("Nome(s) da Base(s) de Dados: " + checkBox.getText());
                 // database = checkboxes.get(i).getText();
             }
         }
@@ -158,7 +161,8 @@ public class BasesDinamicas extends JFrame {
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addComponent(jLbdsistemico)
-                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                                //largura  do quadro 700
+                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
                                                 .addComponent(jLbdUsuario))
                                         .addContainerGap(334, Short.MAX_VALUE))
                                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -172,7 +176,8 @@ public class BasesDinamicas extends JFrame {
                 .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLbdsistemico)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                        //altura do quadro
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
                         .addGap(10, 10, 180)
                         .addComponent(jLbdUsuario)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)

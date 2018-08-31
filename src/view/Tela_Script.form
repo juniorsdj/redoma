@@ -236,8 +236,11 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxTableHeap">
           <Properties>
-            <Property name="text" type="java.lang.String" value=" Tabelas heap"/>
+            <Property name="text" type="java.lang.String" value="Tabelas heap"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxTableHeapActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="checkFileGroupPrimary">
           <Properties>

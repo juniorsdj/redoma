@@ -26,6 +26,7 @@ import model.bean.IndicesNonClustered;
 import model.bean.MaioresIndices;
 import model.bean.TabelasHeap;
 import util.Bases;
+import view.BasesDinamicas;
 import util.ConnectionFactory;
 import view.Tela_Data_Base;
 
@@ -49,12 +50,12 @@ public class Tela_Script extends javax.swing.JFrame {
 
     private int idBanco;
 
-    private int getIdBanco() {
+    public int getIdBanco() {
         return idBanco;
     }
     private String nomeBanco;
 
-    private String getNomeBanco() {
+    public String getNomeBanco() {
         return nomeBanco;
     }
 
@@ -586,7 +587,12 @@ public class Tela_Script extends javax.swing.JFrame {
         jSlider3.setPaintTicks(true);
         jSlider3.setValue(0);
 
-        jCheckBoxTableHeap.setText(" Tabelas heap");
+        jCheckBoxTableHeap.setText("Tabelas heap");
+        jCheckBoxTableHeap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxTableHeapActionPerformed(evt);
+            }
+        });
 
         checkFileGroupPrimary.setText("Índices localizado no Filegroup PRIMARY");
         checkFileGroupPrimary.addActionListener(new java.awt.event.ActionListener() {
@@ -768,51 +774,87 @@ public class Tela_Script extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtVoltarActionPerformed(java.awt.event.ActionEvent evt) {
+
         if (conection != null) {
             BasesDinamicas tdb = new BasesDinamicas(conection);
+            // Zerando o resumoOpcoes porque pode ser que mude o banco
+            BasesDinamicas.resumoOpcoes = new ArrayList<>();
             tdb.setVisible(true);
             this.dispose();
         }
     }
     private void jBtAvançarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAvançarActionPerformed
 
+        //permissoes de escrita
+        if (jCheckBoxPermissaoSA.isSelected()) {
+            //adicione no resumoOpcoes
+            BasesDinamicas.resumoOpcoes.add(jCheckBoxPermissaoSA.getText());
+            //rode o metodo dele
+        }
+        if (jCheckBoxPermisssaoEscrita.isSelected()) {
+            //adicione no resumoOpcoes
+            BasesDinamicas.resumoOpcoes.add(jCheckBoxPermisssaoEscrita.getText());
+            //rode o metodo dele
+        }
+
+        //opções de script
         if (jCheckBoxFragNaoCluster.isSelected()) {
+            BasesDinamicas.resumoOpcoes.add(jCheckBoxFragNaoCluster.getText() + " com fragmentação " + txtIndiceNonClustered.getText());
             selecionarIndicesNonClustered();
         }
         if (jCheckBoxFragCluster.isSelected()) {
+            BasesDinamicas.resumoOpcoes.add(jCheckBoxFragCluster.getText() + " com fragmentação " + txtIndiceClustered.getText());
             selecionarIndicesClustered();
         }
         if (jCheckBoxFillFactor.isSelected()) {
+            BasesDinamicas.resumoOpcoes.add(jCheckBoxFillFactor.getText() + " com fragmentação " + txtFillFactor.getText());
             selecionarFillFactor();
         }
         if (jCheckBoxIndiceNaoUtilizado.isSelected()) {
+            BasesDinamicas.resumoOpcoes.add(jCheckBoxIndiceNaoUtilizado.getText());
             selecionarIndicesNaoUtilizados();
         }
         if (jCheckBoxMaiorIndice.isSelected()) {
+            BasesDinamicas.resumoOpcoes.add(jCheckBoxMaiorIndice.getText());
             selecionarTop10();
         }
         if (checkFileGroupPrimary.isSelected()) {
+            BasesDinamicas.resumoOpcoes.add(checkFileGroupPrimary.getText());
             selecionarIndicesNoPrimary();
         }
         if (jCheckBoxIndexClusterTipoVariavel.isSelected()) {
+            BasesDinamicas.resumoOpcoes.add(jCheckBoxIndexClusterTipoVariavel.getText());
             selecionarVariantes();
         }
         if (jCheckBoxTableHeap.isSelected()) {
+            BasesDinamicas.resumoOpcoes.add(jCheckBoxTableHeap.getText());
             selecionarTabelasHeap();
         }
 
-        if (getTelaResumo() == null) {//nao foi ainda para outra tela
+        List<String> temporaria = BasesDinamicas.resumoOpcoes;
+        for (String opcoes : temporaria) {
+            System.out.println(opcoes.toString());
+        }
+        
+        //ligações entre as telas
+        if (getTelaResumo() == null) {//nao foi ainda para tela resumo
+            //a tela script apontando para a tela resumo
             //cria nova instancia
             //passando esta tela como parametro
-
+            //A tela script conhece o caminho de ida para a tela resumo
             setTelaResumo(new Tela_Resumo(getListaComTodosSelects()));
-            //a tela script agora conhece esta tela caso ela precise voltar
-            //guardando o caminho de volta
+            //a tela resumo conhece o caminho de volta para a tela script
             getTelaResumo().setTelaScript(this);
+            //adicionar tudo ao painel de resumo
+            getTelaResumo().adicionarTudoNaTelaResumo();
+        } else {
+            //ja foi pra tela resumo e voltou pra essa
+            //passa denovo caso eu retire algo da lista ou coloque passando esta nova como parametro
+            getTelaResumo().setListacomlistaComTodosSelects(getListaComTodosSelects());
+            getTelaResumo().adicionarTudoNaTelaResumo(); 
         }
-        getTelaResumo().setListacomlistaComTodosSelects(getListaComTodosSelects());
-        //ja passou pela 3 tela e voltou pra essa
-        this.getTelaResumo().setVisible(true);
+        //chama a tela resumo
+        getTelaResumo().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jBtAvançarActionPerformed
 
@@ -846,6 +888,10 @@ public class Tela_Script extends javax.swing.JFrame {
     private void jCheckBoxFragNaoClusterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxFragNaoClusterActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBoxFragNaoClusterActionPerformed
+
+    private void jCheckBoxTableHeapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxTableHeapActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxTableHeapActionPerformed
 
     /**
      * @param args the command line arguments
