@@ -245,7 +245,7 @@ public class Tela_Script extends javax.swing.JFrame {
         //pegando a conexao com o banco    
         int parametroFill = Integer.parseInt(txtFillFactor.getText());
         String selectFill = "USE " + getNomeBanco() + ";"
-                + "SELECT DB_NAME() AS nomeDoBanco, i.name AS nomeDoIndice, \n"
+                + "SELECT distinct DB_NAME() AS nomeDoBanco, i.name AS nomeDoIndice, \n"
                 + "                 i.fill_factor AS fill_Factor, b.table_name as nomeDaTabela\n"
                 + "               FROM sys.indexes AS i\n"
                 + "                inner join sys.data_spaces AS ds ON i.data_space_id = ds.data_space_id\n"
@@ -574,7 +574,7 @@ public class Tela_Script extends javax.swing.JFrame {
         txtIndiceNonClustered = new javax.swing.JTextField();
         txtIndiceClustered = new javax.swing.JTextField();
         txtFillFactor = new javax.swing.JTextField();
-        jCheckBoxMaiorIndice1 = new javax.swing.JCheckBox();
+        checkMaiorPorTamanho = new javax.swing.JCheckBox();
         jPanelFuncao = new javax.swing.JPanel();
         jBtVoltar = new javax.swing.JButton();
         jBtAvançar = new javax.swing.JButton();
@@ -673,10 +673,10 @@ public class Tela_Script extends javax.swing.JFrame {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jSlider3, org.jdesktop.beansbinding.ELProperty.create("${value}"), txtFillFactor, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        jCheckBoxMaiorIndice1.setText("Os top 10 - maiores Índices por tamanho");
-        jCheckBoxMaiorIndice1.addActionListener(new java.awt.event.ActionListener() {
+        checkMaiorPorTamanho.setText("Os top 10 - maiores Índices por tamanho");
+        checkMaiorPorTamanho.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxMaiorIndice1ActionPerformed(evt);
+                checkMaiorPorTamanhoActionPerformed(evt);
             }
         });
 
@@ -711,7 +711,7 @@ public class Tela_Script extends javax.swing.JFrame {
                         .addContainerGap(177, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBoxMaiorIndice1)
+                            .addComponent(checkMaiorPorTamanho)
                             .addComponent(jCheckBoxTableHeap)
                             .addComponent(jCheckBoxIndiceNaoUtilizado)
                             .addComponent(jLabelOpcaoIndex)
@@ -757,7 +757,7 @@ public class Tela_Script extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBoxMaiorIndice, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBoxMaiorIndice1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(checkMaiorPorTamanho, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(checkFileGroupPrimary)
                 .addGap(18, 18, 18)
@@ -851,7 +851,7 @@ public class Tela_Script extends javax.swing.JFrame {
             BasesDinamicas.resumoOpcoes.add(jCheckBoxPermisssaoEscrita.getText());
             //rode o metodo dele
         }
-        
+
         //opções de script
         if (jCheckBoxFragNaoCluster.isSelected()) {
             BasesDinamicas.resumoOpcoes.add(jCheckBoxFragNaoCluster.getText() + " com fragmentação " + txtIndiceNonClustered.getText());
@@ -873,9 +873,13 @@ public class Tela_Script extends javax.swing.JFrame {
             BasesDinamicas.resumoOpcoes.add(jCheckBoxMaiorIndice.getText());
             selecionarTop10();
         }
-        
-        if(jCheckBoxMaiorIndice1.isSelected()){
-            BasesDinamicas.resumoOpcoes.add(jCheckBoxMaiorIndice1.getText());
+        if (checkMaiorPorTamanho.isSelected()) {
+            BasesDinamicas.resumoOpcoes.add(checkMaiorPorTamanho.getText());
+            selecionarTop10IndexesSize();
+        }
+
+        if (checkMaiorPorTamanho.isSelected()) {
+            BasesDinamicas.resumoOpcoes.add(checkMaiorPorTamanho.getText());
             selecionarTop10IndexesSize();
         }
         if (checkFileGroupPrimary.isSelected()) {
@@ -953,9 +957,9 @@ public class Tela_Script extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBoxTableHeapActionPerformed
 
-    private void jCheckBoxMaiorIndice1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMaiorIndice1ActionPerformed
+    private void checkMaiorPorTamanhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkMaiorPorTamanhoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBoxMaiorIndice1ActionPerformed
+    }//GEN-LAST:event_checkMaiorPorTamanhoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -995,6 +999,7 @@ public class Tela_Script extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox checkFileGroupPrimary;
+    private javax.swing.JCheckBox checkMaiorPorTamanho;
     private javax.swing.JButton jBtAjuda;
     private javax.swing.JButton jBtAvançar;
     private javax.swing.JButton jBtCancelar;
@@ -1005,7 +1010,6 @@ public class Tela_Script extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBoxIndexClusterTipoVariavel;
     private javax.swing.JCheckBox jCheckBoxIndiceNaoUtilizado;
     private javax.swing.JCheckBox jCheckBoxMaiorIndice;
-    private javax.swing.JCheckBox jCheckBoxMaiorIndice1;
     private javax.swing.JCheckBox jCheckBoxPermissaoSA;
     private javax.swing.JCheckBox jCheckBoxPermisssaoEscrita;
     private javax.swing.JCheckBox jCheckBoxTableHeap;
