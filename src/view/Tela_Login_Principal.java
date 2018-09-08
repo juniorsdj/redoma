@@ -52,7 +52,6 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
     }
 
     public void autenticar() {
-        System.out.println("mudanca");
         if (jComboBoxAutenticar.getSelectedIndex() == 0) {
             // Autenticação usando usuario e senha.
             con = ConnectionFactory.getConnection(jTextFieldNomServidor.getText(), jTextFieldNomUsuario.getText(), new String(jPasswordField1.getPassword()));
