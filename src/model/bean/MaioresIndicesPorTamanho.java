@@ -42,7 +42,7 @@ public class MaioresIndicesPorTamanho {
     
     
     public String nomedoSelect() {
-        String nomedoSelect = String.format("***Maiores Indices***%n");
+        String nomedoSelect = String.format("***Maiores Indices Por Tamanho***%n");
         return nomedoSelect;
     }
 
