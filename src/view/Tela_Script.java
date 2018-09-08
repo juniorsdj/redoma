@@ -877,11 +877,6 @@ public class Tela_Script extends javax.swing.JFrame {
             BasesDinamicas.resumoOpcoes.add(checkMaiorPorTamanho.getText());
             selecionarTop10IndexesSize();
         }
-
-        if (checkMaiorPorTamanho.isSelected()) {
-            BasesDinamicas.resumoOpcoes.add(checkMaiorPorTamanho.getText());
-            selecionarTop10IndexesSize();
-        }
         if (checkFileGroupPrimary.isSelected()) {
             BasesDinamicas.resumoOpcoes.add(checkFileGroupPrimary.getText());
             selecionarIndicesNoPrimary();
