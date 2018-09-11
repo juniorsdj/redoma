@@ -5,17 +5,12 @@
  */
 package view;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.bean.IndicesClusterVariantes;
 import model.bean.IndicesClustered;
@@ -40,6 +35,15 @@ public class Tela_Script extends javax.swing.JFrame {
     public static Connection conection;
     public static List<Bases> selectedBancos;
     private List<Object> listaComTodosSelects = new ArrayList<>();
+    private List<Object> listaComSolucoes = new ArrayList<>();
+
+    public List<Object> getListaComSolucoes() {
+        return listaComSolucoes;
+    }
+
+    public void setListaComSolucoes(List<Object> listaComSolucoes) {
+        this.listaComSolucoes = listaComSolucoes;
+    }
 
     public List<Object> getListaComTodosSelects() {
         return listaComTodosSelects;
@@ -99,54 +103,25 @@ public class Tela_Script extends javax.swing.JFrame {
         this.telaResumo = telaResumo;
     }
 
-    public void selecionarTop10IndexesSize() {
-        List<String> listaResultSetString = new ArrayList<>();
-        String selectTop10 = "use " + getNomeBanco()
-                + "\n"
-                + "SELECT top 10 i.[name] AS IndexName\n"
-                + "    ,SUM(s.[used_page_count]) * 8 AS IndexSizeKB\n"
-                + "	, i.[object_id] as objectId\n"
-                + "FROM sys.dm_db_partition_stats AS s\n"
-                + "INNER JOIN sys.indexes AS i ON s.[object_id] = i.[object_id]\n"
-                + "    AND s.[index_id] = i.[index_id]\n"
-                + "GROUP BY i.[name], i.[object_id]\n"
-                + "ORDER BY 2 desc\n";
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+    //metodo para reorganizar o indice
+    public String reogarnizeIndex(String nomeIndice, String nomeTabela) {
+        String reorganize = "ALTER INDEX " + nomeIndice + " ON " + nomeTabela + " REORGANIZE";
+        return reorganize;
+    }
 
-        try {
-            stmt = conection.prepareStatement(selectTop10);
-            rs = stmt.executeQuery();
-            //para percorrer o resultSet
-            MaioresIndicesPorTamanho mit = new MaioresIndicesPorTamanho();
-            listaResultSetString.add(mit.nomedoSelect());
-            //adicionando o cabeçaho da tabela no array de String posicao get(0)
-            System.out.println(mit.nomedoSelect());
-            listaResultSetString.add(mit.cabecalho());
-            System.out.println(mit.cabecalho());
-            while (rs.next()) {//enquanto houver próximo;
-                mit.setIdDoObjeto(rs.getLong("objectId"));
-                mit.setIndexName(rs.getString("IndexName"));
-                mit.setIndexSizeKB(rs.getDouble("IndexSizeKB"));
-
-                System.out.println(mit.toString());
-                //adicionando o corpo da tabela no array de String
-                listaResultSetString.add(mit.toString());
-            }
-        } catch (SQLException ex) {
-            System.err.println("Erro :" + ex);
-        } finally {
-            ConnectionFactory.fecharStmtERs(stmt, rs);
-        }
-        System.out.println("*************************************************");
-        getListaComTodosSelects().add(listaResultSetString);
+    //metodo para recriar o indice
+    public String rebuildIndex(String nomeIndice, String nomeTabela) {
+        String rebuild = "ALTER INDEX " + nomeIndice + " ON " + nomeTabela + " REBUILD WITH (ONLINE = ON)";
+        return rebuild;
     }
 
     public void selecionarIndicesNonClustered() {
         List<String> listaResultSetString = new ArrayList<>();
+        List<String> listaSolucoesFragmentacao = new ArrayList<>();
         //pegando a conexao com o banco    
         int parametroNonClustered = Integer.parseInt(txtIndiceNonClustered.getText());
-        String selectNonClustered = "USE " + getNomeBanco() + ";"
+        String nomeBanco = getNomeBanco();
+        String selectNonClustered = "USE " + nomeBanco + ";"
                 + "SELECT object_name(SysBases.object_id) AS nomeTabela ,\n"
                 + "SisIndex.name AS  nomeIndice,\n"
                 + "SysBases.Index_type_desc AS descricaoIndice,\n"
@@ -160,6 +135,7 @@ public class Tela_Script extends javax.swing.JFrame {
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
+        boolean teveFragmentado = false;
         try {
             stmt = conection.prepareStatement(selectNonClustered);
             rs = stmt.executeQuery();
@@ -167,9 +143,9 @@ public class Tela_Script extends javax.swing.JFrame {
             IndicesNonClustered inc = new IndicesNonClustered();
             listaResultSetString.add(inc.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
-            System.out.println(inc.nomedoSelect());
+            // System.out.println(inc.nomedoSelect());
             listaResultSetString.add(inc.cabecalho());
-            System.out.println(inc.cabecalho());
+            // System.out.println(inc.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
 
                 inc.setNomeTabela(rs.getString("nomeTabela"));
@@ -177,7 +153,38 @@ public class Tela_Script extends javax.swing.JFrame {
                 inc.setDescricaoIndice(rs.getString("descricaoIndice"));
                 inc.setFragmentacao(rs.getInt("fragmentacao"));
 
-                System.out.println(inc.toString());
+             //   System.out.println(inc.toString());
+                //reajustando os indices da tabela
+                int fragmentacao = inc.getFragmentacao();
+                if (fragmentacao > 5 && fragmentacao <= 30) {
+                    //reorganize o indice
+                    if (teveFragmentado == false) {
+                        //adicionando o cabecalho com o nome do database
+                        listaSolucoesFragmentacao.add("Base de Dados: " + nomeBanco + "-->" + inc.nomedoSelect());
+                        teveFragmentado = true;
+                    }
+
+                    String nomeIndice = inc.getNomeIndice();
+                    String nomeTabela = inc.getNomeTabela();
+                    //chama o metodo reorganize
+                    String solucaoReorganize = reogarnizeIndex(nomeIndice, nomeTabela);
+                    listaSolucoesFragmentacao.add("[Reorganize]Fragmentacao atual :" + fragmentacao + "--->" + solucaoReorganize);
+
+                } else if (fragmentacao > 30) {
+                    //reconstrua o indice
+                    if (teveFragmentado == false) {
+                        //adicionando o cabecalho com o nome do database
+                        listaSolucoesFragmentacao.add("Base de Dados: " + nomeBanco + "-->" + inc.nomedoSelect());
+                        teveFragmentado = true;
+                    }
+
+                    String nomeIndice = inc.getNomeIndice();
+                    String nomeTabela = inc.getNomeTabela();
+                    //chama o metodo reorganize
+                    String solucaoRebuild = rebuildIndex(nomeIndice, nomeTabela);
+                    listaSolucoesFragmentacao.add("[Rebuild]Fragmentacao atual :" + fragmentacao + "--->" + solucaoRebuild);
+                }
+
                 //adicionando o corpo da tabela no array de String
                 listaResultSetString.add(inc.toString());
             }
@@ -186,16 +193,22 @@ public class Tela_Script extends javax.swing.JFrame {
         } finally {
             ConnectionFactory.fecharStmtERs(stmt, rs);
         }
-        System.out.println("*************************************************");
+        //   System.out.println("*************************************************");
+        if (teveFragmentado == true) {
+            //se teve pelo menos um registro entao adicione este bloco a lista de selects
+            getListaComSolucoes().add(listaSolucoesFragmentacao);
+        }
         //adicionando o resultado do select ao listaComTodosSelects
         getListaComTodosSelects().add(listaResultSetString);
     }
 
     public void selecionarIndicesClustered() {
         List<String> listaResultSetString = new ArrayList<>();
+        List<String> listaSolucoesFragmentacao = new ArrayList<>();
         //pegando a conexao com o banco    
         int parametroClustered = Integer.parseInt(txtIndiceClustered.getText());
-        String selectClustered = "USE " + getNomeBanco() + ";"
+        String nomeBanco = getNomeBanco();
+        String selectClustered = "USE " + nomeBanco + ";"
                 + "SELECT object_name(SysBases.object_id) AS nomeTabela ,\n"
                 + "SisIndex.name AS  nomeIndice,\n"
                 + "SysBases.Index_type_desc AS descricaoIndice,\n"
@@ -209,6 +222,7 @@ public class Tela_Script extends javax.swing.JFrame {
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
+        boolean teveFragmentado = false;
         try {
             stmt = conection.prepareStatement(selectClustered);
             rs = stmt.executeQuery();
@@ -216,9 +230,9 @@ public class Tela_Script extends javax.swing.JFrame {
             IndicesClustered ic = new IndicesClustered();
             listaResultSetString.add(ic.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
-            System.out.println(ic.nomedoSelect());
+            //  System.out.println(ic.nomedoSelect());
             listaResultSetString.add(ic.cabecalho());
-            System.out.println(ic.cabecalho());
+            //   System.out.println(ic.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
 
                 ic.setNomeTabela(rs.getString("nomeTabela"));
@@ -226,7 +240,38 @@ public class Tela_Script extends javax.swing.JFrame {
                 ic.setDescricaoIndice(rs.getString("descricaoIndice"));
                 ic.setFragmentacao(rs.getInt("fragmentacao"));
 
-                System.out.println(ic.toString());
+              //  System.out.println(ic.toString());
+                //reajustando os indices da tabela
+                int fragmentacao = ic.getFragmentacao();
+                if (fragmentacao > 5 && fragmentacao <= 30) {
+                    //reorganize o indice
+                    if (teveFragmentado == false) {
+                        //adicionando o cabecalho com o nome do database
+                        listaSolucoesFragmentacao.add("Base de Dados: " + nomeBanco + "-->" + ic.nomedoSelect());
+                        teveFragmentado = true;
+                    }
+
+                    String nomeIndice = ic.getNomeIndice();
+                    String nomeTabela = ic.getNomeTabela();
+                    //chama o metodo reorganize
+                    String solucaoReorganize = reogarnizeIndex(nomeIndice, nomeTabela);
+                    listaSolucoesFragmentacao.add("[Reorganize]Fragmentacao atual :" + fragmentacao + "--->" + solucaoReorganize);
+
+                } else if (fragmentacao > 30) {
+                    //reconstrua o indice
+                    if (teveFragmentado == false) {
+                        //adicionando o cabecalho com o nome do database
+                        listaSolucoesFragmentacao.add("Base de Dados: " + nomeBanco + "-->" + ic.nomedoSelect());
+                        teveFragmentado = true;
+                    }
+
+                    String nomeIndice = ic.getNomeIndice();
+                    String nomeTabela = ic.getNomeTabela();
+                    //chama o metodo reorganize
+                    String solucaoRebuild = rebuildIndex(nomeIndice, nomeTabela);
+                    listaSolucoesFragmentacao.add("[Rebuild]Fragmentacao atual :" + fragmentacao + "--->" + solucaoRebuild);
+                }
+
                 //adicionando o corpo da tabela no array de String
                 listaResultSetString.add(ic.toString());
             }
@@ -235,8 +280,12 @@ public class Tela_Script extends javax.swing.JFrame {
         } finally {
             ConnectionFactory.fecharStmtERs(stmt, rs);
         }
-        System.out.println("*************************************************");
         //adicionando o resultado do select ao listaComTodosSelects
+
+        if (teveFragmentado == true) {
+            //se teve pelo menos um registro entao adicione este bloco a lista de selects
+            getListaComSolucoes().add(listaSolucoesFragmentacao);
+        }
         getListaComTodosSelects().add(listaResultSetString);
     }
 
@@ -245,7 +294,7 @@ public class Tela_Script extends javax.swing.JFrame {
         //pegando a conexao com o banco    
         int parametroFill = Integer.parseInt(txtFillFactor.getText());
         String selectFill = "USE " + getNomeBanco() + ";"
-                + "SELECT distinct DB_NAME() AS nomeDoBanco, i.name AS nomeDoIndice, \n"
+                + "SELECT DISTINCT DB_NAME() AS nomeDoBanco, i.name AS nomeDoIndice, \n"
                 + "                 i.fill_factor AS fill_Factor, b.table_name as nomeDaTabela\n"
                 + "               FROM sys.indexes AS i\n"
                 + "                inner join sys.data_spaces AS ds ON i.data_space_id = ds.data_space_id\n"
@@ -268,9 +317,9 @@ public class Tela_Script extends javax.swing.JFrame {
             IndicesFillFactor iff = new IndicesFillFactor();
             listaResultSetString.add(iff.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
-            System.out.println(iff.nomedoSelect());
+            //  System.out.println(iff.nomedoSelect());
             listaResultSetString.add(iff.cabecalho());
-            System.out.println(iff.cabecalho());
+            //  System.out.println(iff.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
 
                 iff.setNomeDoBanco(rs.getString("nomeDoBanco"));
@@ -278,7 +327,7 @@ public class Tela_Script extends javax.swing.JFrame {
                 iff.setFillFactor(rs.getInt("fill_Factor"));
                 iff.setNomeDaTabela(rs.getString("nomeDaTabela"));
 
-                System.out.println(iff.toString());
+                //   System.out.println(iff.toString());
                 //adicionando o corpo da tabela no array de String
                 listaResultSetString.add(iff.toString());
             }
@@ -287,7 +336,7 @@ public class Tela_Script extends javax.swing.JFrame {
         } finally {
             ConnectionFactory.fecharStmtERs(stmt, rs);
         }
-        System.out.println("*************************************************");
+        // System.out.println("*************************************************");
         //adicionando o resultado do select ao listaComTodosSelects
         getListaComTodosSelects().add(listaResultSetString);
     }
@@ -319,12 +368,12 @@ public class Tela_Script extends javax.swing.JFrame {
             listaResultSetString.add(idxNaoUtilizados.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
             listaResultSetString.add(idxNaoUtilizados.cabecalho());
-            System.out.println(idxNaoUtilizados.nomedoSelect());
-            System.out.println(idxNaoUtilizados.cabecalho());
+           // System.out.println(idxNaoUtilizados.nomedoSelect());
+            // System.out.println(idxNaoUtilizados.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
                 idxNaoUtilizados.setNomeDaTabela(rs.getString("nomeDaTabela"));
                 idxNaoUtilizados.setNomeDoIndice(rs.getString("nomeDoIndice"));
-                System.out.println(idxNaoUtilizados.toString());
+                // System.out.println(idxNaoUtilizados.toString());
                 //adicionando o corpo da tabela no array de String
                 listaResultSetString.add(idxNaoUtilizados.toString());
             }
@@ -333,28 +382,23 @@ public class Tela_Script extends javax.swing.JFrame {
         } finally {
             ConnectionFactory.fecharStmtERs(stmt, rs);
         }
-        System.out.println("*************************************************");
+        // System.out.println("*************************************************");
         //adicionando o resultado do select ao listaComTodosSelects
         getListaComTodosSelects().add(listaResultSetString);
     }
 
-    public void selecionarTop10() {
-        //so essa função que passa nao pelo nome mais pelo id do banco
+    public void selecionarTop10IndexesSize() {
         List<String> listaResultSetString = new ArrayList<>();
-        String selectTop10 = "select TOP (10) object_id as idDoObjeto,\n"
-                + "                index_type_desc as descricaoDoIndice,\n"
-                + "                avg_fragmentation_in_percent as fragmentacao\n"
-                + "                from sys.dm_db_index_physical_stats (   \n"
-                + "                " + this.getIdBanco() + "\n"
-                + "                 , null\n"
-                + "                , null\n"
-                + "                 , null\n"
-                + "                  , null\n"
-                + "                ) \n"
-                + "                where avg_fragmentation_in_percent >= 0 and\n"
-                + "                index_id > 0\n"
-                + "                order by avg_fragmentation_in_percent desc";
-
+        String selectTop10 = "use " + getNomeBanco()
+                + "\n"
+                + "SELECT top 10 i.[name] AS IndexName\n"
+                + "    ,SUM(s.[used_page_count]) * 8 AS IndexSizeKB\n"
+                + "	, i.[object_id] as objectId\n"
+                + "FROM sys.dm_db_partition_stats AS s\n"
+                + "INNER JOIN sys.indexes AS i ON s.[object_id] = i.[object_id]\n"
+                + "    AND s.[index_id] = i.[index_id]\n"
+                + "GROUP BY i.[name], i.[object_id]\n"
+                + "ORDER BY 2 desc\n";
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -362,47 +406,94 @@ public class Tela_Script extends javax.swing.JFrame {
             stmt = conection.prepareStatement(selectTop10);
             rs = stmt.executeQuery();
             //para percorrer o resultSet
-            MaioresIndices mi = new MaioresIndices();
-            listaResultSetString.add(mi.nomedoSelect());
+            MaioresIndicesPorTamanho mit = new MaioresIndicesPorTamanho();
+            listaResultSetString.add(mit.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
-            System.out.println(mi.nomedoSelect());
-            listaResultSetString.add(mi.cabecalho());
-            System.out.println(mi.cabecalho());
+            //   System.out.println(mit.nomedoSelect());
+            listaResultSetString.add(mit.cabecalho());
+            //  System.out.println(mit.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
-                mi.setIdDoObjeto(rs.getLong("idDoObjeto"));
-                mi.setDescricaoDoIndice(rs.getString("descricaoDoIndice"));
-                mi.setFragmentacao(rs.getDouble("fragmentacao"));
+                mit.setIdDoObjeto(rs.getLong("objectId"));
+                mit.setIndexName(rs.getString("IndexName"));
+                mit.setIndexSizeKB(rs.getDouble("IndexSizeKB"));
 
-                System.out.println(mi.toString());
+                //   System.out.println(mit.toString());
                 //adicionando o corpo da tabela no array de String
-                listaResultSetString.add(mi.toString());
+                listaResultSetString.add(mit.toString());
             }
         } catch (SQLException ex) {
             System.err.println("Erro :" + ex);
         } finally {
             ConnectionFactory.fecharStmtERs(stmt, rs);
         }
-        System.out.println("*************************************************");
+        //   System.out.println("*************************************************");
         getListaComTodosSelects().add(listaResultSetString);
-
     }
 
+//    public void selecionarTop10() {
+//        //so essa função que passa nao pelo nome mais pelo id do banco
+//        List<String> listaResultSetString = new ArrayList<>();
+//        String selectTop10 = "select TOP (10) object_id as idDoObjeto,\n"
+//                + "                index_type_desc as descricaoDoIndice,\n"
+//                + "                avg_fragmentation_in_percent as fragmentacao\n"
+//                + "                from sys.dm_db_index_physical_stats (   \n"
+//                + "                " + this.getIdBanco() + "\n"
+//                + "                 , null\n"
+//                + "                , null\n"
+//                + "                 , null\n"
+//                + "                  , null\n"
+//                + "                ) \n"
+//                + "                where avg_fragmentation_in_percent >= 0 and\n"
+//                + "                index_id > 0\n"
+//                + "                order by avg_fragmentation_in_percent desc";
+//
+//        PreparedStatement stmt = null;
+//        ResultSet rs = null;
+//
+//        try {
+//            stmt = conection.prepareStatement(selectTop10);
+//            rs = stmt.executeQuery();
+//            //para percorrer o resultSet
+//            MaioresIndices mi = new MaioresIndices();
+//            listaResultSetString.add(mi.nomedoSelect());
+//            //adicionando o cabeçaho da tabela no array de String posicao get(0)
+//            System.out.println(mi.nomedoSelect());
+//            listaResultSetString.add(mi.cabecalho());
+//            System.out.println(mi.cabecalho());
+//            while (rs.next()) {//enquanto houver próximo;
+//                mi.setIdDoObjeto(rs.getLong("idDoObjeto"));
+//                mi.setDescricaoDoIndice(rs.getString("descricaoDoIndice"));
+//                mi.setFragmentacao(rs.getDouble("fragmentacao"));
+//
+//                System.out.println(mi.toString());
+//                //adicionando o corpo da tabela no array de String
+//                listaResultSetString.add(mi.toString());
+//            }
+//        } catch (SQLException ex) {
+//            System.err.println("Erro :" + ex);
+//        } finally {
+//            ConnectionFactory.fecharStmtERs(stmt, rs);
+//        }
+//        System.out.println("*************************************************");
+//        getListaComTodosSelects().add(listaResultSetString);
+//
+//    }
     public void selecionarIndicesNoPrimary() {
         List<String> listaResultSetString = new ArrayList<>();
         //pegando a conexao com o banco    
         //PARA USAR O COMANDO USE BANCO EU DEVO COLOCAR ; PARA FUNCIONAR
         String selectNoPrimary = "USE " + getNomeBanco() + ";"
-                + "Select distinct OBJECT_NAME(i.object_id) As Tabela,\n"
+                + "SELECT DISTINCT OBJECT_NAME(i.object_id) AS Tabela,\n"
                 + "             i.name As Indice, \n"
-                + "             i.object_id IddoObjetoIndice,\n"
-                + "             fg.name as GrupoDeARQUIVO,\n"
-                + "             i.type_desc as TipoDeIndice,\n"
-                + "             o.type as TipoTabela\n"
-                + "  from sys.indexes as i  \n"
-                + "       inner join sys.data_spaces AS ds ON i.data_space_id = ds.data_space_id\n"
-                + "       inner join sys.filegroups as fg on fg.data_space_id = ds.data_space_id \n"
-                + "       inner join sys.objects as o on o.object_id = i.object_id\n"
-                + " where((o.type ='U') and (fg.filegroup_guid IS NULL) and (OBJECT_NAME(i.object_id) <> 'sysdiagrams'))";
+                + "             i.object_id AS IddoObjetoIndice,\n"
+                + "             fg.name AS GrupoDeARQUIVO,\n"
+                + "             i.type_desc AS TipoDeIndice,\n"
+                + "             o.type AS TipoTabela\n"
+                + "  FROM sys.indexes AS i  \n"
+                + "       INNER JOIN sys.data_spaces AS ds ON i.data_space_id = ds.data_space_id\n"
+                + "       INNER JOIN sys.filegroups AS fg on fg.data_space_id = ds.data_space_id \n"
+                + "       INNER JOIN sys.objects AS o on o.object_id = i.object_id\n"
+                + "  WHERE((o.type ='U') AND (fg.filegroup_guid IS NULL) AND (OBJECT_NAME(i.object_id) <> 'sysdiagrams'))";
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -416,8 +507,8 @@ public class Tela_Script extends javax.swing.JFrame {
             listaResultSetString.add(inp.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
             listaResultSetString.add(inp.cabecalho());
-            System.out.println(inp.nomedoSelect());
-            System.out.println(inp.cabecalho());
+          //  System.out.println(inp.nomedoSelect());
+            //   System.out.println(inp.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
                 inp.setNomeDaTabela(rs.getString("Tabela"));
                 inp.setNomeDoIndice(rs.getString("Indice"));
@@ -426,7 +517,7 @@ public class Tela_Script extends javax.swing.JFrame {
                 inp.setTipoDeIndice(rs.getString("TipoDeIndice"));
                 inp.setTipoDeTabela(rs.getString("TipoTabela"));
 
-                System.out.println(inp.toString());
+                //    System.out.println(inp.toString());
                 //adicionando o corpo da tabela no array de String
                 listaResultSetString.add(inp.toString());
             }
@@ -435,7 +526,7 @@ public class Tela_Script extends javax.swing.JFrame {
         } finally {
             ConnectionFactory.fecharStmtERs(stmt, rs);
         }
-        System.out.println("*************************************************");
+        // System.out.println("*************************************************");
         //adicionando o resultado do select ao listaComTodosSelects
         getListaComTodosSelects().add(listaResultSetString);
     }
@@ -471,15 +562,15 @@ public class Tela_Script extends javax.swing.JFrame {
             listaResultSetString.add(icv.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
             listaResultSetString.add(icv.cabecalho());
-            System.out.println(icv.nomedoSelect());
-            System.out.println(icv.cabecalho());
+        //    System.out.println(icv.nomedoSelect());
+            //    System.out.println(icv.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
                 icv.setId(rs.getInt("id"));
                 icv.setName(rs.getString("name"));
                 icv.setSystemType(rs.getString("systemType"));
                 icv.setDescricao(rs.getString("descricao"));
 
-                System.out.println(icv.toString());
+                //     System.out.println(icv.toString());
                 //adicionando o corpo da tabela no array de String
                 listaResultSetString.add(icv.toString());
             }
@@ -488,7 +579,7 @@ public class Tela_Script extends javax.swing.JFrame {
         } finally {
             ConnectionFactory.fecharStmtERs(stmt, rs);
         }
-        System.out.println("*************************************************");
+        //   System.out.println("*************************************************");
         //adicionando o resultado do select ao listaComTodosSelects
         getListaComTodosSelects().add(listaResultSetString);
     }
@@ -522,15 +613,15 @@ public class Tela_Script extends javax.swing.JFrame {
             listaResultSetString.add(sHeap.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
             listaResultSetString.add(sHeap.cabecalho());
-            System.out.println(sHeap.nomedoSelect());
-            System.out.println(sHeap.cabecalho());
+       //     System.out.println(sHeap.nomedoSelect());
+            //     System.out.println(sHeap.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
                 sHeap.setNomeIndice(rs.getString("NomeIndice"));
                 sHeap.setDescricao(rs.getString("Descricao"));
                 sHeap.setChaveUnica(rs.getInt("chaveUnica"));
                 sHeap.setChavePrimaria(rs.getInt("chavePrimaria"));
 
-                System.out.println(sHeap.toString());
+                //        System.out.println(sHeap.toString());
                 //adicionando o corpo da tabela no array de String
                 listaResultSetString.add(sHeap.toString());
             }
@@ -539,7 +630,7 @@ public class Tela_Script extends javax.swing.JFrame {
         } finally {
             ConnectionFactory.fecharStmtERs(stmt, rs);
         }
-        System.out.println("*************************************************");
+        //   System.out.println("*************************************************");
         //adicionando o resultado do select ao listaComTodosSelects
         getListaComTodosSelects().add(listaResultSetString);
     }
@@ -564,7 +655,6 @@ public class Tela_Script extends javax.swing.JFrame {
         jScrollBar1 = new javax.swing.JScrollBar();
         jCheckBoxFillFactor = new javax.swing.JCheckBox();
         jCheckBoxIndiceNaoUtilizado = new javax.swing.JCheckBox();
-        jCheckBoxMaiorIndice = new javax.swing.JCheckBox();
         jSlider3 = new javax.swing.JSlider();
         jCheckBoxTableHeap = new javax.swing.JCheckBox();
         checkFileGroupPrimary = new javax.swing.JCheckBox();
@@ -619,13 +709,6 @@ public class Tela_Script extends javax.swing.JFrame {
         });
 
         jCheckBoxIndiceNaoUtilizado.setText("Índices não utilizados");
-
-        jCheckBoxMaiorIndice.setText("Os top 10 - maiores Índices");
-        jCheckBoxMaiorIndice.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxMaiorIndiceActionPerformed(evt);
-            }
-        });
 
         jSlider3.setMajorTickSpacing(10);
         jSlider3.setPaintLabels(true);
@@ -690,7 +773,6 @@ public class Tela_Script extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBoxMaiorIndice)
                             .addComponent(jCheckBoxPermisssaoEscrita)
                             .addComponent(jLabelOpcaoPermissao)
                             .addComponent(jCheckBoxPermissaoSA)
@@ -711,7 +793,6 @@ public class Tela_Script extends javax.swing.JFrame {
                         .addContainerGap(177, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(checkMaiorPorTamanho)
                             .addComponent(jCheckBoxTableHeap)
                             .addComponent(jCheckBoxIndiceNaoUtilizado)
                             .addComponent(jLabelOpcaoIndex)
@@ -722,7 +803,8 @@ public class Tela_Script extends javax.swing.JFrame {
                                 .addGap(6, 6, 6)
                                 .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtIndiceClustered, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txtIndiceClustered, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(checkMaiorPorTamanho))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -754,11 +836,9 @@ public class Tela_Script extends javax.swing.JFrame {
                     .addComponent(txtFillFactor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jCheckBoxIndiceNaoUtilizado)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jCheckBoxMaiorIndice, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(17, 17, 17)
                 .addComponent(checkMaiorPorTamanho, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(checkFileGroupPrimary)
                 .addGap(18, 18, 18)
                 .addComponent(jCheckBoxIndexClusterTipoVariavel)
@@ -869,10 +949,6 @@ public class Tela_Script extends javax.swing.JFrame {
             BasesDinamicas.resumoOpcoes.add(jCheckBoxIndiceNaoUtilizado.getText());
             selecionarIndicesNaoUtilizados();
         }
-        if (jCheckBoxMaiorIndice.isSelected()) {
-            BasesDinamicas.resumoOpcoes.add(jCheckBoxMaiorIndice.getText());
-            selecionarTop10();
-        }
         if (checkMaiorPorTamanho.isSelected()) {
             BasesDinamicas.resumoOpcoes.add(checkMaiorPorTamanho.getText());
             selecionarTop10IndexesSize();
@@ -901,7 +977,14 @@ public class Tela_Script extends javax.swing.JFrame {
             //cria nova instancia
             //passando esta tela como parametro
             //A tela script conhece o caminho de ida para a tela resumo
-            setTelaResumo(new Tela_Resumo(getListaComTodosSelects()));
+            if (getListaComSolucoes().size() > 0) {
+                //houve solucao para indice fragmentado
+                //passe também para a tela resumo a listaComSolucoes
+                setTelaResumo(new Tela_Resumo(getListaComTodosSelects(), getListaComSolucoes()));
+            } else {
+                setTelaResumo(new Tela_Resumo(getListaComTodosSelects()));
+            }
+
             //a tela resumo conhece o caminho de volta para a tela script
             getTelaResumo().setTelaScript(this);
             //adicionar tudo ao painel de resumo
@@ -910,6 +993,14 @@ public class Tela_Script extends javax.swing.JFrame {
             //ja foi pra tela resumo e voltou pra essa
             //passa denovo caso eu retire algo da lista ou coloque passando esta nova como parametro
             getTelaResumo().setListacomlistaComTodosSelects(getListaComTodosSelects());
+            //passando para a tela resumo a lista com solucoes
+
+            if (getListaComSolucoes().size() > 0) {
+                //houve solucao para indice fragmentado
+                //passe também para a tela resumo a listaComSolucoes
+                getTelaResumo().setListaComSolucoes(getListaComSolucoes());
+            }
+
             getTelaResumo().adicionarTudoNaTelaResumo();
         }
         //chama a tela resumo
@@ -931,10 +1022,6 @@ public class Tela_Script extends javax.swing.JFrame {
     private void checkFileGroupPrimaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkFileGroupPrimaryActionPerformed
 
     }//GEN-LAST:event_checkFileGroupPrimaryActionPerformed
-
-    private void jCheckBoxMaiorIndiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMaiorIndiceActionPerformed
-
-    }//GEN-LAST:event_jCheckBoxMaiorIndiceActionPerformed
 
     private void jCheckBoxFillFactorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxFillFactorActionPerformed
         // TODO add your handling code here:
@@ -1004,7 +1091,6 @@ public class Tela_Script extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBoxFragNaoCluster;
     private javax.swing.JCheckBox jCheckBoxIndexClusterTipoVariavel;
     private javax.swing.JCheckBox jCheckBoxIndiceNaoUtilizado;
-    private javax.swing.JCheckBox jCheckBoxMaiorIndice;
     private javax.swing.JCheckBox jCheckBoxPermissaoSA;
     private javax.swing.JCheckBox jCheckBoxPermisssaoEscrita;
     private javax.swing.JCheckBox jCheckBoxTableHeap;

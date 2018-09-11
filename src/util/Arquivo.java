@@ -35,16 +35,16 @@ public class Arquivo {
         this.diretorio = diretorio;
     }
 
-    public void criarDiretorio() {
+    public void criarDiretorio(String caminho) {
         //criando diretorio
-        File diretorio = new File("C:/Redoma");
+        File diretorio = new File(caminho);
         try {
             diretorio.mkdir();//comando para criar diretorio     
             System.out.println("Diretorio criado com sucesso!");
             setDiretorio(diretorio);
             System.out.println("O diretorio foi criado em-->" + getDiretorio().getAbsolutePath());
         } catch (Exception e) {
-            System.out.println("O diretorio nao foi criado" + e);
+            System.out.println("O diretorio nao foi criado! " + e);
         }
     }
 

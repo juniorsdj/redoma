@@ -1,20 +1,18 @@
 package view;
 
 //import com.microsoft.sqlserver.jdbc.StringUtils;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.sql.Connection;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import util.Arquivo;
 import util.ConnectionFactory;
 
 public class Tela_Resumo extends javax.swing.JFrame {
 
-    private static List<Object> listacomlistaComTodosSelects;
+    private List<Object> listacomlistaComTodosSelects;
+    private List<Object> listaComSolucoes = new ArrayList<>();
 
     public Tela_Resumo() {
         initComponents();
@@ -22,6 +20,12 @@ public class Tela_Resumo extends javax.swing.JFrame {
 
     public Tela_Resumo(List<Object> listacomlistaComTodosSelects) {
         this.listacomlistaComTodosSelects = listacomlistaComTodosSelects;
+        initComponents();
+    }
+
+    public Tela_Resumo(List<Object> listacomlistaComTodosSelects, List<Object> listaComSolucoes) {
+        this.listacomlistaComTodosSelects = listacomlistaComTodosSelects;
+        this.listaComSolucoes = listaComSolucoes;
         initComponents();
     }
 
@@ -35,17 +39,25 @@ public class Tela_Resumo extends javax.swing.JFrame {
         this.telaScript = telaScript;
     }
 
-    public static List<Object> getListacomlistaComTodosSelects() {
+    public List<Object> getListacomlistaComTodosSelects() {
         return listacomlistaComTodosSelects;
     }
 
-    public static void setListacomlistaComTodosSelects(List<Object> listacomlistaComTodosSelects) {
-        Tela_Resumo.listacomlistaComTodosSelects = listacomlistaComTodosSelects;
+    public void setListacomlistaComTodosSelects(List<Object> listacomlistaComTodosSelects) {
+        this.listacomlistaComTodosSelects = listacomlistaComTodosSelects;
+    }
+
+    public List<Object> getListaComSolucoes() {
+        return listaComSolucoes;
+    }
+
+    public void setListaComSolucoes(List<Object> listaComSolucoes) {
+        this.listaComSolucoes = listaComSolucoes;
     }
 
     public void adicionarTudoNaTelaResumo() {
 
-        List<String> listaTemporaria = BasesDinamicas.resumoOpcoes;    
+        List<String> listaTemporaria = BasesDinamicas.resumoOpcoes;
         //usando o String Builder para formatar a impressao
         int contador = 0;
         StringBuilder sb = new StringBuilder();
@@ -58,6 +70,32 @@ public class Tela_Resumo extends javax.swing.JFrame {
         //remover os espacos em branco
         String resumoDeTudo = sb.toString().trim();
         jTextPaneDadosSelecionados.setText(resumoDeTudo);
+    }
+
+    public void salvarConsultas(String caminho, String nomeArquivo) {
+        Arquivo novoArquivo = new Arquivo();
+        novoArquivo.criarDiretorio(caminho);
+        novoArquivo.criarArquivoTxt(nomeArquivo);
+
+        //salvando no arquivo resultado
+        int count = 0;
+        for (Object object : getListacomlistaComTodosSelects()) {
+            novoArquivo.printWriter(novoArquivo.getArquivo(), getListacomlistaComTodosSelects(), count);
+            count++;
+        }
+    }
+
+    public void salvarSolucoes(String caminho, String nomeArquivo) {
+        Arquivo novoArquivo = new Arquivo();
+        novoArquivo.criarDiretorio(caminho);
+        novoArquivo.criarArquivoTxt(nomeArquivo);
+
+        //salvando no arquivo resultado
+        int count = 0;
+        for (Object object : getListaComSolucoes()) {
+            novoArquivo.printWriter(novoArquivo.getArquivo(), getListaComSolucoes(), count);
+            count++;
+        }
     }
 
     /**
@@ -175,6 +213,8 @@ public class Tela_Resumo extends javax.swing.JFrame {
     private void jBtVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtVoltarActionPerformed
         //para zerar as adicoes 
         this.getTelaScript().setListaComTodosSelects(new ArrayList<>());
+        //zerando lista com solucoes
+        this.getTelaScript().setListaComSolucoes(new ArrayList<>());
         jTextPaneDadosSelecionados.setText("");
         //Zerando o resumoOpcoes porque pode ser que mude as opcoes
         BasesDinamicas.resumoOpcoes = new ArrayList<>();
@@ -185,15 +225,39 @@ public class Tela_Resumo extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtVoltarActionPerformed
 
     private void jBtConcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtConcluirActionPerformed
-        Arquivo novoArquivo = new Arquivo();
-        novoArquivo.criarDiretorio();
-        novoArquivo.criarArquivoTxt("Resultado");
+        JFileChooser filechooser = new JFileChooser();
+        //serve para pegar um arquivo no windows explorer;
+        filechooser.setDialogTitle("Escolha um local para salvar a consulta");
+        //para selecionar apenas diretorios
+        filechooser.setApproveButtonText("OK");
+        //para exibir somente diretorios
+        filechooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-        //salvando no arquivo resultado
-        int count = 0;
-        for (Object object : listacomlistaComTodosSelects) {
-            novoArquivo.printWriter(novoArquivo.getArquivo(), listacomlistaComTodosSelects, count);
-            count++;
+        int retorno = filechooser.showOpenDialog(this);
+
+        if (retorno == JFileChooser.APPROVE_OPTION) {
+            //se realmente foi selecionado um local entao execute!
+            //o arquivo selecionado esta dentro de file
+            File file = filechooser.getSelectedFile();
+            //pegar o local escolhido para o arquivo
+            // JOptionPane.showMessageDialog(null, "local escolhido: " + file.getPath());
+            String caminho = file.getPath();
+
+            String nomeArquivo = null;
+            while (nomeArquivo == null || nomeArquivo.equals("")) {
+                nomeArquivo = JOptionPane.showInputDialog("Digite o nome do arquivo: ");
+                if (nomeArquivo == null || nomeArquivo.equals("")) {
+                    JOptionPane.showMessageDialog(null,
+                            "Você não digitou nada, favor digite o nome do arquivo!");
+                }
+            }
+            salvarConsultas(caminho, nomeArquivo);
+        }
+
+        if (getListaComSolucoes().size() > 0) {
+            //tem indices que precisam de Atualizacao, estao fragmentados
+            //guardar solucao so para o administrador
+            salvarSolucoes("C:/redomasolucao", "solucoes");
         }
         //fechando a conexao aqui
         ConnectionFactory.close();

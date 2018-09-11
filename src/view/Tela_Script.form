@@ -60,12 +60,11 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="jScrollBar1" alignment="1" max="32767" attributes="0"/>
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jCheckBoxMaiorIndice" min="-2" max="-2" attributes="0"/>
                               <Component id="jCheckBoxPermisssaoEscrita" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabelOpcaoPermissao" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jCheckBoxPermissaoSA" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -92,7 +91,6 @@
                       </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="checkMaiorPorTamanho" min="-2" max="-2" attributes="0"/>
                               <Component id="jCheckBoxTableHeap" min="-2" max="-2" attributes="0"/>
                               <Component id="jCheckBoxIndiceNaoUtilizado" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabelOpcaoIndex" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -105,6 +103,7 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="txtIndiceClustered" min="-2" pref="42" max="-2" attributes="0"/>
                               </Group>
+                              <Component id="checkMaiorPorTamanho" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
@@ -145,11 +144,9 @@
                   </Group>
                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                   <Component id="jCheckBoxIndiceNaoUtilizado" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="jCheckBoxMaiorIndice" min="-2" pref="29" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                   <Component id="checkMaiorPorTamanho" min="-2" pref="35" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="checkFileGroupPrimary" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jCheckBoxIndexClusterTipoVariavel" min="-2" max="-2" attributes="0"/>
@@ -220,14 +217,6 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="&#xcd;ndices n&#xe3;o utilizados"/>
           </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBoxMaiorIndice">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Os top 10 - maiores &#xcd;ndices"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxMaiorIndiceActionPerformed"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JSlider" name="jSlider3">
           <Properties>
