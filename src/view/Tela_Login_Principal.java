@@ -109,6 +109,11 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
                 jBtCreditoMousePressed(evt);
             }
         });
+        jBtCredito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtCreditoActionPerformed(evt);
+            }
+        });
 
         jLsimblo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/download.jpg"))); // NOI18N
 
@@ -382,6 +387,14 @@ public class Tela_Login_Principal extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jComboBoxAutenticarKeyPressed
+
+    private void jBtCreditoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCreditoActionPerformed
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Creditos().setVisible(true);
+            }
+        });
+    }//GEN-LAST:event_jBtCreditoActionPerformed
 
     /**
      * @param args the command line arguments
