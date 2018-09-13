@@ -113,7 +113,7 @@ public class Tela_Script extends javax.swing.JFrame {
     //metodo para recriar o indice
     public String rebuildIndex(String nomeIndice, String nomeTabela) {
         String rebuild = "ALTER INDEX " + nomeIndice + " ON " + nomeTabela + " REBUILD WITH (FILLFACTOR = 80, SORT_IN_TEMPDB = ON,\n" +
-"              STATISTICS_NORECOMPUTE = ON)";
+            " STATISTICS_NORECOMPUTE = ON)";
         return rebuild;
     }
 
