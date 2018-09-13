@@ -105,13 +105,15 @@ public class Tela_Script extends javax.swing.JFrame {
 
     //metodo para reorganizar o indice
     public String reogarnizeIndex(String nomeIndice, String nomeTabela) {
+        
         String reorganize = "ALTER INDEX " + nomeIndice + " ON " + nomeTabela + " REORGANIZE";
         return reorganize;
     }
 
     //metodo para recriar o indice
     public String rebuildIndex(String nomeIndice, String nomeTabela) {
-        String rebuild = "ALTER INDEX " + nomeIndice + " ON " + nomeTabela + " REBUILD WITH (ONLINE = ON)";
+        String rebuild = "ALTER INDEX " + nomeIndice + " ON " + nomeTabela + " REBUILD WITH (FILLFACTOR = 80, SORT_IN_TEMPDB = ON,\n" +
+"              STATISTICS_NORECOMPUTE = ON)";
         return rebuild;
     }
 
@@ -168,7 +170,7 @@ public class Tela_Script extends javax.swing.JFrame {
                     String nomeTabela = inc.getNomeTabela();
                     //chama o metodo reorganize
                     String solucaoReorganize = reogarnizeIndex(nomeIndice, nomeTabela);
-                    listaSolucoesFragmentacao.add("[Reorganize]Fragmentacao atual :" + fragmentacao + "--->" + solucaoReorganize);
+                    listaSolucoesFragmentacao.add(solucaoReorganize);
 
                 } else if (fragmentacao > 30) {
                     //reconstrua o indice
@@ -182,7 +184,7 @@ public class Tela_Script extends javax.swing.JFrame {
                     String nomeTabela = inc.getNomeTabela();
                     //chama o metodo reorganize
                     String solucaoRebuild = rebuildIndex(nomeIndice, nomeTabela);
-                    listaSolucoesFragmentacao.add("[Rebuild]Fragmentacao atual :" + fragmentacao + "--->" + solucaoRebuild);
+                    listaSolucoesFragmentacao.add(solucaoRebuild);
                 }
 
                 //adicionando o corpo da tabela no array de String
@@ -255,7 +257,7 @@ public class Tela_Script extends javax.swing.JFrame {
                     String nomeTabela = ic.getNomeTabela();
                     //chama o metodo reorganize
                     String solucaoReorganize = reogarnizeIndex(nomeIndice, nomeTabela);
-                    listaSolucoesFragmentacao.add("[Reorganize]Fragmentacao atual :" + fragmentacao + "--->" + solucaoReorganize);
+                    listaSolucoesFragmentacao.add(solucaoReorganize);
 
                 } else if (fragmentacao > 30) {
                     //reconstrua o indice
@@ -269,7 +271,7 @@ public class Tela_Script extends javax.swing.JFrame {
                     String nomeTabela = ic.getNomeTabela();
                     //chama o metodo reorganize
                     String solucaoRebuild = rebuildIndex(nomeIndice, nomeTabela);
-                    listaSolucoesFragmentacao.add("[Rebuild]Fragmentacao atual :" + fragmentacao + "--->" + solucaoRebuild);
+                    listaSolucoesFragmentacao.add(solucaoRebuild);
                 }
 
                 //adicionando o corpo da tabela no array de String
