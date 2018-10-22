@@ -102,6 +102,23 @@ public class Tela_Script extends javax.swing.JFrame {
     public void setTelaResumo(Tela_Resumo telaResumo) {
         this.telaResumo = telaResumo;
     }
+    public String verificarHistoricoBackup(){
+        String historicoBackup  = "USE msdb\n"+
+            "SELECT backup_set_id,\n" +
+            "server_name	AS 'Nome_do_Servidor',\n" +
+            "database_name AS 'Nome_do_Banco',\n" +
+            "name AS 'Nome_do_Backup',\n" +
+            "type AS 'Tipo_do_Backup',\n" +
+            "backup_size AS 'Tamanho_do_Backup',\n" +
+            "user_name AS 'Usuario_que_Realizou',\n" +
+            "database_creation_date AS 'Data_de_Criacao',\n" +
+            "backup_start_date AS 'Data_Inicio_Backup',\n" +
+            "backup_finish_date AS 'Data_Fim_Backup'\n" +
+            " FROM backupset where database_name = "+getNomeBanco();
+        
+        return historicoBackup;
+    }
+    
 
     //metodo para reorganizar o indice
     public String reogarnizeIndex(String nomeIndice, String nomeTabela) {
@@ -647,6 +664,7 @@ public class Tela_Script extends javax.swing.JFrame {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabelOpcaoPermissao = new javax.swing.JLabel();
         jCheckBoxPermissaoSA = new javax.swing.JCheckBox();
@@ -667,6 +685,9 @@ public class Tela_Script extends javax.swing.JFrame {
         txtIndiceClustered = new javax.swing.JTextField();
         txtFillFactor = new javax.swing.JTextField();
         checkMaiorPorTamanho = new javax.swing.JCheckBox();
+        jLabel1 = new javax.swing.JLabel();
+        radioSim = new javax.swing.JRadioButton();
+        radioNao = new javax.swing.JRadioButton();
         jPanelFuncao = new javax.swing.JPanel();
         jBtVoltar = new javax.swing.JButton();
         jBtAvançar = new javax.swing.JButton();
@@ -765,6 +786,25 @@ public class Tela_Script extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Quer Saber o Histórico de Backup do Banco");
+
+        buttonGroup1.add(radioSim);
+        radioSim.setText("Sim");
+        radioSim.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioSimActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(radioNao);
+        radioNao.setSelected(true);
+        radioNao.setText("Não");
+        radioNao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioNaoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -774,40 +814,45 @@ public class Tela_Script extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBoxPermisssaoEscrita)
-                            .addComponent(jLabelOpcaoPermissao)
-                            .addComponent(jCheckBoxPermissaoSA)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jCheckBoxFillFactor)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtFillFactor, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jCheckBoxFragNaoCluster)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(10, 10, 10)
-                                .addComponent(txtIndiceNonClustered, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(177, Short.MAX_VALUE))
+                        .addComponent(radioSim)
+                        .addGap(18, 18, 18)
+                        .addComponent(radioNao))
+                    .addComponent(jCheckBoxPermisssaoEscrita)
+                    .addComponent(jLabelOpcaoPermissao)
+                    .addComponent(jCheckBoxPermissaoSA)
+                    .addComponent(jCheckBoxTableHeap)
+                    .addComponent(jLabelOpcaoIndex)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBoxTableHeap)
+                        .addComponent(jCheckBoxFragCluster)
+                        .addGap(6, 6, 6)
+                        .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtIndiceClustered, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(jCheckBoxIndiceNaoUtilizado)
-                            .addComponent(jLabelOpcaoIndex)
-                            .addComponent(checkFileGroupPrimary)
-                            .addComponent(jCheckBoxIndexClusterTipoVariavel)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jCheckBoxFragCluster)
-                                .addGap(6, 6, 6)
-                                .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtIndiceClustered, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(checkMaiorPorTamanho))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(checkFileGroupPrimary))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jCheckBoxFillFactor)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txtFillFactor, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jCheckBoxFragNaoCluster)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGap(10, 10, 10)
+                            .addComponent(txtIndiceNonClustered, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(checkMaiorPorTamanho)
+                        .addGap(47, 47, 47)
+                        .addComponent(jCheckBoxIndexClusterTipoVariavel)))
+                .addContainerGap(129, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -837,16 +882,22 @@ public class Tela_Script extends javax.swing.JFrame {
                     .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtFillFactor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jCheckBoxIndiceNaoUtilizado)
-                .addGap(17, 17, 17)
-                .addComponent(checkMaiorPorTamanho, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(checkFileGroupPrimary)
-                .addGap(18, 18, 18)
-                .addComponent(jCheckBoxIndexClusterTipoVariavel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBoxIndiceNaoUtilizado)
+                    .addComponent(checkFileGroupPrimary))
+                .addGap(5, 5, 5)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(checkMaiorPorTamanho, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBoxIndexClusterTipoVariavel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckBoxTableHeap)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(radioSim)
+                    .addComponent(radioNao))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -967,6 +1018,13 @@ public class Tela_Script extends javax.swing.JFrame {
             BasesDinamicas.resumoOpcoes.add(jCheckBoxTableHeap.getText());
             selecionarTabelasHeap();
         }
+        //Verificacao de Backup
+        if(radioSim.isSelected()){
+            BasesDinamicas.resumoOpcoes.add("Verificar Histórico de Backup");
+        }
+        if(radioNao.isSelected()){
+            BasesDinamicas.resumoOpcoes.add("Não Verificar Histórico de Backup");
+        }
 
         List<String> temporaria = BasesDinamicas.resumoOpcoes;
         for (String opcoes : temporaria) {
@@ -1045,6 +1103,14 @@ public class Tela_Script extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_checkMaiorPorTamanhoActionPerformed
 
+    private void radioSimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioSimActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_radioSimActionPerformed
+
+    private void radioNaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioNaoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_radioNaoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1082,6 +1148,7 @@ public class Tela_Script extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox checkFileGroupPrimary;
     private javax.swing.JCheckBox checkMaiorPorTamanho;
     private javax.swing.JButton jBtAjuda;
@@ -1096,6 +1163,7 @@ public class Tela_Script extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBoxPermissaoSA;
     private javax.swing.JCheckBox jCheckBoxPermisssaoEscrita;
     private javax.swing.JCheckBox jCheckBoxTableHeap;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelOpcaoIndex;
     private javax.swing.JLabel jLabelOpcaoPermissao;
     private javax.swing.JPanel jPanel1;
@@ -1104,6 +1172,8 @@ public class Tela_Script extends javax.swing.JFrame {
     private javax.swing.JSlider jSlider1;
     private javax.swing.JSlider jSlider2;
     private javax.swing.JSlider jSlider3;
+    private javax.swing.JRadioButton radioNao;
+    private javax.swing.JRadioButton radioSim;
     private javax.swing.JTextField txtFillFactor;
     private javax.swing.JTextField txtIndiceClustered;
     private javax.swing.JTextField txtIndiceNonClustered;
