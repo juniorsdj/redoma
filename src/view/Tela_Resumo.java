@@ -292,7 +292,7 @@ public class Tela_Resumo extends javax.swing.JFrame {
             //guardar solucao so para o administrador
             salvarHistoricoBackup("C:/redomabackup", "historicoBackup");
         }
-        //fechando a conexao aqui
+        //fechando a conexao aqui.
         ConnectionFactory.close();
         //fechando o programa
         System.exit(0);
