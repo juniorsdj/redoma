@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import model.bean.HistoricoBackup;
 import model.bean.IndicesClusterVariantes;
 import model.bean.IndicesClustered;
 import model.bean.IndicesFillFactor;
@@ -36,6 +37,7 @@ public class Tela_Script extends javax.swing.JFrame {
     public static List<Bases> selectedBancos;
     private List<Object> listaComTodosSelects = new ArrayList<>();
     private List<Object> listaComSolucoes = new ArrayList<>();
+    private List<Object> listaComHistoricoBackup = new ArrayList<>();
 
     public List<Object> getListaComSolucoes() {
         return listaComSolucoes;
@@ -53,6 +55,14 @@ public class Tela_Script extends javax.swing.JFrame {
         this.listaComTodosSelects = listaComTodosSelects;
     }
 
+    public List<Object> getListaComHistoricoBackup() {
+        return listaComHistoricoBackup;
+    }
+
+    public void setListaComHistoricoBackup(List<Object> listaComHistoricoBackup) {
+        this.listaComHistoricoBackup = listaComHistoricoBackup;
+    }
+
     private int idBanco;
 
     public int getIdBanco() {
@@ -64,9 +74,6 @@ public class Tela_Script extends javax.swing.JFrame {
         return nomeBanco;
     }
 
-    /**
-     * Creates new form Tela_Data_Base
-     */
     public Tela_Script(Connection conection) {
         this.conection = conection;
         initComponents();
@@ -102,35 +109,67 @@ public class Tela_Script extends javax.swing.JFrame {
     public void setTelaResumo(Tela_Resumo telaResumo) {
         this.telaResumo = telaResumo;
     }
-    public String verificarHistoricoBackup(){
-        String historicoBackup  = "USE msdb\n"+
-            "SELECT backup_set_id,\n" +
-            "server_name	AS 'Nome_do_Servidor',\n" +
-            "database_name AS 'Nome_do_Banco',\n" +
-            "name AS 'Nome_do_Backup',\n" +
-            "type AS 'Tipo_do_Backup',\n" +
-            "backup_size AS 'Tamanho_do_Backup',\n" +
-            "user_name AS 'Usuario_que_Realizou',\n" +
-            "database_creation_date AS 'Data_de_Criacao',\n" +
-            "backup_start_date AS 'Data_Inicio_Backup',\n" +
-            "backup_finish_date AS 'Data_Fim_Backup'\n" +
-            " FROM backupset where database_name = "+getNomeBanco();
-        
-        return historicoBackup;
+
+    public void verificarHistoricoBackup() {
+        List<String> listaHistoricoBackup = new ArrayList<>();
+        String nomeBanco = getNomeBanco();
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String selectHistoricoBackup = "USE msdb;\n"
+                + "SELECT backup_set_id AS IdBackup,\n"
+                + "server_name	AS NomedoServidor,\n"
+                + "database_name AS NomedoBanco,\n"
+                + "name AS NomedoBackup,\n"
+                + "type AS TipodoBackup,\n"
+                + "backup_size AS TamanhodoBackup,\n"
+                + "user_name AS UsuarioqueRealizou,\n"
+                + "database_creation_date AS DatadeCriacao,\n"
+                + "backup_start_date AS DataInicioBackup,\n"
+                + "backup_finish_date AS DataFimBackup\n"
+                + " FROM backupset where database_name = '"+nomeBanco+"'";
+        try {
+            stmt = conection.prepareStatement(selectHistoricoBackup);
+            rs = stmt.executeQuery();
+
+            HistoricoBackup hb = new HistoricoBackup();
+            String historicoBanco = String.format("***Histórico do Banco: " + nomeBanco + "***%n");
+            listaHistoricoBackup.add(historicoBanco);
+            listaHistoricoBackup.add(hb.cabecalho());
+            while (rs.next()) {//enquanto houver próximo;
+
+                hb.setIdBackup(rs.getInt("IdBackup"));
+                hb.setNomedoServidor(rs.getString("NomedoServidor"));
+                hb.setNomedoBanco(rs.getString("NomedoBanco"));
+                hb.setNomedoBackup(rs.getString("NomedoBackup"));
+                hb.setTipodoBackup(rs.getString("TipodoBackup"));
+                hb.setTamanhodoBackup(rs.getDouble("TamanhodoBackup"));
+                hb.setUsuarioqueRealizou(rs.getString("UsuarioqueRealizou"));
+                hb.setDatadeCriacao(rs.getDate("DatadeCriacao"));
+                hb.setDataInicioBackup(rs.getDate("DataInicioBackup"));
+                hb.setDataFimBackup(rs.getDate("DataFimBackup"));
+
+                listaHistoricoBackup.add(hb.toString());
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erro :" + ex);
+        } finally {
+            ConnectionFactory.fecharStmtERs(stmt, rs);
+        }
+        getListaComHistoricoBackup().add(listaHistoricoBackup);
     }
-    
 
     //metodo para reorganizar o indice
     public String reogarnizeIndex(String nomeIndice, String nomeTabela) {
-        
+
         String reorganize = "ALTER INDEX " + nomeIndice + " ON " + nomeTabela + " REORGANIZE";
         return reorganize;
     }
 
     //metodo para recriar o indice
     public String rebuildIndex(String nomeIndice, String nomeTabela) {
-        String rebuild = "ALTER INDEX " + nomeIndice + " ON " + nomeTabela + " REBUILD WITH (FILLFACTOR = 80, SORT_IN_TEMPDB = ON,\n" +
-            " STATISTICS_NORECOMPUTE = ON)";
+        String rebuild = "ALTER INDEX " + nomeIndice + " ON " + nomeTabela + " REBUILD WITH (FILLFACTOR = 80, SORT_IN_TEMPDB = ON,\n"
+                + " STATISTICS_NORECOMPUTE = ON)";
         return rebuild;
     }
 
@@ -172,7 +211,7 @@ public class Tela_Script extends javax.swing.JFrame {
                 inc.setDescricaoIndice(rs.getString("descricaoIndice"));
                 inc.setFragmentacao(rs.getInt("fragmentacao"));
 
-             //   System.out.println(inc.toString());
+                //   System.out.println(inc.toString());
                 //reajustando os indices da tabela
                 int fragmentacao = inc.getFragmentacao();
                 if (fragmentacao > 5 && fragmentacao <= 30) {
@@ -259,7 +298,7 @@ public class Tela_Script extends javax.swing.JFrame {
                 ic.setDescricaoIndice(rs.getString("descricaoIndice"));
                 ic.setFragmentacao(rs.getInt("fragmentacao"));
 
-              //  System.out.println(ic.toString());
+                //  System.out.println(ic.toString());
                 //reajustando os indices da tabela
                 int fragmentacao = ic.getFragmentacao();
                 if (fragmentacao > 5 && fragmentacao <= 30) {
@@ -387,7 +426,7 @@ public class Tela_Script extends javax.swing.JFrame {
             listaResultSetString.add(idxNaoUtilizados.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
             listaResultSetString.add(idxNaoUtilizados.cabecalho());
-           // System.out.println(idxNaoUtilizados.nomedoSelect());
+            // System.out.println(idxNaoUtilizados.nomedoSelect());
             // System.out.println(idxNaoUtilizados.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
                 idxNaoUtilizados.setNomeDaTabela(rs.getString("nomeDaTabela"));
@@ -526,7 +565,7 @@ public class Tela_Script extends javax.swing.JFrame {
             listaResultSetString.add(inp.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
             listaResultSetString.add(inp.cabecalho());
-          //  System.out.println(inp.nomedoSelect());
+            //  System.out.println(inp.nomedoSelect());
             //   System.out.println(inp.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
                 inp.setNomeDaTabela(rs.getString("Tabela"));
@@ -581,7 +620,7 @@ public class Tela_Script extends javax.swing.JFrame {
             listaResultSetString.add(icv.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
             listaResultSetString.add(icv.cabecalho());
-        //    System.out.println(icv.nomedoSelect());
+            //    System.out.println(icv.nomedoSelect());
             //    System.out.println(icv.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
                 icv.setId(rs.getInt("id"));
@@ -632,7 +671,7 @@ public class Tela_Script extends javax.swing.JFrame {
             listaResultSetString.add(sHeap.nomedoSelect());
             //adicionando o cabeçaho da tabela no array de String posicao get(0)
             listaResultSetString.add(sHeap.cabecalho());
-       //     System.out.println(sHeap.nomedoSelect());
+            //     System.out.println(sHeap.nomedoSelect());
             //     System.out.println(sHeap.cabecalho());
             while (rs.next()) {//enquanto houver próximo;
                 sHeap.setNomeIndice(rs.getString("NomeIndice"));
@@ -1019,52 +1058,41 @@ public class Tela_Script extends javax.swing.JFrame {
             selecionarTabelasHeap();
         }
         //Verificacao de Backup
-        if(radioSim.isSelected()){
+        if (radioSim.isSelected()) {
             BasesDinamicas.resumoOpcoes.add("Verificar Histórico de Backup");
+            verificarHistoricoBackup();//para verificar o historico do backup
         }
-        if(radioNao.isSelected()){
+        if (radioNao.isSelected()) {
             BasesDinamicas.resumoOpcoes.add("Não Verificar Histórico de Backup");
         }
 
-        List<String> temporaria = BasesDinamicas.resumoOpcoes;
-        for (String opcoes : temporaria) {
-            System.out.println(opcoes.toString());
-        }
-
+//        List<String> temporaria = BasesDinamicas.resumoOpcoes;
+//        for (String opcoes : temporaria) {
+//            System.out.println(opcoes.toString());
+//        }
         //ligações entre as telas
         if (getTelaResumo() == null) {//nao foi ainda para tela resumo
             //a tela script apontando para a tela resumo
             //cria nova instancia
             //passando esta tela como parametro
             //A tela script conhece o caminho de ida para a tela resumo
-            if (getListaComSolucoes().size() > 0) {
-                //houve solucao para indice fragmentado
-                //passe também para a tela resumo a listaComSolucoes
-                setTelaResumo(new Tela_Resumo(getListaComTodosSelects(), getListaComSolucoes()));
-            } else {
-                setTelaResumo(new Tela_Resumo(getListaComTodosSelects()));
-            }
-
-            //a tela resumo conhece o caminho de volta para a tela script
-            getTelaResumo().setTelaScript(this);
+            setTelaResumo(new Tela_Resumo(getListaComTodosSelects(), getListaComSolucoes(), getListaComHistoricoBackup()));
+            getTelaResumo().setTelaScript(this);  //a tela resumo conhece o caminho de volta para a tela script
             //adicionar tudo ao painel de resumo
-            getTelaResumo().adicionarTudoNaTelaResumo();
+            getTelaResumo().adicionarTudoNaTelaResumo(); //adicionando tudo no painel resumoOpcoes
         } else {
             //ja foi pra tela resumo e voltou pra essa
             //passa denovo caso eu retire algo da lista ou coloque passando esta nova como parametro
             getTelaResumo().setListacomlistaComTodosSelects(getListaComTodosSelects());
             //passando para a tela resumo a lista com solucoes
+            getTelaResumo().setListaComSolucoes(getListaComSolucoes());
+            getTelaResumo().setListaComBackup(getListaComHistoricoBackup());
 
-            if (getListaComSolucoes().size() > 0) {
-                //houve solucao para indice fragmentado
-                //passe também para a tela resumo a listaComSolucoes
-                getTelaResumo().setListaComSolucoes(getListaComSolucoes());
-            }
-
-            getTelaResumo().adicionarTudoNaTelaResumo();
+            getTelaResumo().adicionarTudoNaTelaResumo();//adicionando tudo no painel resumoOpcoes
         }
         //chama a tela resumo
         getTelaResumo().setVisible(true);
+        //fecha esta outra tela        
         this.dispose();
     }//GEN-LAST:event_jBtAvançarActionPerformed
 

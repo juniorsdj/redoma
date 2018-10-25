@@ -13,19 +13,26 @@ public class Tela_Resumo extends javax.swing.JFrame {
 
     private List<Object> listacomlistaComTodosSelects;
     private List<Object> listaComSolucoes = new ArrayList<>();
+    private List<Object> listaComBackup = new ArrayList<>();
 
     public Tela_Resumo() {
         initComponents();
     }
 
-    public Tela_Resumo(List<Object> listacomlistaComTodosSelects) {
-        this.listacomlistaComTodosSelects = listacomlistaComTodosSelects;
-        initComponents();
-    }
-
-    public Tela_Resumo(List<Object> listacomlistaComTodosSelects, List<Object> listaComSolucoes) {
+//    public Tela_Resumo(List<Object> listacomlistaComTodosSelects) {
+//        this.listacomlistaComTodosSelects = listacomlistaComTodosSelects;
+//        initComponents();
+//    }
+//
+//    public Tela_Resumo(List<Object> listacomlistaComTodosSelects, List<Object> listaComSolucoes) {
+//        this.listacomlistaComTodosSelects = listacomlistaComTodosSelects;
+//        this.listaComSolucoes = listaComSolucoes;
+//        initComponents();
+//    }
+    public Tela_Resumo(List<Object> listacomlistaComTodosSelects, List<Object> listaComSolucoes, List<Object> listaComBackup) {
         this.listacomlistaComTodosSelects = listacomlistaComTodosSelects;
         this.listaComSolucoes = listaComSolucoes;
+        this.listaComBackup = listaComBackup;
         initComponents();
     }
 
@@ -55,8 +62,15 @@ public class Tela_Resumo extends javax.swing.JFrame {
         this.listaComSolucoes = listaComSolucoes;
     }
 
-    public void adicionarTudoNaTelaResumo() {
+    public List<Object> getListaComBackup() {
+        return listaComBackup;
+    }
 
+    public void setListaComBackup(List<Object> listaComBackup) {
+        this.listaComBackup = listaComBackup;
+    }
+
+    public void adicionarTudoNaTelaResumo() {
         List<String> listaTemporaria = BasesDinamicas.resumoOpcoes;
         //usando o String Builder para formatar a impressao
         int contador = 0;
@@ -73,27 +87,38 @@ public class Tela_Resumo extends javax.swing.JFrame {
     }
 
     public void salvarConsultas(String caminho, String nomeArquivo) {
-        Arquivo novoArquivo = new Arquivo();
-        novoArquivo.criarDiretorio(caminho);
-        novoArquivo.criarArquivoTxt(nomeArquivo);
+        Arquivo novoArquivoConsultas = new Arquivo();
+        novoArquivoConsultas.criarDiretorio(caminho);
+        novoArquivoConsultas.criarArquivoTxt(nomeArquivo);
 
         //salvando no arquivo resultado
         int count = 0;
         for (Object object : getListacomlistaComTodosSelects()) {
-            novoArquivo.printWriter(novoArquivo.getArquivo(), getListacomlistaComTodosSelects(), count);
+            novoArquivoConsultas.printWriter(novoArquivoConsultas.getArquivo(), getListacomlistaComTodosSelects(), count);
             count++;
         }
     }
 
     public void salvarSolucoes(String caminho, String nomeArquivo) {
-        Arquivo novoArquivo = new Arquivo();
-        novoArquivo.criarDiretorio(caminho);
-        novoArquivo.criarArquivoTxt(nomeArquivo);
+        Arquivo novoArquivoSolucoes = new Arquivo();
+        novoArquivoSolucoes.criarDiretorio(caminho);
+        novoArquivoSolucoes.criarArquivoTxt(nomeArquivo);
 
         //salvando no arquivo resultado
         int count = 0;
         for (Object object : getListaComSolucoes()) {
-            novoArquivo.printWriter(novoArquivo.getArquivo(), getListaComSolucoes(), count);
+            novoArquivoSolucoes.printWriter(novoArquivoSolucoes.getArquivo(), getListaComSolucoes(), count);
+            count++;
+        }
+    }
+
+    public void salvarHistoricoBackup(String caminho, String nomeArquivo) {
+        Arquivo novoArquivoBackup = new Arquivo();
+        novoArquivoBackup.criarDiretorio(caminho);
+        novoArquivoBackup.criarArquivoTxt(nomeArquivo);
+        int count = 0;
+        for (Object object : getListaComBackup()) {
+            novoArquivoBackup.printWriter(novoArquivoBackup.getArquivo(), getListaComBackup(), count);
             count++;
         }
     }
@@ -211,10 +236,12 @@ public class Tela_Resumo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtVoltarActionPerformed
-        //para zerar as adicoes 
+        //para zerar as consultas feitas
         this.getTelaScript().setListaComTodosSelects(new ArrayList<>());
         //zerando lista com solucoes
         this.getTelaScript().setListaComSolucoes(new ArrayList<>());
+        //zerando o historico dos backups feitos
+        this.getTelaScript().setListaComHistoricoBackup(new ArrayList<>());
         jTextPaneDadosSelecionados.setText("");
         //Zerando o resumoOpcoes porque pode ser que mude as opcoes
         BasesDinamicas.resumoOpcoes = new ArrayList<>();
@@ -227,7 +254,7 @@ public class Tela_Resumo extends javax.swing.JFrame {
     private void jBtConcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtConcluirActionPerformed
         JFileChooser filechooser = new JFileChooser();
         //serve para pegar um arquivo no windows explorer;
-        filechooser.setDialogTitle("Escolha um local para salvar a consulta");
+        filechooser.setDialogTitle("Escolha um local para salvar a consulta!");
         //para selecionar apenas diretorios
         filechooser.setApproveButtonText("OK");
         //para exibir somente diretorios
@@ -258,6 +285,12 @@ public class Tela_Resumo extends javax.swing.JFrame {
             //tem indices que precisam de Atualizacao, estao fragmentados
             //guardar solucao so para o administrador
             salvarSolucoes("C:/redomasolucao", "solucoes");
+        }
+
+        if (getListaComBackup().size() > 0) {
+            //tem indices que precisam de Atualizacao, estao fragmentados
+            //guardar solucao so para o administrador
+            salvarHistoricoBackup("C:/redomabackup", "historicoBackup");
         }
         //fechando a conexao aqui
         ConnectionFactory.close();
